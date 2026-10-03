@@ -78,8 +78,8 @@ export function isoFace(ch: string, side: 'left' | 'right', h: number, x: number
       const v = Math.min(15, py % 16);
       const si = (v * 16 + px) * 4;
       const di = ((off + py) * 16 + px) * 4;
-      // darken the very top row a touch less so block edges read clearly
-      const k = py === 0 ? shade + 0.15 : shade;
+      // lit top edge, then darker toward the ground (ambient occlusion)
+      const k = py === 0 ? shade + 0.2 : shade * (1 - 0.32 * Math.min(1, py / 24));
       img.data[di] = data[si] * k;
       img.data[di + 1] = data[si + 1] * k;
       img.data[di + 2] = data[si + 2] * k;

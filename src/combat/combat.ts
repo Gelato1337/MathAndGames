@@ -837,6 +837,7 @@ export class Combat {
         r.drawSpriteAt(unit.kind, fx, fy, z, { flash: unit.flash > 0, bob, alpha: unit.hidden ? 0.55 : 1, size: unit.size });
         if (unit.seal) {
           const c = tileCenter(fx + (unit.size - 1) / 2, fy + (unit.size - 1) / 2, z);
+          r.addLight(c.x, c.y - unit.size * 8, 34 * unit.size, '90,200,255', 0.6);
           ctx.strokeStyle = frame % 20 < 10 ? 'rgba(115,239,247,0.9)' : 'rgba(65,166,246,0.9)';
           ctx.lineWidth = 1;
           ctx.beginPath();

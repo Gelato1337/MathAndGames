@@ -2,8 +2,8 @@ import './style.css';
 import { TILE } from './art/tiles';
 import { Combat, type CombatResult } from './combat/combat';
 import { onLangChange, setLang, getLang, t } from './i18n';
-import { clearInput, initInput } from './input';
-import { Renderer } from './render';
+import { clearInput, initInput, isHeld, takeWheel } from './input';
+import { COMBAT_ZOOM, Renderer } from './render';
 import { checkTutor } from './tutor/client';
 import { devUnlockAll, fadeAttunement, game, newGame } from './state';
 import { beforeBattle, examineGate, talk, type StoryCtx } from './story/story';
@@ -11,7 +11,7 @@ import { isBlocking, toast, uiRoot } from './ui/dom';
 import { bagScreen, clearHud, endingScreen, introSlides, pauseMenu, questsScreen, renderExploreHud, skillsScreen, titleScreen } from './ui/menus';
 import { messageBox } from './ui/question';
 import { Explore, type Target } from './world/explore';
-import { ENCOUNTERS, PLAYER_START, WorldMap, type EncounterDef } from './world/map';
+import { chimneys, ENCOUNTERS, PLAYER_START, WorldMap, type EncounterDef } from './world/map';
 
 const canvas = document.getElementById('view') as HTMLCanvasElement;
 const r = new Renderer(canvas);
@@ -19,10 +19,12 @@ initInput(canvas);
 setLang(getLang());
 
 let world = new WorldMap();
+r.setChimneys(chimneys(world));
 let mode: 'title' | 'explore' | 'combat' = 'title';
 let busy = false;
 let combat: Combat | null = null;
 let lastPrompt: string | null | undefined;
+let savedZoom: number | null = null;
 
 const ENTRY: Record<EncounterDef['id'], Array<{ x: number; y: number }>> = {
   forest: [
@@ -119,6 +121,10 @@ async function startEncounter(e: EncounterDef, intro: boolean): Promise<void> {
   clearHud();
   if (intro) await beforeBattle(e.id);
   mode = 'combat';
+  if (savedZoom === null) {
+    savedZoom = r.zoomIndex;
+    r.zoomIndex = Math.min(r.zoomIndex, COMBAT_ZOOM);
+  }
   const [a, b] = ENTRY[e.id];
   const lead = intro ? { x: explore.leader.x, y: explore.leader.y } : a;
   const foll = intro ? { x: explore.follower.x, y: explore.follower.y } : b;
@@ -147,6 +153,10 @@ async function endEncounter(res: CombatResult, c: Combat): Promise<void> {
     busy = false;
     await startEncounter(e, false);
     return;
+  }
+  if (savedZoom !== null) {
+    r.zoomIndex = savedZoom;
+    savedZoom = null;
   }
   fadeAttunement(c.refreshed);
   const kai = c.units.find((u) => u.kind === 'kai')!;
@@ -217,10 +227,39 @@ onLangChange(() => {
 
 let last = performance.now();
 let titleCam = 0;
+let lastActive: unknown = null;
+
+/** Mouse wheel / +− zoom everywhere; in battle WASD and arrow keys pan the camera (BG3-style). */
+function cameraControls(dt: number): void {
+  const w = takeWheel();
+  if (w) r.zoom(-w);
+  if (isHeld('+') || isHeld('=')) {
+    r.zoom(1);
+    clearInput();
+  } else if (isHeld('-')) {
+    r.zoom(-1);
+    clearInput();
+  }
+  if (mode !== 'combat') return; // while exploring, the keys walk
+  const speed = 160 * dt;
+  if (isHeld('w', 'ArrowUp')) r.pan.y -= speed;
+  if (isHeld('s', 'ArrowDown')) r.pan.y += speed;
+  if (isHeld('a', 'ArrowLeft')) r.pan.x -= speed;
+  if (isHeld('d', 'ArrowRight')) r.pan.x += speed;
+  r.pan.x = Math.max(-260, Math.min(260, r.pan.x));
+  r.pan.y = Math.max(-180, Math.min(180, r.pan.y));
+}
+
 function loop(now: number): void {
   const dt = Math.min(0.05, (now - last) / 1000);
   last = now;
   r.frame++;
+  if (mode !== 'title') cameraControls(dt);
+  // a new combat turn re-centres on whoever acts
+  if (combat && combat.active !== lastActive) {
+    lastActive = combat.active;
+    r.pan = { x: 0, y: 0 };
+  }
 
   if (mode === 'explore') {
     if (!busy && !isBlocking()) explore.update(dt);
@@ -237,10 +276,10 @@ function loop(now: number): void {
     if (titleCam > 40) titleCam = 0;
   }
 
-  r.begin();
+  r.begin(dt);
   if (mode === 'combat' && combat) combat.draw();
   else explore.draw();
-  r.flush(world);
+  r.flush(world, dt);
   requestAnimationFrame(loop);
 }
 

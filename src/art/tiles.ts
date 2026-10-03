@@ -22,24 +22,44 @@ function px(ctx: Ctx, color: string, x: number, y: number, w = 1, h = 1): void {
 
 function grass(ctx: Ctx, rnd: () => number): void {
   px(ctx, P.g, 0, 0, 16, 16);
-  for (let i = 0; i < 10; i++) px(ctx, P.G, Math.floor(rnd() * 16), Math.floor(rnd() * 16));
+  // soft darker patches
   for (let i = 0; i < 3; i++) {
-    const x = Math.floor(rnd() * 14);
-    const y = Math.floor(rnd() * 14) + 1;
+    const x = Math.floor(rnd() * 13);
+    const y = Math.floor(rnd() * 13);
+    px(ctx, P.G, x, y, 3, 2);
+    px(ctx, P.G, x + 1, y + 2, 2, 1);
+  }
+  for (let i = 0; i < 14; i++) px(ctx, P.G, Math.floor(rnd() * 16), Math.floor(rnd() * 16));
+  // bright blades
+  for (let i = 0; i < 5; i++) {
+    const x = Math.floor(rnd() * 14) + 1;
+    const y = Math.floor(rnd() * 13) + 2;
     px(ctx, P.l, x, y);
-    px(ctx, P.l, x + 1, y - 1);
+    px(ctx, P.l, x - 1, y + 1);
+    px(ctx, '#7fd860', x + 1, y + 1);
   }
 }
 
 function floor(ctx: Ctx, rnd: () => number): void {
-  px(ctx, P.m, 0, 0, 16, 16);
-  px(ctx, P.f, 0, 15, 16, 1);
+  px(ctx, '#5f7591', 0, 0, 16, 16);
+  // two slabs per tile, with bevelled edges
+  px(ctx, P.f, 0, 7, 16, 1);
   px(ctx, P.f, 15, 0, 1, 16);
-  for (let i = 0; i < 4; i++) px(ctx, P.s, Math.floor(rnd() * 15), Math.floor(rnd() * 15));
+  px(ctx, P.f, 7, 8, 1, 8);
+  px(ctx, P.s, 0, 0, 15, 1);
+  px(ctx, P.s, 0, 8, 7, 1);
+  px(ctx, P.s, 8, 8, 7, 1);
+  for (let i = 0; i < 5; i++) px(ctx, P.m, Math.floor(rnd() * 15), Math.floor(rnd() * 15));
+  if (rnd() < 0.35) {
+    const x = 2 + Math.floor(rnd() * 10);
+    px(ctx, P.f, x, 2, 1, 3);
+    px(ctx, P.f, x + 1, 5, 2, 1);
+  }
   if (rnd() < 0.3) {
-    const x = 3 + Math.floor(rnd() * 8);
-    px(ctx, P.f, x, 5, 1, 3);
-    px(ctx, P.f, x + 1, 8, 2, 1);
+    // moss in the cracks
+    const y = rnd() < 0.5 ? 6 : 14;
+    px(ctx, P.G, Math.floor(rnd() * 10), y, 3, 1);
+    px(ctx, P.g, Math.floor(rnd() * 10), y, 1, 1);
   }
 }
 
@@ -57,11 +77,21 @@ const builders: Record<string, (ctx: Ctx, rnd: () => number, frame: number) => v
   },
   '=': (ctx, rnd) => {
     px(ctx, P.e, 0, 0, 16, 16);
-    for (let i = 0; i < 6; i++) px(ctx, P.u, Math.floor(rnd() * 16), Math.floor(rnd() * 16));
+    // wheel ruts and pebbles
+    px(ctx, '#b0844f', 4, 0, 2, 16);
+    px(ctx, '#b0844f', 11, 0, 2, 16);
+    for (let i = 0; i < 7; i++) px(ctx, P.u, Math.floor(rnd() * 16), Math.floor(rnd() * 16));
+    for (let i = 0; i < 4; i++) {
+      const x = Math.floor(rnd() * 15);
+      const y = Math.floor(rnd() * 15);
+      px(ctx, P.s, x, y, 2, 1);
+      px(ctx, P.m, x, y + 1, 2, 1);
+    }
     for (let i = 0; i < 3; i++) px(ctx, P.y, Math.floor(rnd() * 16), Math.floor(rnd() * 16));
   },
   '~': (ctx, _rnd, frame) => {
     px(ctx, P.b, 0, 0, 16, 16);
+    px(ctx, '#3150ad', 0, 8, 16, 8);
     for (let row = 0; row < 3; row++) {
       const y = 3 + row * 5;
       const off = (frame + row * 3) % 8;
@@ -91,12 +121,12 @@ const builders: Record<string, (ctx: Ctx, rnd: () => number, frame: number) => v
   },
   R: (ctx) => {
     px(ctx, P.r, 0, 0, 16, 16);
-    for (let y = 3; y < 16; y += 4) px(ctx, P.p, 0, y, 16, 1);
     for (let y = 0; y < 16; y += 4) {
+      px(ctx, '#d5596a', 0, y, 16, 1); // lit shingle edge
+      px(ctx, P.p, 0, y + 3, 16, 1);
       const off = (y / 4) % 2 === 0 ? 0 : 4;
       for (let x = off; x < 16; x += 8) px(ctx, P.p, x, y, 1, 3);
     }
-    px(ctx, P.o, 0, 0, 16, 1);
   },
   H: (ctx) => {
     px(ctx, P.e, 0, 0, 16, 16);

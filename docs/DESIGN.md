@@ -72,7 +72,19 @@ Heights (`buildHeights` in `src/world/map.ts`):
 | Ruins floor | 1 |
 | Golem's dais | 2 |
 
-Rules:
+Exploration movement is free, not tile by tile. Characters have a position in fractional tiles and a small collision radius, slide along walls, and hop smoothly up and down steps. The follower walks the leader's trail. Click-to-move finds a path on the grid, then smooths it by skipping waypoints that are in a straight line of sight.
+
+Lighting is drawn on top of the tiles:
+
+- Higher ground is brighter.
+- Taller neighbours behind a tile cast contact shadows onto it.
+- Edges that drop away get a rim light.
+- Side faces darken toward the ground.
+- Water has foam along the shore and sparkles.
+
+Atmosphere: cloud shadows, pollen, chimney smoke and a vignette. Braziers and lanterns cast additive light, and the golem's seal glows. Trees (broadleaf, pine, birch) are generated procedurally in `src/art/trees.ts`.
+
+Rules in battle (still grid-based, so AP, ranges and areas stay exact):
 
 - You can step up or down one level at a time.
 - Climbing up costs one extra tile of movement.

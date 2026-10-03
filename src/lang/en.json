@@ -42,8 +42,8 @@
     "start": "Begin"
   },
   "hud": {
-    "talk": "E: Talk to {name}",
-    "examine": "E: Examine",
+    "talk": "Click to talk to {name}",
+    "examine": "Click to examine",
     "quests": "Quests",
     "skills": "Skills",
     "bag": "Bag",
@@ -79,8 +79,8 @@
   },
   "help": {
     "title": "How to play",
-    "move": "Move: WASD / arrow keys, or click where you want to go.",
-    "talk": "Talk / examine: E, Space or Enter (or click a person).",
+    "move": "Move: click where you want to go (the dots show the path), or walk freely with WASD / the arrow keys. Up on the keyboard is up on the screen. Zoom with the mouse wheel or + and −. In battle, WASD pans the camera.",
+    "talk": "Talk / examine: click a person or the rune gate. The party walks over and starts talking. (E also works when you stand next to them.)",
     "menu": "Menu: Esc · Quests: Q · Skills: K · Bag: I",
     "combat1": "Battle: each turn a character gains AP (Action Points). Moving costs 1 AP per 3 tiles, and skills show their AP cost.",
     "combat2": "Click a blue tile to move. Pick a skill with 1–4, then click a target.",
@@ -388,7 +388,7 @@
   "tutorial": {
     "title": "Battle basics",
     "l1": "Battles are turn-based on a grid. Each turn a character gains 4 Action Points (AP), and can save up to 6.",
-    "l2": "Click a blue tile to move (1 AP buys 3 tiles). Click an enemy next to you to attack.",
+    "l2": "Click a blue tile to move (1 AP buys 3 tiles). Click an enemy next to you to attack. WASD pans the camera and the mouse wheel zooms.",
     "l3": "Use number keys 1–4 or the buttons for skills. Each shows its AP cost. Some need a few turns to cool down.",
     "l4": "Skills you've learned work without any math. Turn on ⚡ Overcharge (O) to answer a question for a stronger effect.",
     "l5": "Press Space or End turn when you're done. Right-click or Esc cancels a skill.",

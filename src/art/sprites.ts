@@ -1,3 +1,5 @@
+import { birch, broadleaf, pine } from './trees';
+
 /**
  * Pixel art, defined as strings. Each character maps to a palette colour,
  * '.' is transparent. Sprites are rendered once to offscreen canvases.
@@ -347,6 +349,44 @@ SPRITES.owl = [
   '................',
 ];
 
+SPRITES.brazier = [
+  '................',
+  '................',
+  '................',
+  '................',
+  '..kkkkkkkkkkkk..',
+  '..kUuuuuuuuuUk..',
+  '...kmmmmmmmmk...',
+  '...ksmmmmmmmk...',
+  '....kmmmmmmk....',
+  '.....kmmmmk.....',
+  '......kmmk......',
+  '......kmmk......',
+  '.....kmmmmk.....',
+  '....kssmmmmk....',
+  '....kkkkkkkk....',
+  '................',
+];
+
+SPRITES.lantern = [
+  '................',
+  '......kkkk......',
+  '.....kffffk.....',
+  '.....kyyyyk.....',
+  '.....kyyyyk.....',
+  '.....kffffk.....',
+  '.......kk.......',
+  '.......uk.......',
+  '.......uk.......',
+  '.......uk.......',
+  '.......uk.......',
+  '.......uk.......',
+  '.......uk.......',
+  '.......uk.......',
+  '......kuUk......',
+  '.....kkkkkk.....',
+];
+
 SPRITES.fence = [
   '................',
   '................',
@@ -387,8 +427,15 @@ export function renderSprite(rows: string[]): HTMLCanvasElement {
   return cv;
 }
 
+const GENERATED: Record<string, (seed: number) => HTMLCanvasElement> = { broad: broadleaf, pine, birch };
+
 export function sprite(name: string): HTMLCanvasElement {
   let cv = cache.get(name);
+  if (!cv && name.startsWith('tree_')) {
+    const [, kind, seed] = name.split('_');
+    cv = GENERATED[kind](Number(seed));
+    cache.set(name, cv);
+  }
   if (!cv) {
     const rows = SPRITES[name];
     if (!rows) throw new Error(`Unknown sprite ${name}`);

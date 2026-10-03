@@ -30,7 +30,7 @@ export interface EncounterDef {
   enemies: EnemyPlacement[];
 }
 
-const BLOCKING = new Set(['T', 'R', 'H', 'w', 'D', 'F', '#', 'G', 'o', 'O', '~']);
+const BLOCKING = new Set(['T', 'R', 'H', 'w', 'D', 'F', '#', 'G', 'o', 'O', '~', 'L', 'l']);
 
 export const NPCS: NpcDef[] = [
   { id: 'elder', x: 5, y: 12 },
@@ -115,6 +115,18 @@ export class WorldMap {
   }
 }
 
+/** One chimney per house, on the roof ridge (for smoke). */
+export function chimneys(map: WorldMap): Array<{ x: number; y: number; z: number }> {
+  const out: Array<{ x: number; y: number; z: number }> = [];
+  for (let y = 0; y < map.h - 1; y++) {
+    for (let x = 0; x < map.w; x++) {
+      const ridge = map.get(x, y) === 'R' && map.get(x, y + 1) === 'R';
+      if (ridge && map.get(x - 1, y) !== 'R') out.push({ x: x + 1, y, z: map.height(x + 1, y) });
+    }
+  }
+  return out;
+}
+
 /** The boss stands on a raised dais inside the ruins. */
 export const DAIS = { x: 53, y: 12, w: 4, h: 6 };
 
@@ -170,6 +182,10 @@ export function tileLook(ch: string): { top: string; left: string; right: string
       return { top: 's', left: 'dirt', right: 'dirt', object: 'crop' };
     case 'O':
       return { top: '_', left: '#', right: '#', object: 'rock' };
+    case 'L':
+      return { top: '_', left: '#', right: '#', object: 'brazier' };
+    case 'l':
+      return { top: '.', left: 'dirt', right: 'dirt', object: 'lantern' };
     case '_':
       return { top: '_', left: '#', right: '#' };
     case '#':
@@ -275,6 +291,15 @@ function buildTiles(): string[][] {
   t[19][55] = 'O';
   t[14][46] = '=';
   t[15][46] = '=';
+  // braziers in the ruin corners, lanterns by the village doors
+  for (const [x, y] of [
+    [48, 8],
+    [57, 8],
+    [48, 21],
+    [57, 21],
+  ])
+    t[y][x] = 'L';
+  for (const x of [6, 14, 21, 29]) t[12][x] = 'l';
 
   // keep NPC spots and paths clear
   for (const n of NPCS) t[n.y][n.x] = t[n.y][n.x] === '=' ? '=' : '.';

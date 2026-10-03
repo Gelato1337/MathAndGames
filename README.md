@@ -15,6 +15,15 @@ npm test           # language parity, problem generators, map, sprites, seals
 npm run build      # static build in dist/
 ```
 
+Controls:
+
+- **Exploring:**
+  - Click where to go; the dots show the path.
+  - Click a person or the gate to walk over and talk.
+  - Or walk freely in any direction with WASD / the arrow keys. Up on the keyboard is up on the screen.
+- **Battle:** turn-based on a grid. Click tiles to move and enemies to attack; WASD pans the camera.
+- **Everywhere:** mouse wheel or + / − zooms.
+
 Dev shortcuts (only with `npm run dev`):
 
 - `?dev` unlocks every skill.

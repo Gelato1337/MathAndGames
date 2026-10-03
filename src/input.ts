@@ -4,6 +4,7 @@ const held = new Set<string>();
 const pressed: string[] = [];
 const clicks: Array<{ x: number; y: number; button: number }> = [];
 let mouse: { x: number; y: number } | null = null;
+let wheel = 0;
 
 export function initInput(canvas: HTMLCanvasElement): void {
   window.addEventListener('keydown', (e) => {
@@ -28,6 +29,16 @@ export function initInput(canvas: HTMLCanvasElement): void {
   canvas.addEventListener('mousemove', (e) => {
     mouse = { x: e.clientX, y: e.clientY };
   });
+  // listen on the whole game area so HUD panels don't swallow the wheel
+  (canvas.parentElement ?? canvas).addEventListener(
+    'wheel',
+    (e) => {
+      if (isBlocking()) return; // let modals scroll
+      e.preventDefault();
+      wheel += Math.sign(e.deltaY);
+    },
+    { passive: false },
+  );
   canvas.addEventListener('mouseleave', () => {
     mouse = null;
   });
@@ -47,6 +58,13 @@ export function takePressed(): string[] {
 export function takeClicks(): Array<{ x: number; y: number; button: number }> {
   const out = clicks.splice(0);
   return isBlocking() ? [] : out;
+}
+
+/** Mouse-wheel notches since last call (positive = scrolled down / away). */
+export function takeWheel(): number {
+  const w = wheel;
+  wheel = 0;
+  return w;
 }
 
 export function mousePos(): { x: number; y: number } | null {

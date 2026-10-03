@@ -42,8 +42,8 @@
     "start": "Aloita"
   },
   "hud": {
-    "talk": "E: Puhu ({name})",
-    "examine": "E: Tutki",
+    "talk": "Klikkaa puhuaksesi: {name}",
+    "examine": "Klikkaa tutkiaksesi",
     "quests": "Tehtävät",
     "skills": "Taidot",
     "bag": "Laukku",
@@ -79,8 +79,8 @@
   },
   "help": {
     "title": "Peliohjeet",
-    "move": "Liiku: WASD / nuolinäppäimet, tai klikkaa minne haluat mennä.",
-    "talk": "Puhu / tutki: E, välilyönti tai Enter (tai klikkaa henkilöä).",
+    "move": "Liiku: klikkaa paikkaa, johon haluat mennä (pisteet näyttävät reitin), tai kävele vapaasti WASD- tai nuolinäppäimillä. Ylös näppäimistöllä on ylös ruudulla. Zoomaa hiiren rullalla tai + ja −. Taistelussa WASD siirtää kameraa.",
+    "talk": "Puhu / tutki: klikkaa henkilöä tai riimuporttia. Ryhmä kävelee paikalle ja aloittaa keskustelun. (Myös E toimii, kun seisot vieressä.)",
     "menu": "Valikko: Esc · Tehtävät: Q · Taidot: K · Laukku: I",
     "combat1": "Taistelu: joka vuorolla hahmo saa toimintapisteitä (TP). Liikkuminen maksaa 1 TP / 3 ruutua, ja taidot näyttävät hintansa.",
     "combat2": "Klikkaa sinistä ruutua liikkuaksesi. Valitse taito näppäimillä 1–4 ja klikkaa kohdetta.",
@@ -388,7 +388,7 @@
   "tutorial": {
     "title": "Taistelun perusteet",
     "l1": "Taistelut ovat vuoropohjaisia ruudukolla. Joka vuorolla hahmo saa 4 toimintapistettä (TP), ja voi säästää niitä enintään 6.",
-    "l2": "Klikkaa sinistä ruutua liikkuaksesi (1 TP = 3 ruutua). Klikkaa vieressä olevaa vihollista hyökätäksesi.",
+    "l2": "Klikkaa sinistä ruutua liikkuaksesi (1 TP = 3 ruutua). Klikkaa vieressä olevaa vihollista hyökätäksesi. WASD siirtää kameraa ja hiiren rulla zoomaa.",
     "l3": "Käytä taitoja numeronäppäimillä 1–4 tai napeilla. Jokainen näyttää TP-hintansa. Osa taidoista latautuu muutaman vuoron.",
     "l4": "Opitut taidot toimivat ilman matematiikkaa. Laita ⚡ Ylilataus (O) päälle ja vastaa kysymykseen, niin vaikutus on vahvempi.",
     "l5": "Paina välilyöntiä tai Lopeta vuoro, kun olet valmis. Hiiren oikea painike tai Esc peruu taidon.",
