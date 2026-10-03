@@ -3,8 +3,10 @@ import { fmtNum, t } from '../i18n';
 import { parseAnswer } from '../math/answer';
 import { record } from '../math/mastery';
 import type { Problem, Step, Visual } from '../math/problems';
+import { fmtSide } from '../math/seal';
 import { balanceView } from './balance';
 import { autofocus, h, openModal } from './dom';
+import { tutorPanel, type TutorContext } from './tutor';
 
 export interface AskOpts {
   title?: string;
@@ -45,6 +47,13 @@ export function gridVisual(w: number, hgt: number, cell = 14): HTMLCanvasElement
   return cv;
 }
 
+/** Describe a picture in words, for the tutor. */
+export function visualText(v: Visual | undefined): string {
+  if (!v) return '';
+  if (v.kind === 'grid') return t('tutor.visualGrid', { w: v.w, h: v.h });
+  return t('tutor.visualBalance', { eq: `${fmtSide(v.leftBags, v.leftUnits)} = ${fmtSide(v.rightBags, v.rightUnits)}` });
+}
+
 export function visualEl(v: Visual | undefined): HTMLElement | null {
   if (!v) return null;
   if (v.kind === 'grid') return h('div', {}, [gridVisual(v.w, v.h)]);
@@ -74,6 +83,17 @@ export function ask(p: Problem, opts: AskOpts = {}): Promise<AskResult> {
       feedback,
       explain,
     ]);
+    let hintShown = false;
+    // the tutor is for thinking time, so timed questions don't get it
+    const tutor = opts.seconds
+      ? null
+      : tutorPanel({
+          problem: () => stepText(p.prompt),
+          context: () => [opts.title, opts.story, visualText(p.visual)].filter(Boolean).join(' — '),
+          hint: () => (hintShown ? stepText(p.hint) : null),
+          answer: () => p.answer,
+        });
+    if (tutor) content.append(tutor);
     const modal = openModal(content);
     if (import.meta.env.DEV) (window as unknown as { __answer: number }).__answer = p.answer;
     const start = performance.now();
@@ -144,6 +164,7 @@ export function ask(p: Problem, opts: AskOpts = {}): Promise<AskResult> {
       }
     });
     hintBtn?.addEventListener('click', () => {
+      hintShown = true;
       feedback.className = 'feedback accent';
       feedback.textContent = stepText(p.hint);
       input.focus();
@@ -171,6 +192,7 @@ export interface NumberPromptOpts {
   cancel?: boolean;
   /** Return an error message to keep the prompt open. */
   validate?: (n: number) => string | null;
+  tutor?: TutorContext;
 }
 
 /** Ask the player for any number (not graded). Resolves null on cancel. */
@@ -186,6 +208,7 @@ export function numberPrompt(opts: NumberPromptOpts): Promise<number | null> {
       opts.extra ?? null,
       h('div.row.answer-row', {}, [h('span', { text: opts.label }), input, ok, cancel]),
       feedback,
+      opts.tutor ? tutorPanel(opts.tutor) : null,
     ]);
     const modal = openModal(content);
     const done = (v: number | null) => {

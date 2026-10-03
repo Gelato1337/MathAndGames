@@ -4,6 +4,7 @@ import { record } from '../math/mastery';
 import { fmtSide } from '../math/seal';
 import { parseAnswer } from '../math/answer';
 import { autofocus, h, img, openModal } from './dom';
+import { tutorPanel } from './tutor';
 
 export interface BalanceState {
   leftBags: number;
@@ -78,6 +79,12 @@ export function balancePuzzle(stage: BalanceStage, title: string, intro: string)
       h('div.row.answer-row', {}, [splitBtn, undoBtn, resetBtn]),
       answerRow,
     ]);
+    const tutor = tutorPanel({
+      problem: () => eq.textContent ?? '',
+      context: () => `${t('tutor.balanceTask')} ${intro}`,
+      answer: () => stage.x,
+    });
+    if (tutor) content.append(tutor);
     const modal = openModal(content);
     const started = performance.now();
 

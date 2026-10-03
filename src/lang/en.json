@@ -70,7 +70,12 @@
       "normal": "Normal",
       "relaxed": "Relaxed",
       "off": "Off"
-    }
+    },
+    "tutorTitle": "AI tutor",
+    "tutorOnline": "Connected ({provider}).",
+    "tutorOffline": "Not connected.",
+    "tutorHelp": "Owl the tutor runs on your own computer through Claude Code, Gemini CLI or Codex CLI. Install one of them, run \"npm run tutor\" in the game folder, and play the game from \"npm run dev\" on the same computer. Owl only gives hints and questions, never answers.",
+    "tutorCheck": "Check again"
   },
   "help": {
     "title": "How to play",
@@ -83,7 +88,9 @@
     "combat4": "Space ends the turn. Right-click or Esc cancels a skill.",
     "learn1": "Learn once, cast many: trainers teach skills through a short trial.",
     "learn2": "Attunement: skills fade a little after each battle unless you overcharge them. Practise with trainers to restore them.",
-    "learn3": "Stuck? Use the Hint button. Every wrong answer shows the steps."
+    "learn3": "Stuck? Use the Hint button. Every wrong answer shows the steps.",
+    "combat5": "Height: higher ground gives +25% damage per level and +1 range for ranged skills. Climbing costs extra movement.",
+    "tutor": "AI tutor: when the local tutor is running, untimed questions get an \"Ask Owl\" button. Owl asks guiding questions and never gives the answer."
   },
   "chars": {
     "kai": "Kai",
@@ -94,7 +101,8 @@
     "pekka": "Pekka",
     "helmi": "Helmi",
     "slime": "Number Slime",
-    "golem": "Riddle Golem"
+    "golem": "Riddle Golem",
+    "owl": "Owl"
   },
   "classes": {
     "kai": "Ninja",
@@ -383,7 +391,8 @@
     "l2": "Click a blue tile to move (1 AP buys 3 tiles). Click an enemy next to you to attack.",
     "l3": "Use number keys 1–4 or the buttons for skills. Each shows its AP cost. Some need a few turns to cool down.",
     "l4": "Skills you've learned work without any math. Turn on ⚡ Overcharge (O) to answer a question for a stronger effect.",
-    "l5": "Press Space or End turn when you're done. Right-click or Esc cancels a skill."
+    "l5": "Press Space or End turn when you're done. Right-click or Esc cancels a skill.",
+    "l6": "Height matters. Attacks from higher ground deal more damage, and ranged skills reach 1 tile further. Climbing up costs extra movement, and you can only climb one level at a time."
   },
   "combat": {
     "begin": "Battle!",
@@ -429,7 +438,8 @@
     "winForest": "The slimes dissolve into scattered digits. The forest path is clear.",
     "attuneNote": "Tip: skills you didn't overcharge lose a little attunement after each battle. Practise with your trainers to make them sharp again.",
     "winGolem": "The last seal cracks and the golem crumbles into sand. Water bursts from the spring!",
-    "goldGained": "+{n} gold"
+    "goldGained": "+{n} gold",
+    "highGround": "High ground!"
   },
   "probe": {
     "intro": "The seal reads: {eq}. Pick a whole number for x to test.",
@@ -540,5 +550,23 @@
     },
     "approaches": "Ways you measured the field: {list}",
     "thanks": "Thanks for playing the prototype!"
+  },
+  "tutor": {
+    "ask": "Ask Owl the tutor",
+    "title": "Owl the tutor",
+    "greeting": "Hoo! I won't tell you the answer, but I'll help you find it. What feels tricky?",
+    "placeholder": "What are you stuck on?",
+    "send": "Send",
+    "stuck": "I'm still stuck",
+    "stuckMsg": "I'm still stuck. Can you help a bit more?",
+    "thinking": "Owl is thinking...",
+    "error": "Owl didn't answer: {err}",
+    "redacted": "(Owl nearly gave the answer away, so that part is hidden.)",
+    "level": "Help level {n}/3",
+    "visualGrid": "There is a picture of a grid of squares, {w} wide and {h} tall.",
+    "visualBalance": "There is a picture of a balance scale showing {eq}, where x is a bag and numbers are weights.",
+    "balanceTask": "Balance-scale puzzle: take the same things off both sides until one bag stands alone, then say how many weights are in a bag.",
+    "farmContext": "Helmi's field is an 8 m × 6 m rectangle with a 3 m × 2 m corner missing. She needs 3 seeds per square metre.",
+    "probeTask": "Guess and check: the player picks a whole number for x, calculates both sides, and sees whether they match."
   }
 }

@@ -56,6 +56,30 @@ Helmi's field is an 8 × 6 rectangle with a 3 × 2 corner missing (42 m²), at 3
   - A whole bag or more extra: wasted gold and a smaller reward.
   - Exact: best reward.
 
+## 2.5D world and elevation
+
+The renderer (`src/render.ts`, `src/art/iso.ts`) projects the tile map isometrically. Each tile is a 32 × 16 diamond, and one height level is 8 px. The 16 × 16 pixel-art tiles are re-sampled onto diamond tops and shaded side faces, so all art is still defined as strings. Everything is painted back to front, one diagonal at a time, so houses, walls, trees and characters hide each other correctly. Heroes stay faintly visible behind big objects.
+
+Heights (`buildHeights` in `src/world/map.ts`):
+
+| Place | Height |
+|---|---|
+| River | −0.5 |
+| Village, road, farm | 0 |
+| Hills behind the village | 1–2 |
+| House roofs | step up from 2 to a ridge at 3 |
+| Forest clearing | 0, with two mounds of 1–2 |
+| Ruins floor | 1 |
+| Golem's dais | 2 |
+
+Rules:
+
+- You can step up or down one level at a time.
+- Climbing up costs one extra tile of movement.
+- From higher ground: +25% damage per level (max +50%), and ranged skills reach 1 tile further.
+- From lower ground: −15% damage.
+- The golem holds the dais, so the players have a reason to climb it.
+
 ## Combat (DOS2 / BG3-style)
 
 - Grid, 8-directional movement, initiative order shown at the top.
@@ -77,9 +101,20 @@ Helmi's field is an 8 × 6 rectangle with a 3 × 2 corner missing (42 m²), at 3
 | Overcharge timer | `combat.ts` → `timerSeconds(8)` |
 | Field shape / seed rate | `src/world/map.ts` → `FIELD`, `src/data.ts` → `SEEDS_PER_M2` |
 
+## AI tutor
+
+The main problem is balancing *character learning* against *player learning*. The tutor sits on the player side: it is help for thinking, never a way around the thinking.
+
+- Owl only appears on untimed questions. Overcharges are about fluency, so no help appears there.
+- Escalation goes in-game hint → Owl level 1 (nudge) → level 2 (strategy) → level 3 (analogous example or first step).
+- The model never sees the answer. The client checks every reply for the answer and asks for a rewrite, or hides the number (`src/tutor/guard.ts`).
+- The system prompt is a plain file (`tutor/rules.md`) so a teacher can tune tone and strictness.
+
 ## Ideas for next steps
 
 - Save/load (state is already a single object in `state.ts`).
+- Rotate the camera, and cut away walls in front of the party like BG3.
+- Tutor memory across problems (e.g. "you often forget the corner"), using `mastery.ts`.
 - More "angles" puzzles: area models for multiplication, number-line movement, magic squares.
 - Grid tactics that use math, e.g. aiming Fireball by coordinates, or a vector-based Shadow Step for older players.
 - Teacher-facing report: export per-topic accuracy from `mastery.ts`.

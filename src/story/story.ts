@@ -218,7 +218,7 @@ export async function examineGate(ctx: StoryCtx): Promise<void> {
 export async function beforeBattle(id: 'forest' | 'ruins'): Promise<void> {
   if (id === 'forest') {
     await say('kai', t('battle.forest1'));
-    await messageBox(t('tutorial.title'), [t('tutorial.l1'), t('tutorial.l2'), t('tutorial.l3'), t('tutorial.l4'), t('tutorial.l5')]);
+    await messageBox(t('tutorial.title'), [t('tutorial.l1'), t('tutorial.l2'), t('tutorial.l3'), t('tutorial.l4'), t('tutorial.l5'), t('tutorial.l6')]);
   } else {
     await say('golem', t('battle.golem1'));
     await say('golem', t('battle.golem2'));

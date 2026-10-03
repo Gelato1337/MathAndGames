@@ -23,6 +23,12 @@ export async function probeSeal(seal: Seal, log: string[], title = t('skills.pro
     label: t('probe.pick'),
     cancel: true,
     validate: (v) => (Number.isInteger(v) && v >= 0 && v <= 99 ? null : t('probe.wholeNumber')),
+    tutor: {
+      problem: () => eq,
+      context: () => t('tutor.probeTask'),
+      attempts: () => log,
+      answer: () => solveSeal(seal),
+    },
   });
   if (n === null) return { shattered: false, computedOk: false, cancelled: true };
 

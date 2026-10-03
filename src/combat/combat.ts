@@ -11,13 +11,16 @@ import { wait } from '../ui/dom';
 import { ask } from '../ui/question';
 import { probeSeal, unbindSeal } from '../ui/seals';
 import { inRect, type EncounterDef, type WorldMap } from '../world/map';
+import { tileCenter } from '../art/iso';
 import { CombatHud } from './hud';
 import { ENEMY_ATTACKS, GOLEM_THRESHOLDS, makeEnemy, makeHero, occupies, unitDist, type Unit } from './units';
 
 interface Float {
   text: string;
-  x: number;
-  y: number;
+  fx: number;
+  fy: number;
+  z: number;
+  lift: number;
   t: number;
   color: string;
 }
@@ -50,7 +53,7 @@ export class Combat {
   reach: Reach | null = null;
   hud: CombatHud;
   private anims: Array<{ u: Unit; path: Array<{ x: number; y: number }>; i: number; t: number; done: () => void }> = [];
-  private shots: Array<{ x0: number; y0: number; x1: number; y1: number; t: number; color: string; done: () => void }> = [];
+  private shots: Array<{ x0: number; y0: number; z0: number; x1: number; y1: number; z1: number; t: number; color: string; done: () => void }> = [];
 
   constructor(
     readonly enc: EncounterDef,
@@ -95,11 +98,13 @@ export class Combat {
   }
 
   canStand(u: Unit, x: number, y: number): boolean {
+    const h0 = this.world.height(x, y);
     for (let dy = 0; dy < u.size; dy++) {
       for (let dx = 0; dx < u.size; dx++) {
         const tx = x + dx;
         const ty = y + dy;
         if (!inRect(this.enc.region, tx, ty) || !this.world.walkable(tx, ty)) return false;
+        if (this.world.height(tx, ty) !== h0) return false;
         const o = this.unitAt(tx, ty);
         if (o && o !== u) return false;
       }
@@ -125,33 +130,68 @@ export class Combat {
     }
   }
 
-  /** 8-directional BFS from a unit, up to maxTiles steps. */
+  /** Height of the ground a unit stands on. */
+  z(u: { x: number; y: number }): number {
+    return this.world.height(u.x, u.y);
+  }
+
+  /**
+   * Movement range from a unit (8 directions). A step costs 1 tile of
+   * movement, climbing up a level costs 1 more, and cliffs higher than one
+   * level can't be climbed at all.
+   */
   reachable(u: Unit, maxTiles: number): Reach {
     const dist = new Map<number, number>();
     const prev = new Map<number, number>();
     const start = this.key(u.x, u.y);
     dist.set(start, 0);
-    const q: Array<[number, number]> = [[u.x, u.y]];
-    while (q.length) {
-      const [x, y] = q.shift()!;
-      const d = dist.get(this.key(x, y))!;
-      if (d >= maxTiles) continue;
+    const open: number[] = [start];
+    while (open.length) {
+      // small grids: a linear scan for the cheapest open node is plenty
+      let bi = 0;
+      for (let i = 1; i < open.length; i++) if (dist.get(open[i])! < dist.get(open[bi])!) bi = i;
+      const k = open.splice(bi, 1)[0];
+      const d = dist.get(k)!;
+      const x = k % this.world.w;
+      const y = Math.floor(k / this.world.w);
       for (let dy = -1; dy <= 1; dy++) {
         for (let dx = -1; dx <= 1; dx++) {
           if (!dx && !dy) continue;
           const nx = x + dx;
           const ny = y + dy;
-          const k = this.key(nx, ny);
-          if (dist.has(k)) continue;
           if (dx && dy && (!this.canStand(u, x + dx, y) || !this.canStand(u, x, y + dy))) continue;
-          if (!this.canStand(u, nx, ny)) continue;
-          dist.set(k, d + 1);
-          prev.set(k, this.key(x, y));
-          q.push([nx, ny]);
+          if (!this.canStand(u, nx, ny) || !this.world.canStep(x, y, nx, ny)) continue;
+          const climb = this.world.height(nx, ny) > this.world.height(x, y) ? 1 : 0;
+          const nd = d + 1 + climb;
+          if (nd > maxTiles) continue;
+          const nk = this.key(nx, ny);
+          if (dist.has(nk) && dist.get(nk)! <= nd) continue;
+          if (!dist.has(nk)) open.push(nk);
+          dist.set(nk, nd);
+          prev.set(nk, k);
         }
       }
     }
     return { dist, prev };
+  }
+
+  /** Height difference attacker − target (positive = attacker stands higher). */
+  elevation(a: { x: number; y: number }, b: { x: number; y: number }): number {
+    return this.z(a) - this.z(b);
+  }
+
+  /** High ground: +25% damage per level above (max +50%), −15% from below. */
+  heightMult(a: Unit, b: Unit): number {
+    const dz = this.elevation(a, b);
+    if (dz > 0) return 1 + 0.25 * Math.min(dz, 2);
+    if (dz < 0) return 0.85;
+    return 1;
+  }
+
+  /** Ranged skills reach one tile further from higher ground. */
+  rangeOf(u: Unit, id: SkillId, tx: number, ty: number): number {
+    const r = SKILLS[id].range;
+    return r > 1 && this.elevation(u, { x: tx, y: ty }) > 0 ? r + 1 : r;
   }
 
   pathTo(reach: Reach, u: Unit, x: number, y: number): Array<{ x: number; y: number }> {
@@ -276,9 +316,10 @@ export class Combat {
     if (this.log.length > 8) this.log.pop();
   }
 
-  float(u: Unit | { x: number; y: number; size?: number }, text: string, color: string): void {
+  float(u: Unit | { x: number; y: number; size?: number }, text: string, color: string, lift = 0): void {
     const size = (u as Unit).size ?? 1;
-    this.floats.push({ text, x: u.x * TILE + (size * TILE) / 2, y: u.y * TILE - 4, t: 0, color });
+    const off = (size - 1) / 2;
+    this.floats.push({ text, fx: u.x + off, fy: u.y + off, z: this.z(u), lift: lift + size * 14, t: 0, color });
   }
 
   onFire(u: Unit): boolean {
@@ -286,8 +327,15 @@ export class Combat {
     return false;
   }
 
-  damage(target: Unit, amount: number): void {
+  damage(target: Unit, amount: number, from?: Unit): void {
     if (target.dead) return;
+    if (from) {
+      const hm = this.heightMult(from, target);
+      const label = t('combat.highGround');
+      const shown = this.floats.some((f) => f.text === label && f.t < 0.8);
+      if (hm > 1 && !target.seal && !shown) this.float(target, label, '#ffcd75', 10);
+      amount *= hm;
+    }
     if (target.seal) {
       this.float(target, t('combat.sealedFloat'), '#73eff7');
       this.addLog(t('combat.sealAbsorbs', { name: this.name(target) }));
@@ -304,7 +352,7 @@ export class Combat {
         target.sealPhase++;
         target.seal = GOLEM_SEALS[target.sealPhase];
         target.probeLog = [];
-        this.float({ x: target.x, y: target.y - 1, size: 2 }, t('combat.resealFloat'), '#73eff7');
+        this.float(target, t('combat.resealFloat'), '#73eff7', 12);
         this.addLog(t('combat.reseal', { eq: fmtSeal(target.seal) }));
       }
     }
@@ -325,7 +373,7 @@ export class Combat {
     target.seal = null;
     target.stagger = true;
     target.flash = 0.4;
-    this.float({ x: target.x, y: target.y - 1, size: target.size }, t('combat.shatterFloat'), '#ffcd75');
+    this.float(target, t('combat.shatterFloat'), '#ffcd75', 12);
     this.addLog(t('combat.shatter', { name: this.name(target) }));
   }
 
@@ -339,10 +387,12 @@ export class Combat {
   shoot(from: Unit, to: { x: number; y: number }, color: string): Promise<void> {
     return new Promise((done) =>
       this.shots.push({
-        x0: from.x * TILE + (from.size * TILE) / 2,
-        y0: from.y * TILE + 6,
-        x1: to.x * TILE + TILE / 2,
-        y1: to.y * TILE + TILE / 2,
+        x0: from.x + (from.size - 1) / 2,
+        y0: from.y + (from.size - 1) / 2,
+        z0: this.z(from),
+        x1: to.x + ((to as Unit).size ? ((to as Unit).size - 1) / 2 : 0),
+        y1: to.y + ((to as Unit).size ? ((to as Unit).size - 1) / 2 : 0),
+        z1: this.z(to),
         t: 0,
         color,
         done,
@@ -388,7 +438,7 @@ export class Combat {
     this.floats = this.floats.filter((f) => f.t < 1.3);
 
     const mp = mousePos();
-    this.hover = mp ? this.r.screenToTile(mp.x, mp.y) : null;
+    this.hover = mp ? this.pick(mp.x, mp.y) : null;
 
     const clicks = takeClicks();
     const keys = takePressed();
@@ -396,13 +446,25 @@ export class Combat {
 
     for (const k of keys) this.onKey(k);
     for (const c of clicks) {
-      const tile = this.r.screenToTile(c.x, c.y);
+      const tile = this.pick(c.x, c.y);
       if (c.button === 2) this.select(null);
       else void this.onClick(tile.x, tile.y);
     }
   }
 
   // ---------- player input ----------
+
+  /** Tile under the mouse; clicking a character's body counts as its tile. */
+  pick(clientX: number, clientY: number): { x: number; y: number } {
+    const p = this.r.toLogical(clientX, clientY);
+    const units = this.alive().sort((a, b) => b.x + b.y + b.size - (a.x + a.y + a.size));
+    for (const u of units) {
+      const c = tileCenter(u.px / TILE + (u.size - 1) / 2, u.py / TILE + (u.size - 1) / 2, this.z(u));
+      const w = u.size * 16;
+      if (p.x >= c.x - w / 2 && p.x <= c.x + w / 2 && p.y >= c.y - w + 2 && p.y <= c.y + 2) return { x: u.x, y: u.y };
+    }
+    return this.r.screenToTile(clientX, clientY, this.world);
+  }
 
   skillsOf(u: Unit): SkillId[] {
     if (u.team !== 'hero') return [];
@@ -447,11 +509,11 @@ export class Combat {
     if (def.target === 'enemy') {
       if (!tu || tu.team !== 'enemy') return false;
       if (id === 'unbind' && !tu.seal) return false;
-      return unitDist(u, tu) <= def.range;
+      return unitDist(u, tu) <= this.rangeOf(u, id, tu.x, tu.y);
     }
     if (def.target === 'ally') return !!tu && tu.team === 'hero' && unitDist(u, tu) <= def.range;
-    if (def.target === 'emptyTile') return !tu && inRect(this.enc.region, x, y) && this.world.walkable(x, y) && d <= def.range;
-    return inRect(this.enc.region, x, y) && unitDist(u, { x, y, size: 1 }) <= def.range;
+    if (def.target === 'emptyTile') return !tu && this.canStand(u, x, y) && d <= def.range;
+    return inRect(this.enc.region, x, y) && this.world.walkable(x, y) && unitDist(u, { x, y, size: 1 }) <= this.rangeOf(u, id, x, y);
   }
 
   private async onClick(x: number, y: number): Promise<void> {
@@ -534,7 +596,7 @@ export class Combat {
 
     switch (id) {
       case 'strike': {
-        this.damage(target!, rand(6, 8) * hiddenMult());
+        this.damage(target!, rand(6, 8) * hiddenMult(), u);
         break;
       }
       case 'flurry': {
@@ -548,7 +610,7 @@ export class Combat {
         }
         const hm = hiddenMult();
         for (let i = 0; i < hits && !target!.dead; i++) {
-          this.damage(target!, 4 * mult * hm);
+          this.damage(target!, 4 * mult * hm, u);
           await wait(160);
         }
         break;
@@ -563,7 +625,7 @@ export class Combat {
         this.float(u, t('combat.stepFloat'), '#94b0c2');
         if (good) {
           u.hidden = true;
-          this.float({ x: u.x, y: u.y - 1 }, t('combat.hiddenFloat'), '#ffcd75');
+          this.float(u, t('combat.hiddenFloat'), '#ffcd75', 10);
         }
         break;
       }
@@ -572,12 +634,12 @@ export class Combat {
           const res = await probeSeal(target!.seal, target!.probeLog);
           if (res.shattered) this.breakSeal(target!);
         }
-        this.damage(target!, 5 * mult * hiddenMult());
+        this.damage(target!, 5 * mult * hiddenMult(), u);
         break;
       }
       case 'bolt': {
         await this.shoot(u, target!, '#73eff7');
-        this.damage(target!, rand(5, 7));
+        this.damage(target!, rand(5, 7), u);
         break;
       }
       case 'fireball': {
@@ -595,7 +657,7 @@ export class Combat {
             if (tu) hit.add(tu);
           }
         }
-        for (const tu of hit) this.damage(tu, dmg);
+        for (const tu of hit) this.damage(tu, dmg, u);
         break;
       }
       case 'mend': {
@@ -650,7 +712,8 @@ export class Combat {
         const targets = heroes
           .filter((h) => {
             const d = unitDist(u, h);
-            return d <= atk.range && d >= atk.minRange;
+            const range = atk.range > 1 && this.elevation(u, h) > 0 ? atk.range + 1 : atk.range;
+            return d <= range && d >= atk.minRange;
           })
           .sort((a, b) => a.hp - b.hp);
         if (!targets.length) continue;
@@ -662,7 +725,7 @@ export class Combat {
           u.flash = 0.15;
           await wait(250);
         }
-        this.damage(tgt, rand(atk.min, atk.max));
+        this.damage(tgt, rand(atk.min, atk.max), u);
         if (this.checkEnd()) return;
         await wait(400);
         acted = true;
@@ -700,113 +763,126 @@ export class Combat {
     const ctx = r.ctx;
     const reg = this.enc.region;
     const frame = r.frame;
+    const u = this.active;
 
-    // grid inside the arena
-    ctx.strokeStyle = 'rgba(26,28,44,0.35)';
-    ctx.lineWidth = 1 / 3;
+    // arena grid
     for (let y = reg.y; y < reg.y + reg.h; y++) {
-      for (let x = reg.x; x < reg.x + reg.w; x++) {
-        if (this.world.walkable(x, y)) ctx.strokeRect(x * TILE, y * TILE, TILE, TILE);
-      }
+      for (let x = reg.x; x < reg.x + reg.w; x++) if (this.world.walkable(x, y)) r.addOverlay(x, y, 'rgba(0,0,0,0)', 'rgba(26,28,44,0.4)');
     }
-    // arena border
-    ctx.strokeStyle = 'rgba(255,205,117,0.6)';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(reg.x * TILE + 0.5, reg.y * TILE + 0.5, reg.w * TILE - 1, reg.h * TILE - 1);
-
     // fire
     for (const k of this.fire.keys()) {
       const x = k % this.world.w;
       const y = Math.floor(k / this.world.w);
-      r.tileRect(x, y, 1, 1, 'rgba(239,125,87,0.45)');
-      ctx.fillStyle = (frame + x * 3 + y) % 12 < 6 ? '#ffcd75' : '#b13e53';
-      ctx.fillRect(x * TILE + 4 + ((frame >> 2) % 3), y * TILE + 8, 2, 4);
-      ctx.fillRect(x * TILE + 10, y * TILE + 5 + ((frame >> 3) % 2), 2, 4);
+      r.addOverlay(x, y, 'rgba(239,125,87,0.45)');
+      const z = this.world.height(x, y);
+      r.addSprite(x, y, () => {
+        const c = tileCenter(x, y, z);
+        ctx.fillStyle = (frame + x * 3 + y) % 12 < 6 ? '#ffcd75' : '#b13e53';
+        ctx.fillRect(c.x - 5 + ((frame >> 2) % 3), c.y - 5, 2, 4);
+        ctx.fillRect(c.x + 3, c.y - 7 + ((frame >> 3) % 2), 2, 4);
+      });
     }
 
-    const u = this.active;
     if (this.state === 'player' && u) {
       if (this.selected) {
         const def = SKILLS[this.selected];
         for (let y = reg.y; y < reg.y + reg.h; y++) {
           for (let x = reg.x; x < reg.x + reg.w; x++) {
-            if (unitDist(u, { x, y, size: 1 }) <= def.range && this.world.walkable(x, y)) r.tileRect(x, y, 1, 1, 'rgba(255,205,117,0.12)');
-            if (this.validTarget(this.selected, x, y)) r.tileRect(x, y, 1, 1, 'rgba(255,205,117,0.25)', 'rgba(255,205,117,0.8)');
+            if (!this.world.walkable(x, y)) continue;
+            if (this.validTarget(this.selected, x, y)) r.addOverlay(x, y, 'rgba(255,205,117,0.35)', 'rgba(255,205,117,0.9)');
+            else if (unitDist(u, { x, y, size: 1 }) <= this.rangeOf(u, this.selected, x, y)) r.addOverlay(x, y, 'rgba(255,205,117,0.12)');
           }
         }
         if (this.hover && def.area && this.validTarget(this.selected, this.hover.x, this.hover.y)) {
-          r.tileRect(this.hover.x - def.area, this.hover.y - def.area, def.area * 2 + 1, def.area * 2 + 1, 'rgba(177,62,83,0.4)', '#ef7d57');
+          for (let dy = -def.area; dy <= def.area; dy++)
+            for (let dx = -def.area; dx <= def.area; dx++) r.addOverlay(this.hover.x + dx, this.hover.y + dy, 'rgba(177,62,83,0.45)', '#ef7d57');
         }
       } else if (this.reach) {
         for (const [k, d] of this.reach.dist) {
           if (d === 0) continue;
           const cost = this.moveCost(u, d);
           if (cost > u.ap) continue;
-          const x = k % this.world.w;
-          const y = Math.floor(k / this.world.w);
-          r.tileRect(x, y, 1, 1, cost === 0 ? 'rgba(115,239,247,0.32)' : 'rgba(65,166,246,0.24)');
+          r.addOverlay(k % this.world.w, Math.floor(k / this.world.w), cost === 0 ? 'rgba(115,239,247,0.35)' : 'rgba(65,166,246,0.28)');
         }
         if (this.hover) {
-          const k = this.key(this.hover.x, this.hover.y);
-          const d = this.reach.dist.get(k);
+          const d = this.reach.dist.get(this.key(this.hover.x, this.hover.y));
           if (d !== undefined && d > 0 && this.moveCost(u, d) <= u.ap) {
-            for (const p of this.pathTo(this.reach, u, this.hover.x, this.hover.y)) r.tileRect(p.x, p.y, 1, 1, 'rgba(255,205,117,0.3)');
-            r.text(t('combat.apCost', { n: this.moveCost(u, d) }), this.hover.x * TILE + 8, this.hover.y * TILE - 3, { size: 15, color: '#ffcd75' });
+            for (const p of this.pathTo(this.reach, u, this.hover.x, this.hover.y)) r.addOverlay(p.x, p.y, 'rgba(255,205,117,0.4)');
+            const hx = this.hover.x;
+            const hy = this.hover.y;
+            const hz = this.world.height(hx, hy);
+            r.addLate(() => {
+              const c = tileCenter(hx, hy, hz);
+              const climb = hz > this.z(u) ? ` ▲${hz}` : '';
+              r.text(t('combat.apCost', { n: this.moveCost(u, d) }) + climb, c.x, c.y - 14, { size: 15, color: '#ffcd75' });
+            });
           }
         }
       }
     }
 
-    // units, sorted by y
-    const list = this.units.filter((x) => !x.dead).sort((a, b) => a.py - b.py);
-    for (const unit of list) {
-      const spr = unit.kind;
+    // units
+    for (const unit of this.units.filter((x) => !x.dead)) {
+      const anim = this.anims.find((a) => a.u === unit);
+      const fx = unit.px / TILE;
+      const fy = unit.py / TILE;
+      // while walking, sort by the further-forward tile so floors never cover the walker
+      const next = anim && anim.i < anim.path.length ? anim.path[anim.i] : null;
+      const sx = Math.max(unit.x, next?.x ?? unit.x) + unit.size - 1;
+      const sy = Math.max(unit.y, next?.y ?? unit.y) + unit.size - 1;
+      const z0 = this.z(unit);
+      const z = next ? z0 + (this.world.height(next.x, next.y) - z0) * anim!.t : z0;
       const bob = unit === this.active && Math.sin(frame / 6) > 0 ? -1 : 0;
-      r.drawSprite(spr, unit.px, unit.py - 2, { flash: unit.flash > 0, bob, alpha: unit.hidden ? 0.55 : 1 });
-      if (unit.seal) {
-        const cx = unit.px + (unit.size * TILE) / 2;
-        const cy = unit.py + (unit.size * TILE) / 2;
-        ctx.strokeStyle = frame % 20 < 10 ? 'rgba(115,239,247,0.9)' : 'rgba(65,166,246,0.9)';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.ellipse(cx, cy, unit.size * 10, unit.size * 10, 0, 0, Math.PI * 2);
-        ctx.stroke();
-      }
-    }
-    // HP bars + seal text
-    for (const unit of list) {
-      const w = unit.size * TILE - 2;
-      const x = unit.px + 1;
-      const y = unit.py - 5;
-      ctx.fillStyle = '#1a1c2c';
-      ctx.fillRect(x, y, w, 2);
-      ctx.fillStyle = unit.team === 'hero' ? '#a7f070' : '#ef7d57';
-      ctx.fillRect(x, y, Math.max(0, (w * unit.hp) / unit.maxHp), 2);
-      if (unit.seal) {
-        r.text(fmtSeal(unit.seal), unit.px + (unit.size * TILE) / 2, unit.py - 12, { size: 20, color: '#73eff7', bold: true });
-      }
-    }
-    if (u && !u.dead && this.state !== 'over') {
-      const ax = u.px + (u.size * TILE) / 2;
-      const ay = u.py - (u.seal ? 22 : 10) + (Math.sin(frame / 5) > 0 ? -1 : 0);
-      ctx.fillStyle = '#ffcd75';
-      ctx.beginPath();
-      ctx.moveTo(ax - 3, ay - 3);
-      ctx.lineTo(ax + 3, ay - 3);
-      ctx.lineTo(ax, ay + 1);
-      ctx.fill();
+      r.addSprite(sx, sy, () => {
+        r.drawSpriteAt(unit.kind, fx, fy, z, { flash: unit.flash > 0, bob, alpha: unit.hidden ? 0.55 : 1, size: unit.size });
+        if (unit.seal) {
+          const c = tileCenter(fx + (unit.size - 1) / 2, fy + (unit.size - 1) / 2, z);
+          ctx.strokeStyle = frame % 20 < 10 ? 'rgba(115,239,247,0.9)' : 'rgba(65,166,246,0.9)';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.ellipse(c.x, c.y - unit.size * 7, unit.size * 11, unit.size * 9, 0, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+      });
+      // HP bar, seal equation and turn marker drawn on top of everything
+      r.addLate(() => {
+        // heroes stay faintly visible through walls and big enemies
+        if (unit.team === 'hero') r.drawSpriteAt(unit.kind, fx, fy, z, { alpha: 0.3, bob });
+        const c = tileCenter(fx + (unit.size - 1) / 2, fy + (unit.size - 1) / 2, z);
+        const top = c.y - unit.size * 16 - 1;
+        const w = unit.size * 14;
+        ctx.fillStyle = '#1a1c2c';
+        ctx.fillRect(c.x - w / 2, top, w, 2);
+        ctx.fillStyle = unit.team === 'hero' ? '#a7f070' : '#ef7d57';
+        ctx.fillRect(c.x - w / 2, top, Math.max(0, (w * unit.hp) / unit.maxHp), 2);
+        if (unit.seal) r.text(fmtSeal(unit.seal), c.x, top - 7, { size: 20, color: '#73eff7', bold: true });
+        if (unit === u && this.state !== 'over') {
+          const ay = top - (unit.seal ? 16 : 4) + (Math.sin(frame / 5) > 0 ? -1 : 0);
+          ctx.fillStyle = '#ffcd75';
+          ctx.beginPath();
+          ctx.moveTo(c.x - 3, ay - 3);
+          ctx.lineTo(c.x + 3, ay - 3);
+          ctx.lineTo(c.x, ay + 1);
+          ctx.fill();
+        }
+      });
     }
 
-    for (const s of this.shots) {
-      const x = s.x0 + (s.x1 - s.x0) * s.t;
-      const y = s.y0 + (s.y1 - s.y0) * s.t - Math.sin(s.t * Math.PI) * 6;
-      ctx.fillStyle = s.color;
-      ctx.fillRect(x - 2, y - 2, 4, 4);
-      ctx.fillStyle = '#f4f4f4';
-      ctx.fillRect(x - 1, y - 1, 2, 2);
-    }
-    for (const f of this.floats) {
-      r.text(f.text, f.x, f.y - f.t * 14, { color: f.color, size: 20, bold: true });
-    }
+    r.addLate(() => {
+      for (const sh of this.shots) {
+        const a = tileCenter(sh.x0, sh.y0, sh.z0);
+        const b = tileCenter(sh.x1, sh.y1, sh.z1);
+        const x = a.x + (b.x - a.x) * sh.t;
+        const y = a.y - 8 + (b.y - a.y) * sh.t - Math.sin(sh.t * Math.PI) * 10;
+        ctx.fillStyle = sh.color;
+        ctx.fillRect(x - 2, y - 2, 4, 4);
+        ctx.fillStyle = '#f4f4f4';
+        ctx.fillRect(x - 1, y - 1, 2, 2);
+      }
+      for (const f of this.floats) {
+        const c = tileCenter(f.fx, f.fy, f.z);
+        r.text(f.text, c.x, c.y - f.lift - f.t * 14, { color: f.color, size: 20, bold: true });
+      }
+    });
   }
 }

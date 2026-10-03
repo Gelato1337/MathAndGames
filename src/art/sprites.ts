@@ -315,6 +315,57 @@ export const SPRITES: Record<string, string[]> = {
   ],
 };
 
+// Taller tree for the isometric view: same canopy, longer trunk.
+SPRITES.treeTall = [
+  ...SPRITES.tree.slice(0, 12),
+  '.....kkkUUkkk...',
+  '......kuUUk.....',
+  '......kuUUk.....',
+  '......kuUUk.....',
+  '......kuUUk.....',
+  '.....kuuUUUk....',
+  '....kuu.kUUk....',
+  '.....kk..kk.....',
+];
+
+SPRITES.owl = [
+  '................',
+  '...k........k...',
+  '...kk......kk...',
+  '...kukkkkkkuk...',
+  '..kuuuuuuuuuuk..',
+  '..kuwwwuuwwwuk..',
+  '..kuwkwuuwkwuk..',
+  '..kuwwwyywwwuk..',
+  '..kuuuuyyuuuuk..',
+  '..kueeuuuueeuk..',
+  '..kueeeeeeeeuk..',
+  '..kuueeeeeeuuk..',
+  '...kuueeeeuuk...',
+  '....kkkkkkkk....',
+  '.....yy..yy.....',
+  '................',
+];
+
+SPRITES.fence = [
+  '................',
+  '................',
+  '................',
+  '................',
+  '................',
+  '..kk........kk..',
+  '.kuUkkkkkkkkuUk.',
+  '.keeeeeeeeeeeek.',
+  '.kuUkkkkkkkkuUk.',
+  '..uU........uU..',
+  '.kuUkkkkkkkkuUk.',
+  '.keeeeeeeeeeeek.',
+  '.kuUkkkkkkkkuUk.',
+  '..uU........uU..',
+  '..kk........kk..',
+  '................',
+];
+
 const cache = new Map<string, HTMLCanvasElement>();
 
 export function renderSprite(rows: string[]): HTMLCanvasElement {

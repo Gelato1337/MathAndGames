@@ -100,7 +100,7 @@ export class Explore {
         const nx = x + dx;
         const ny = y + dy;
         const k = key(nx, ny);
-        if (prev.has(k) || this.blocked(nx, ny)) continue;
+        if (prev.has(k) || this.blocked(nx, ny) || !this.world.canStep(x, y, nx, ny)) continue;
         prev.set(k, key(x, y));
         q.push([nx, ny]);
       }
@@ -130,7 +130,7 @@ export class Explore {
     this.facing = [dx, dy];
     const nx = this.leader.x + dx;
     const ny = this.leader.y + dy;
-    if (this.blocked(nx, ny)) {
+    if (this.blocked(nx, ny) || !this.world.canStep(this.leader.x, this.leader.y, nx, ny)) {
       if (dx !== 0) this.leader.flip = dx < 0;
       return false;
     }
@@ -178,7 +178,7 @@ export class Explore {
     }
 
     for (const c of takeClicks()) {
-      const t = this.r.screenToTile(c.x, c.y);
+      const t = this.r.screenToTile(c.x, c.y, this.world);
       const npc = NPCS.find((n) => n.x === t.x && n.y === t.y);
       const gate = GATE_TILES.some((g) => g.x === t.x && g.y === t.y) && this.world.get(t.x, t.y) === 'G';
       if (npc || gate) {
@@ -250,19 +250,35 @@ export class Explore {
     }
   }
 
+  /** Height of an actor, smoothly following its step. */
+  actorZ(a: Actor): number {
+    const z0 = this.world.height(a.fromX, a.fromY);
+    const z1 = this.world.height(a.x, a.y);
+    return a.moving ? z0 + (z1 - z0) * a.t : z1;
+  }
+
   draw(): void {
     const r = this.r;
     const bobT = r.frame / 8;
-    const list: Array<{ y: number; draw: () => void }> = [];
     for (const n of NPCS) {
-      list.push({ y: n.y, draw: () => r.drawSprite(n.id, n.x * TILE, n.y * TILE - 2, { bob: Math.sin(bobT + n.x) > 0.6 ? -1 : 0 }) });
+      const z = this.world.height(n.x, n.y);
+      r.addSprite(n.x, n.y, () => r.drawSpriteAt(n.id, n.x, n.y, z, { bob: Math.sin(bobT + n.x) > 0.6 ? -1 : 0 }));
     }
     for (const e of this.hooks.enemySprites()) {
-      list.push({ y: e.y, draw: () => r.drawSprite(e.sprite, e.x * TILE, e.y * TILE - 2, { bob: Math.sin(bobT * 0.7 + e.x) > 0 ? -1 : 0 }) });
+      const size = e.sprite === 'golem' ? 2 : 1;
+      const z = this.world.height(e.x, e.y);
+      r.addSprite(e.x + size - 1, e.y + size - 1, () =>
+        r.drawSpriteAt(e.sprite, e.x, e.y, z, { size, bob: Math.sin(bobT * 0.7 + e.x) > 0 ? -1 : 0 }),
+      );
     }
     for (const a of [this.follower, this.leader]) {
-      list.push({ y: a.py / TILE + (a === this.leader ? 0.01 : 0), draw: () => r.drawSprite(a.sprite, a.px, a.py - 2, { bob: a.moving && a.t < 0.5 ? -1 : 0, flip: a.flip }) });
+      const fx = a.px / TILE;
+      const fy = a.py / TILE;
+      // sort by the tile being entered so the actor is never hidden by the floor it walks onto
+      const sx = a.moving ? Math.max(a.x, a.fromX) : a.x;
+      const sy = a.moving ? Math.max(a.y, a.fromY) : a.y;
+      const z = this.actorZ(a);
+      r.addSprite(sx, sy, () => r.drawSpriteAt(a.sprite, fx, fy, z, { bob: a.moving && a.t < 0.5 ? -1 : 0, flip: a.flip }));
     }
-    list.sort((p, q) => p.y - q.y).forEach((d) => d.draw());
   }
 }

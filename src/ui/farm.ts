@@ -5,6 +5,7 @@ import { record } from '../math/mastery';
 import { game } from '../state';
 import { FIELD } from '../world/map';
 import { autofocus, h, openModal } from './dom';
+import { tutorPanel } from './tutor';
 
 export const FIELD_AREA = FIELD.w * FIELD.h - FIELD.cutW * FIELD.cutH;
 export const FIELD_SEEDS = FIELD_AREA * SEEDS_PER_M2;
@@ -100,6 +101,14 @@ export function farmPlanner(): Promise<boolean> {
       h('div.row.answer-row', {}, [input, submit, close]),
       fb,
     ]);
+    const attempts: string[] = [];
+    const tutor = tutorPanel({
+      problem: () => question.textContent ?? '',
+      context: () => t('tutor.farmContext'),
+      attempts: () => attempts,
+      answer: () => (stage() === 'area' ? FIELD_AREA : FIELD_SEEDS),
+    });
+    if (tutor) content.append(tutor);
     const modal = openModal(content);
 
     const approaches: Approach[] = ['count', 'split', 'subtract'];
@@ -135,6 +144,7 @@ export function farmPlanner(): Promise<boolean> {
         fb.textContent = t('common.typeNumber');
         return;
       }
+      attempts.push(input.value.trim());
       if (stage() === 'area') {
         const ok = v === FIELD_AREA;
         record('farm', ok, performance.now() - started);

@@ -903,3 +903,81 @@ kbd {
   bottom: auto;
   flex-direction: column;
 }
+
+/* ---------- tutor ---------- */
+.tutor {
+  margin-top: 0.8em;
+  text-align: left;
+}
+
+.tutor-open {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.tutor-open img,
+.tutor-msg img {
+  width: 1.6em;
+  height: 1.6em;
+  image-rendering: pixelated;
+  flex: none;
+}
+
+.tutor-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  color: var(--yellow);
+  margin-bottom: 0.3em;
+}
+
+.tutor-log {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+  max-height: 9em;
+  overflow-y: auto;
+  background: var(--ink);
+  border: 0.12em solid var(--slate);
+  border-radius: 0.2em;
+  padding: 0.4em;
+  margin-bottom: 0.4em;
+}
+
+.tutor-msg {
+  display: flex;
+  gap: 0.4em;
+  align-items: flex-start;
+  line-height: 1.35;
+  max-width: 92%;
+}
+
+.tutor-msg.tutor span {
+  background: var(--slate);
+  padding: 0.25em 0.5em;
+  border-radius: 0.3em;
+}
+
+.tutor-msg.student {
+  align-self: flex-end;
+}
+
+.tutor-msg.student span {
+  background: var(--blue);
+  padding: 0.25em 0.5em;
+  border-radius: 0.3em;
+}
+
+input[type='text'].tutor-input {
+  flex: 1;
+  width: auto;
+  min-width: 8em;
+  font-size: 1em;
+  text-align: left;
+}
+
+.tutor-status {
+  min-height: 1.2em;
+  font-size: 0.85em;
+}

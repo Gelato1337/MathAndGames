@@ -4,6 +4,7 @@ import { Combat, type CombatResult } from './combat/combat';
 import { onLangChange, setLang, getLang, t } from './i18n';
 import { clearInput, initInput } from './input';
 import { Renderer } from './render';
+import { checkTutor } from './tutor/client';
 import { devUnlockAll, fadeAttunement, game, newGame } from './state';
 import { beforeBattle, examineGate, talk, type StoryCtx } from './story/story';
 import { isBlocking, toast, uiRoot } from './ui/dom';
@@ -181,6 +182,7 @@ function toTitle(): void {
 
 async function startGame(dev: boolean): Promise<void> {
   newGame();
+  void checkTutor();
   world = new WorldMap();
   explore = makeExplore();
   mode = 'explore';
@@ -222,22 +224,23 @@ function loop(now: number): void {
 
   if (mode === 'explore') {
     if (!busy && !isBlocking()) explore.update(dt);
-    r.follow(explore.leader.px, explore.leader.py, world, 1);
+    const a = explore.leader;
+    r.follow(a.px / TILE, a.py / TILE, explore.actorZ(a), 1);
     refreshHud();
   } else if (mode === 'combat' && combat) {
     combat.update(dt);
     const u = combat.active;
-    if (u) r.follow(u.px + ((u.size - 1) * TILE) / 2, u.py + ((u.size - 1) * TILE) / 2, world, 0.08);
+    if (u) r.follow(u.px / TILE + (u.size - 1) / 2, u.py / TILE + (u.size - 1) / 2, world.height(u.x, u.y), 0.08);
   } else if (mode === 'title') {
-    titleCam += dt * 8;
-    r.follow(80 + titleCam, 14 * TILE, world, 1);
-    if (titleCam > 700) titleCam = 0;
+    titleCam += dt * 0.5;
+    r.follow(5 + titleCam, 14, 0, 1);
+    if (titleCam > 40) titleCam = 0;
   }
 
   r.begin();
-  r.drawMap(world);
   if (mode === 'combat' && combat) combat.draw();
   else explore.draw();
+  r.flush(world);
   requestAnimationFrame(loop);
 }
 

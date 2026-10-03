@@ -70,7 +70,12 @@
       "normal": "Normaali",
       "relaxed": "Rauhallinen",
       "off": "Pois"
-    }
+    },
+    "tutorTitle": "Tekoälyopettaja",
+    "tutorOnline": "Yhdistetty ({provider}).",
+    "tutorOffline": "Ei yhteyttä.",
+    "tutorHelp": "Pöllö-opettaja toimii omalla tietokoneellasi Claude Coden, Gemini CLI:n tai Codex CLI:n kautta. Asenna jokin niistä, aja pelikansiossa \"npm run tutor\" ja pelaa peliä samalla koneella komennolla \"npm run dev\". Pöllö antaa vain vihjeitä ja kysymyksiä, ei koskaan vastauksia.",
+    "tutorCheck": "Tarkista uudelleen"
   },
   "help": {
     "title": "Peliohjeet",
@@ -83,7 +88,9 @@
     "combat4": "Välilyönti lopettaa vuoron. Hiiren oikea painike tai Esc peruu taidon.",
     "learn1": "Opi kerran, käytä monesti: opettajat opettavat taidot lyhyellä kokeella.",
     "learn2": "Viritys: taidot heikkenevät hieman joka taistelun jälkeen, ellet ylilataa niitä. Harjoittele opettajan kanssa palauttaaksesi ne.",
-    "learn3": "Jumissa? Paina Vihje-nappia. Jokainen väärä vastaus näyttää ratkaisun vaiheet."
+    "learn3": "Jumissa? Paina Vihje-nappia. Jokainen väärä vastaus näyttää ratkaisun vaiheet.",
+    "combat5": "Korkeus: korkeampi maasto antaa +25 % vahinkoa tasoa kohden ja +1 kantaman kaukotaidoille. Kiipeäminen maksaa lisää liikettä.",
+    "tutor": "Tekoälyopettaja: kun paikallinen opettaja on käynnissä, ajastamattomissa tehtävissä on \"Kysy Pöllöltä\" -nappi. Pöllö esittää ohjaavia kysymyksiä eikä koskaan kerro vastausta."
   },
   "chars": {
     "kai": "Kai",
@@ -94,7 +101,8 @@
     "pekka": "Pekka",
     "helmi": "Helmi",
     "slime": "Lukulima",
-    "golem": "Arvoitusgolemi"
+    "golem": "Arvoitusgolemi",
+    "owl": "Pöllö"
   },
   "classes": {
     "kai": "Ninja",
@@ -383,7 +391,8 @@
     "l2": "Klikkaa sinistä ruutua liikkuaksesi (1 TP = 3 ruutua). Klikkaa vieressä olevaa vihollista hyökätäksesi.",
     "l3": "Käytä taitoja numeronäppäimillä 1–4 tai napeilla. Jokainen näyttää TP-hintansa. Osa taidoista latautuu muutaman vuoron.",
     "l4": "Opitut taidot toimivat ilman matematiikkaa. Laita ⚡ Ylilataus (O) päälle ja vastaa kysymykseen, niin vaikutus on vahvempi.",
-    "l5": "Paina välilyöntiä tai Lopeta vuoro, kun olet valmis. Hiiren oikea painike tai Esc peruu taidon."
+    "l5": "Paina välilyöntiä tai Lopeta vuoro, kun olet valmis. Hiiren oikea painike tai Esc peruu taidon.",
+    "l6": "Korkeus ratkaisee. Hyökkäykset korkeammalta tekevät enemmän vahinkoa, ja kaukotaidot ulottuvat ruudun pidemmälle. Ylös kiipeäminen maksaa lisää liikettä, ja voit kiivetä vain yhden tason kerrallaan."
   },
   "combat": {
     "begin": "Taistelu!",
@@ -429,7 +438,8 @@
     "winForest": "Limat hajoavat sinne tänne sinkoileviksi numeroiksi. Metsäpolku on vapaa.",
     "attuneNote": "Vinkki: taidot, joita et ylilatannut, menettävät hieman viritystä joka taistelun jälkeen. Harjoittele opettajien kanssa, niin ne terävöityvät taas.",
     "winGolem": "Viimeinen sinetti halkeaa, ja golemi murenee hiekaksi. Vesi purskahtaa lähteestä!",
-    "goldGained": "+{n} kultaa"
+    "goldGained": "+{n} kultaa",
+    "highGround": "Korkea maasto!"
   },
   "probe": {
     "intro": "Sinetissä lukee: {eq}. Valitse x:lle kokonaisluku, jota kokeilet.",
@@ -540,5 +550,23 @@
     },
     "approaches": "Tavat, joilla mittasit pellon: {list}",
     "thanks": "Kiitos, että pelasit prototyyppiä!"
+  },
+  "tutor": {
+    "ask": "Kysy Pöllö-opettajalta",
+    "title": "Pöllö-opettaja",
+    "greeting": "Huhuu! En kerro vastausta, mutta autan sinua löytämään sen. Mikä tuntuu hankalalta?",
+    "placeholder": "Missä kohtaa olet jumissa?",
+    "send": "Lähetä",
+    "stuck": "Olen yhä jumissa",
+    "stuckMsg": "Olen yhä jumissa. Voitko auttaa vähän enemmän?",
+    "thinking": "Pöllö miettii...",
+    "error": "Pöllö ei vastannut: {err}",
+    "redacted": "(Pöllö oli vähällä paljastaa vastauksen, joten se kohta on piilotettu.)",
+    "level": "Avun taso {n}/3",
+    "visualGrid": "Kuvassa on ruudukko, {w} ruutua leveä ja {h} ruutua korkea.",
+    "visualBalance": "Kuvassa on vaaka, joka näyttää {eq}. x on pussi ja luvut ovat punnuksia.",
+    "balanceTask": "Vaakatehtävä: ota molemmilta puolilta samat asiat pois, kunnes yksi pussi on yksin, ja kerro sitten montako punnusta pussissa on.",
+    "farmContext": "Helmin pelto on 8 m × 6 m -suorakulmio, josta puuttuu 3 m × 2 m -kulma. Hän tarvitsee 3 siementä neliömetrille.",
+    "probeTask": "Kokeile ja tarkista: pelaaja valitsee x:lle kokonaisluvun, laskee molemmat puolet ja katsoo, täsmäävätkö ne."
   }
 }

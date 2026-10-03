@@ -5,6 +5,7 @@ import { getLang, LANGS, setLang, t, type Lang } from '../i18n';
 import { summary } from '../math/mastery';
 import { game, setTimers, settings, type TimerMode } from '../state';
 import { objective, sideObjective } from '../story/story';
+import { checkTutor, tutorStatus } from '../tutor/client';
 import { FIELD_SEEDS } from './farm';
 import { h, hudRoot, img, openModal, uiRoot } from './dom';
 
@@ -137,17 +138,29 @@ export function settingsScreen(onChange: () => void): Promise<void> {
       ),
     );
   renderTimers();
+  const tutorLine = h('p');
+  const renderTutor = () => {
+    const st = tutorStatus();
+    tutorLine.className = st.online ? 'good' : 'muted';
+    tutorLine.textContent = st.online ? t('settings.tutorOnline', { provider: st.provider ?? '?' }) : t('settings.tutorOffline');
+  };
+  renderTutor();
+  void checkTutor().then(renderTutor);
+  const checkBtn = h('button', { text: t('settings.tutorCheck'), onclick: () => void checkTutor().then(renderTutor) });
   return screen(t('menu.settings'), [
     h('h3', { text: t('settings.language') }),
     langButtons(onChange),
     h('h3', { text: t('settings.timersTitle') }),
     h('p.muted', { text: t('settings.timersHelp') }),
     timerRow,
+    h('h3', { text: t('settings.tutorTitle') }),
+    h('div.row', {}, [tutorLine, checkBtn]),
+    h('p.muted', { text: t('settings.tutorHelp') }),
   ]);
 }
 
 export function helpScreen(): Promise<void> {
-  const keys = ['move', 'talk', 'menu', 'combat1', 'combat2', 'combat3', 'combat4', 'learn1', 'learn2', 'learn3'];
+  const keys = ['move', 'talk', 'menu', 'combat1', 'combat2', 'combat3', 'combat4', 'combat5', 'learn1', 'learn2', 'learn3', 'tutor'];
   return screen(t('help.title'), keys.map((k) => h('p', { text: t(`help.${k}`) })));
 }
 

@@ -171,7 +171,6 @@ describe('sprites', () => {
     for (const [name, rows] of Object.entries(SPRITES)) {
       const w = rows[0].length;
       for (const [i, r] of rows.entries()) expect(r.length, `${name} row ${i}`).toBe(w);
-      expect(rows.length, name).toBe(w);
     }
   });
 });
@@ -200,7 +199,7 @@ describe('world map', () => {
         const nx = x + dx;
         const ny = y + dy;
         const k = `${nx},${ny}`;
-        if (seen.has(k) || !world.walkable(nx, ny)) continue;
+        if (seen.has(k) || !world.canStep(x, y, nx, ny)) continue;
         if (NPCS.some((n) => n.x === nx && n.y === ny)) continue;
         seen.add(k);
         q.push([nx, ny]);
@@ -226,6 +225,16 @@ describe('world map', () => {
             expect(inRect(e.region, en.x + dx, en.y + dy)).toBe(true);
           }
       }
+    }
+  });
+
+  it('has no unclimbable cliffs inside the battle arenas', () => {
+    for (const e of ENCOUNTERS) {
+      for (let y = e.region.y; y < e.region.y + e.region.h; y++)
+        for (let x = e.region.x; x < e.region.x + e.region.w - 1; x++) {
+          if (!world.walkable(x, y) || !world.walkable(x + 1, y)) continue;
+          expect(Math.abs(world.height(x, y) - world.height(x + 1, y)), `${e.id} ${x},${y}`).toBeLessThanOrEqual(1);
+        }
     }
   });
 

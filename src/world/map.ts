@@ -72,13 +72,29 @@ export function inRect(r: Rect, x: number, y: number): boolean {
   return x >= r.x && y >= r.y && x < r.x + r.w && y < r.y + r.h;
 }
 
+/** Highest step a character can climb between neighbouring tiles. */
+export const MAX_STEP = 1;
+
 export class WorldMap {
   readonly w = MAP_W;
   readonly h = MAP_H;
   tiles: string[][];
+  /** Height level of every tile (water is below 0, buildings are tall blocks). */
+  heights: number[][];
 
   constructor() {
     this.tiles = buildTiles();
+    this.heights = buildHeights(this.tiles);
+  }
+
+  height(x: number, y: number): number {
+    if (x < 0 || y < 0 || x >= this.w || y >= this.h) return 0;
+    return this.heights[y][x];
+  }
+
+  /** Can a character step from (ax, ay) to the neighbouring (bx, by)? */
+  canStep(ax: number, ay: number, bx: number, by: number): boolean {
+    return this.walkable(bx, by) && Math.abs(this.height(bx, by) - this.height(ax, ay)) <= MAX_STEP;
   }
 
   get(x: number, y: number): string {
@@ -96,6 +112,82 @@ export class WorldMap {
 
   openGate(): void {
     for (const g of GATE_TILES) this.set(g.x, g.y, '_');
+  }
+}
+
+/** The boss stands on a raised dais inside the ruins. */
+export const DAIS = { x: 53, y: 12, w: 4, h: 6 };
+
+function buildHeights(t: string[][]): number[][] {
+  const hgt: number[][] = t.map((row) => row.map(() => 0));
+  const set = (x: number, y: number, w: number, h: number, v: number) => {
+    for (let yy = y; yy < y + h; yy++) for (let xx = x; xx < x + w; xx++) hgt[yy][xx] = v;
+  };
+  // hills behind the village
+  set(1, 1, 31, 6, 1);
+  set(4, 2, 10, 3, 2);
+  set(20, 1, 9, 3, 2);
+  // forest floor rolls a little
+  for (let y = 1; y < MAP_H - 1; y++) {
+    for (let x = 34; x <= 46; x++) if ((x * 7 + y * 13) % 5 === 0) hgt[y][x] = 1;
+  }
+  // clearing: flat with two mounds to fight over
+  set(36, 9, 9, 12, 0);
+  set(37, 10, 3, 2, 1);
+  hgt[10][38] = 2;
+  set(41, 17, 3, 3, 1);
+  // ruins: low outer walls, raised floor, tall back wall, dais for the golem
+  set(47, 7, 12, 16, 1);
+  set(47, 7, 12, 1, 3);
+  set(48, 8, 10, 14, 1);
+  set(DAIS.x, DAIS.y, DAIS.w, DAIS.h, 2);
+
+  for (let y = 0; y < MAP_H; y++) {
+    for (let x = 0; x < MAP_W; x++) {
+      const ch = t[y][x];
+      if (ch === '~') hgt[y][x] = -0.5;
+      else if (ch === 'B' || ch === '=') hgt[y][x] = 0;
+      // houses: wall row at 2, roof stepping up to a ridge
+      else if ('HwD'.includes(ch)) hgt[y][x] = 2;
+      else if (ch === 'R') hgt[y][x] = t[y + 1]?.[x] === 'R' ? 3 : 2.5;
+    }
+  }
+  // the road and farm stay flat at ground level
+  set(3, 18, 16, 12, 0);
+  return hgt;
+}
+
+/** Which textures to use for a tile's top and side faces in the 2.5D view. */
+export function tileLook(ch: string): { top: string; left: string; right: string; object?: string } {
+  switch (ch) {
+    case 'T':
+      return { top: '.', left: 'dirt', right: 'dirt', object: 'treeTall' };
+    case 'o':
+      return { top: '.', left: 'dirt', right: 'dirt', object: 'rock' };
+    case 'F':
+      return { top: '.', left: 'dirt', right: 'dirt', object: 'fence' };
+    case 'c':
+      return { top: 's', left: 'dirt', right: 'dirt', object: 'crop' };
+    case 'O':
+      return { top: '_', left: '#', right: '#', object: 'rock' };
+    case '_':
+      return { top: '_', left: '#', right: '#' };
+    case '#':
+      return { top: '#', left: '#', right: '#' };
+    case 'G':
+      return { top: 'G', left: 'G', right: 'G' };
+    case 'R':
+      return { top: 'R', left: 'H', right: 'H' };
+    case 'H':
+    case 'w':
+    case 'D':
+      return { top: 'R', left: ch, right: 'H' };
+    case '~':
+      return { top: '~', left: '~', right: '~' };
+    case 'B':
+      return { top: 'B', left: 'B', right: 'B' };
+    default:
+      return { top: ch, left: 'dirt', right: 'dirt' };
   }
 }
 

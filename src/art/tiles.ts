@@ -151,6 +151,12 @@ const builders: Record<string, (ctx: Ctx, rnd: () => number, frame: number) => v
     px(ctx, P.m, 2, 11, 3, 1);
   },
   _: floor,
+  dirt: (ctx, rnd) => {
+    px(ctx, P.u, 0, 0, 16, 16);
+    for (let y = 3; y < 16; y += 5) px(ctx, P.U, 0, y, 16, 1);
+    for (let i = 0; i < 6; i++) px(ctx, P.e, Math.floor(rnd() * 16), Math.floor(rnd() * 16));
+    px(ctx, P.G, 0, 0, 16, 1);
+  },
   G: (ctx, _rnd, frame) => {
     builders['#'](ctx, () => 0, 0);
     px(ctx, P.k, 2, 1, 12, 15);
@@ -177,6 +183,7 @@ export function tileCanvas(ch: string, x: number, y: number, frame: number): HTM
     const ctx = cv.getContext('2d')!;
     const build = builders[ch] ?? grass;
     build(ctx, mulberry(Math.abs(variant) * 977 + ch.charCodeAt(0)), frame % 8);
+    cv.dataset.key = key;
     tileCache.set(key, cv);
   }
   return cv;
