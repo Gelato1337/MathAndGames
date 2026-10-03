@@ -1,0 +1,544 @@
+{
+  "meta": {
+    "title": "Numerola",
+    "subtitle": "Arvoitusgolemi"
+  },
+  "langs": {
+    "en": "English",
+    "fi": "Suomi"
+  },
+  "math": {
+    "var": "x"
+  },
+  "common": {
+    "ok": "OK",
+    "cancel": "Peruuta",
+    "continue": "Jatka",
+    "leave": "Poistu",
+    "submit": "Vastaa",
+    "hint": "Vihje",
+    "close": "Sulje",
+    "next": "Seuraava",
+    "undo": "Kumoa",
+    "reset": "Aloita alusta",
+    "correct": "Oikein!",
+    "wrong": "Ei aivan.",
+    "theAnswer": "Oikea vastaus oli {answer}.",
+    "timeUp": "Aika loppui!",
+    "typeNumber": "Kirjoita luku (esim. 12, 2,5 tai 1/2).",
+    "answerLabel": "Vastauksesi",
+    "gold": "{n} kultaa",
+    "advance": "▼ klikkaa / Enter"
+  },
+  "title": {
+    "newGame": "Uusi peli",
+    "help": "Peliohjeet",
+    "tagline": "Matematiikka-roolipelin prototyyppi · opi kerran, käytä monesti"
+  },
+  "intro": {
+    "p1": "Laakson kylässä Numerolassa kaikki pyörii lukujen varassa: sadot, kauppa ja jopa taikuus.",
+    "p2": "Mutta muinainen Arvoitusgolemi on herännyt itäisillä raunioilla ja sinetöinyt kylän lähteen. Kaivot kuivuvat.",
+    "p3": "Olet Kai, nuori ninja, ja Aino, taikurin oppipoika. Vanhin Vesa odottaa teitä kylän länsipäässä.",
+    "start": "Aloita"
+  },
+  "hud": {
+    "talk": "E: Puhu ({name})",
+    "examine": "E: Tutki",
+    "quests": "Tehtävät",
+    "skills": "Taidot",
+    "bag": "Laukku",
+    "menu": "Valikko",
+    "objective": "Tavoite",
+    "side": "Sivutehtävä"
+  },
+  "menu": {
+    "title": "Valikko",
+    "resume": "Jatka",
+    "quests": "Tehtävät",
+    "skills": "Taidot",
+    "bag": "Laukku",
+    "settings": "Asetukset",
+    "help": "Peliohjeet",
+    "toTitle": "Takaisin alkuun",
+    "skillsHelp": "Opettele taito kerran opettajalta, sen jälkeen voit käyttää sitä vapaasti. Ylilataa taistelussa saadaksesi lisävoimaa."
+  },
+  "settings": {
+    "language": "Kieli",
+    "timersTitle": "Kysymysten ajastimet",
+    "timersHelp": "Ninjan ylilataukset ovat ajastettuja. Rauhallinen tuplaa ajan, Pois poistaa ajastimet kokonaan.",
+    "timers": {
+      "normal": "Normaali",
+      "relaxed": "Rauhallinen",
+      "off": "Pois"
+    }
+  },
+  "help": {
+    "title": "Peliohjeet",
+    "move": "Liiku: WASD / nuolinäppäimet, tai klikkaa minne haluat mennä.",
+    "talk": "Puhu / tutki: E, välilyönti tai Enter (tai klikkaa henkilöä).",
+    "menu": "Valikko: Esc · Tehtävät: Q · Taidot: K · Laukku: I",
+    "combat1": "Taistelu: joka vuorolla hahmo saa toimintapisteitä (TP). Liikkuminen maksaa 1 TP / 3 ruutua, ja taidot näyttävät hintansa.",
+    "combat2": "Klikkaa sinistä ruutua liikkuaksesi. Valitse taito näppäimillä 1–4 ja klikkaa kohdetta.",
+    "combat3": "⚡ Ylilataus (O): vastaa kysymykseen, niin taito on vahvempi. Väärä vastaus tekee silti tavallisen iskun.",
+    "combat4": "Välilyönti lopettaa vuoron. Hiiren oikea painike tai Esc peruu taidon.",
+    "learn1": "Opi kerran, käytä monesti: opettajat opettavat taidot lyhyellä kokeella.",
+    "learn2": "Viritys: taidot heikkenevät hieman joka taistelun jälkeen, ellet ylilataa niitä. Harjoittele opettajan kanssa palauttaaksesi ne.",
+    "learn3": "Jumissa? Paina Vihje-nappia. Jokainen väärä vastaus näyttää ratkaisun vaiheet."
+  },
+  "chars": {
+    "kai": "Kai",
+    "aino": "Aino",
+    "elder": "Vanhin Vesa",
+    "ren": "Mestari Ren",
+    "lumi": "Viisas Lumi",
+    "pekka": "Pekka",
+    "helmi": "Helmi",
+    "slime": "Lukulima",
+    "golem": "Arvoitusgolemi"
+  },
+  "classes": {
+    "kai": "Ninja",
+    "aino": "Taikuri",
+    "kaiDesc": "Nopea ajattelu: päässälaskut, kertotaulut, kokeile ja tarkista.",
+    "ainoDesc": "Syvä ajattelu: pinta-alat, puuttuvat luvut, yhtälöt."
+  },
+  "skills": {
+    "strike": {
+      "name": "Isku",
+      "desc": "Nopea miekanisku. 6–8 vahinkoa."
+    },
+    "flurry": {
+      "name": "Iskusarja",
+      "desc": "Kaksi nopeaa iskua, 4 vahinkoa kumpikin.",
+      "oc": "Ylilataus: sarja nopeita laskuja kelloa vastaan. Jokainen oikea vastaus lisää yhden iskun, enintään 6 iskua."
+    },
+    "shadowStep": {
+      "name": "Varjoaskel",
+      "desc": "Siirry tyhjään ruutuun enintään 5 ruudun päähän.",
+      "oc": "Ylilataus: vastaa nopeaan kertolaskuun ja muutut Piiloon. Seuraava hyökkäyksesi tekee 50 % enemmän vahinkoa."
+    },
+    "probe": {
+      "name": "Koetteluisku",
+      "desc": "Kokeileva isku: 5 vahinkoa. Sinettiä vastaan arvaa x ja laske. Jos puolet ovat yhtä suuret, sinetti murtuu."
+    },
+    "bolt": {
+      "name": "Sauvasalama",
+      "desc": "Taikakipinä. 5–7 vahinkoa, kantama 5."
+    },
+    "fireball": {
+      "name": "Tulipallo",
+      "desc": "Polttaa 3 × 3 -alueen, 9 vahinkoa, ja jättää tulen 2 kierrokseksi. Osuu myös omiin!",
+      "oc": "Ylilataus: ratkaise pinta-alatehtävä, niin vahinko on 50 % suurempi."
+    },
+    "mend": {
+      "name": "Parannus",
+      "desc": "Paranna liittolaista (tai itseäsi) 10 HP.",
+      "oc": "Ylilataus: ratkaise puuttuvan luvun tehtävä, niin parannus on 16 HP."
+    },
+    "unbind": {
+      "name": "Sinetinpurku",
+      "desc": "Lue sinetti vaakana ja ratkaise x. Oikea vastaus murtaa sinetin."
+    },
+    "ap": "{n} TP",
+    "range": "Kantama {n}",
+    "cooldown": "Latautuu {n}",
+    "attunement": "Viritys {n} % (heikkenee taisteluiden välillä; harjoittele tai ylilataa palauttaaksesi)",
+    "notLearned": "Ei vielä opittu. Opettaja: {who}.",
+    "overcharge": "Ylilataus",
+    "overchargeDesc": "Vastaa kysymykseen taitoa käyttäessäsi. Oikein: vahvempi vaikutus, ja taito pysyy terävänä. Väärin: tavallinen isku, ei koskaan huti."
+  },
+  "items": {
+    "tonic": {
+      "name": "Yrttijuoma",
+      "short": "Juoma",
+      "desc": "Palauttaa 15 HP. Taistelussa maksaa 1 TP."
+    },
+    "tea": {
+      "name": "Keskittymistee",
+      "short": "Tee",
+      "desc": "Taistelussa: saat heti 2 TP lisää. Maksaa 0 TP."
+    },
+    "seeds": {
+      "name": "Siemenpussi",
+      "desc": "Pussi, jossa on 10 siementä. Helmi tarvitsee niitä pellolleen."
+    }
+  },
+  "quests": {
+    "main": {
+      "title": "Piilotettu luku",
+      "desc": "Arvoitusgolemi on sinetöinyt Numerolan lähteen.",
+      "s1": "Puhu Vanhin Vesan kanssa",
+      "s2": "Opettele sinetin murtava taito (Koetteluisku tai Sinetinpurku)",
+      "s3": "Avaa riimuportti idässä",
+      "s4": "Voita Arvoitusgolemi",
+      "started": "Uusi tehtävä: Piilotettu luku"
+    },
+    "farm": {
+      "title": "Vino pelto",
+      "desc": "Helmi tarvitsee siemeniä oudon muotoiselle pellolleen.",
+      "s1": "Laske pellon pinta-ala",
+      "s2": "Laske, montako siementä tarvitaan",
+      "s3": "Osta tarpeeksi siemenpusseja Pekalta",
+      "s4": "Vie siemenet Helmille",
+      "started": "Uusi tehtävä: Vino pelto"
+    },
+    "none": "Ei vielä sivutehtäviä. Tarvitseeko joku kylässä apua?"
+  },
+  "obj": {
+    "talkElder": "Puhu Vanhin Vesan kanssa kylän länsipäässä.",
+    "train": "Opettele Koetteluisku (Mestari Ren, dojo) tai Sinetinpurku (Viisas Lumi, kirjasto).",
+    "gate": "Mene itään sillan yli ja metsän läpi riimuportille.",
+    "golem": "Mene raunioille ja murra Arvoitusgolemin sinetit.",
+    "done": "Lähde virtaa taas!",
+    "farm0": "Helmi maatilalla (etelässä) saattaa tarvita apua.",
+    "farm1": "Suunnittele Helmin pelto (puhu Helmille).",
+    "farm2": "Viimeistele Helmin pellon suunnitelma.",
+    "farm3": "Osta siemenpusseja Pekalta (tarvitaan {seeds} siementä) ja vie ne Helmille."
+  },
+  "elder": {
+    "intro1": "Kai, Aino, onneksi tulitte. Arvoitusgolemi istuu lähteemme päällä, eikä mikään terä pure sen kivikuoreen.",
+    "intro2": "Sen kuori on sidottu sinetillä: piilotetulla luvulla. Löydä luku, niin sinetti murtuu.",
+    "intro3": "Mestari Ren dojolla opettaa ninjan tien: nopean ajattelun, kokeile ja tarkista. Viisas Lumi kirjastossa opettaa taikurin tien: yhtälöt, jotka paljastavat tuntemattoman.",
+    "intro4": "Opetelkaa minkä ehditte. Sitten itään metsän läpi vanhojen raunioiden riimuportille.",
+    "kaiReply": "Nopeaa ajattelua? Kuulostaa juuri minun treeniltäni.",
+    "ainoReply": "Ja minun on se hidas ja ovela laji. Me löydämme sen luvun, Vanhin.",
+    "intro5": "Ai niin, ja Helmi maatilalla kaipaisi apua. Sankaritkin tarvitsevat leipää.",
+    "again": "Miten harjoittelu sujuu?",
+    "optGolem": "Kerro golemista.",
+    "optHint": "Mitä meidän pitäisi tehdä seuraavaksi?",
+    "golem1": "Golemin sinetit ovat yhtälöitä. Ensimmäinen on helppo, mutta aina kun murrat yhden, tilalle syntyy vaikeampi.",
+    "golem2": "Murra sen sinetit, iske kun se on suojaton, niin lähde on taas meidän.",
+    "hintTrain": "Ette osaa vielä murtaa sinettiä. Opetelkaa Koetteluisku Mestari Reniltä tai Sinetinpurku Viisas Lumilta. Molemmat olisi vielä parempi.",
+    "hintGate": "Menkää itään, sillan yli ja metsän läpi. Riimuportti vartioi raunioita.",
+    "hintGolem": "Portti on auki. Golemi odottaa raunioilla. Olkaa rohkeita, ja tarkistakaa vastauksenne.",
+    "thanks": "Lähde virtaa taas! Numerola muistaa teidät, Kai ja Aino."
+  },
+  "ren": {
+    "busy": "Hmph. Puhu ensin Vanhin Vesan kanssa ja tule sitten takaisin.",
+    "intro1": "Vai haluat oppia ninjan tien. Ninja ei pysähdy pohtimaan. Ninja tietää.",
+    "intro2": "Jokainen tekniikka alkaa kokeella. Läpäise se kerran, niin liike on sinun. Harjoittele, niin se pysyy terävänä.",
+    "menu": "Mitä otetaan, oppilas?",
+    "menuDone": "Olet oppinut kaiken, mitä opetan. Pidä mielesi terävänä.",
+    "about1": "Ninjan liikkeet ovat halpoja ja nopeita. Ylilataa ne, niin heitän sinulle nopeita kysymyksiä. Vastaa ennen kuin aika loppuu!",
+    "about2": "Koetteluisku on kokeile ja tarkista: valitse luku, kokeile sitä sinettiin ja korjaa. Hidasta? Ehkä. Mutta se toimii aina.",
+    "sealHint": "Muista: sinettiä vastaan valitse luku x:lle ja laske. Liian pieni? Kokeile isompaa. Liian iso? Kokeile pienempää."
+  },
+  "lumi": {
+    "busy": "Ah, vieraita! Puhukaa ensin Vanhin Vesan kanssa, hänellä on uutisia.",
+    "intro1": "Tervetuloa kirjastoon. Taikurin voima tulee ymmärryksestä, ei nopeudesta.",
+    "intro2": "Kokeissani ei ole aikarajaa. Ota aikaa, käytä vihjeitä ja opi näkemään tehtävän muoto.",
+    "menu": "Minkä oppitunnin otamme?",
+    "menuDone": "Olet oppinut kaikki oppituntini. Loppu on harjoittelua.",
+    "about1": "Taikurin loitsut ovat vahvoja, mutta maksavat enemmän TP:tä. Ylilataa loitsu, niin ratkaiset tehtävän ilman aikarajaa ja saat suuremman vaikutuksen.",
+    "about2": "Sinetinpurku lukee sinetin kuin vaa'an. Mitä teet toiselle puolelle, tee myös toiselle, kunnes x on yksin.",
+    "sealHint": "Kun kohtaat golemin, käytä Sinetinpurkua ja ratkaise sen yhtälö. Yksi oikea vastaus murtaa sinetin."
+  },
+  "trainer": {
+    "train": "Suorita koe: {skill}",
+    "practice": "Harjoittele heikentyneitä taitoja ({n})",
+    "about": "Kerro tiestäsi.",
+    "practiced": "{n}/{total} taidosta on taas terävinä."
+  },
+  "trial": {
+    "title": "Koe: {skill}",
+    "progress": "Oikeita vastauksia: {n} / {need}",
+    "learnedTitle": "Opittu: {skill}!",
+    "flurry": {
+      "intro": "Iskusarja! Isku, isku, isku. Oppiaksesi sen laske yhteen- ja vähennyslaskuja nopeasti päässä. Neljä oikeaa vastausta.",
+      "outro": "Taistelussa laita Ylilataus päälle, niin jokainen nopea oikea vastaus lisää yhden iskun sarjaan."
+    },
+    "shadowStep": {
+      "intro": "Varjoaskel. Kertotaulut, oppilas. Ninja osaa ne laskematta. Neljä oikein.",
+      "outro": "Ylilataa se nopealla kertolaskulla, niin katoat varjoihin: seuraava hyökkäyksesi on 50 % vahvempi."
+    },
+    "probe": {
+      "intro": "Koetteluisku. Ensin laskujärjestys: kertolasku ennen yhteenlaskua, elleivät sulut sano muuta.",
+      "guess": "Nyt varsinainen oppitunti. Tässä harjoitussinetissä lukee 2x + 1 = 11. Valitse x:lle arvo, laske 2x + 1 ja katso, tuleeko 11.",
+      "keepTrying": "Luovutatko jo? Ninja yrittää uudelleen. Valitse toinen luku.",
+      "outro": "Sinettiä vastaan Koetteluiskulla voit kokeilla yhtä arvausta kerrallaan. Jokainen huti kertoo, kannattaako kokeilla isompaa vai pienempää."
+    },
+    "fireball": {
+      "intro": "Tulipallo peittää alueen: suorakulmion palavaa maata. Opetellaan mittaamaan pinta-aloja. Rivit kertaa sarakkeet. Kolme oikein.",
+      "outro": "Tulipallo polttaa 3 × 3 -alueen (9 ruutua) ja jättää liekit 2 kierrokseksi. Varo, se polttaa myös ystäviä! Ylilataa se pinta-alatehtävällä, niin vahinko on 50 % suurempi."
+    },
+    "mend": {
+      "intro": "Parannus täyttää sen, mikä puuttuu. Siis: puuttuvan luvun tehtäviä. Mikä luku tulee laatikkoon? Neljä oikein.",
+      "outro": "Ylilataa Parannus puuttuvan luvun tehtävällä, niin se parantaa 16 eikä 10."
+    },
+    "unbind": {
+      "intro": "Sinetinpurku on syvin oppitunti: vaaka. Pussissa on tuntematon määrä punnuksia. Pidä vaaka tasapainossa ja selvitä, montako niitä on.",
+      "stage1": "Yksi pussi ja 3 punnusta ovat tasapainossa 7 punnuksen kanssa. Ota punnuksia pois, mutta aina yhtä monta molemmilta puolilta!",
+      "stage2": "Kaksi pussia ja 1 punnus ovat tasapainossa 9 punnuksen kanssa. Kun toisella puolella on vain pusseja, jaa molemmat puolet yhtä suuriin ryhmiin.",
+      "stage3": "Pusseja molemmilla puolilla! Voit ottaa myös pussin kummaltakin puolelta, koska pussi painaa joka puolella saman verran.",
+      "symbols": "Hienoa. Nyt sama asia ilman vaakaa, pelkillä merkeillä. x on pussi, ja luvut ovat punnuksia.",
+      "outro": "Sinetinpurulla yksi oikea vastaus murtaa sinetin. Kuvittele vaaka mieleesi, niin se auttaa ajattelemaan."
+    }
+  },
+  "practice": {
+    "title": "Harjoitus: {skill}"
+  },
+  "pekka": {
+    "busy": "Kauppa ei ole vielä auki, ystävä. Vanhin etsi sinua!",
+    "hello": "Tervetuloa Pekan puotiin! Juomia, teetä, siemeniä, kaikki rehellisin hinnoin. Melkein.",
+    "optShop": "Näytä tavarasi.",
+    "optChat": "Miten kauppa käy?",
+    "chat1": "Kauppa? Kaikki laskevat kolikkonsa kahteen kertaan, kun lähde kuivui.",
+    "chat2": "Vinkki: jos osaat laskea alennuksen päässäsi, saatan antaa jotain kaupan päälle."
+  },
+  "shop": {
+    "title": "Pekan puoti",
+    "greeting": "Hinnat ovat kappalehintoja. Kirjoita, montako haluat.",
+    "haggle": "Tingi (kerran)",
+    "qty": "Määrä",
+    "buy": "Osta",
+    "badQty": "Kirjoita kokonaisluku, vähintään 1.",
+    "noGold": "Se maksaa {cost} kultaa, mutta sinulla on vain {gold}.",
+    "bought": "Ostit {n} × {item} hintaan {cost} kultaa.",
+    "owned": "Sinulla: {n}",
+    "haggleTitle": "Tinkimässä Pekan kanssa",
+    "haggleStory": "Pekka virnistää: \"Laske tämä, niin saat Yrttijuoman kaupan päälle.\"",
+    "haggleWin": "\"Terävä! Tässä, Yrttijuoma talon piikkiin.\"",
+    "haggleLose": "\"Hah! Parempi onni ensi kerralla, ystävä.\" (Pekka tinkii vain kerran.)"
+  },
+  "helmi": {
+    "busy": "Ai, hei! Oletteko nähneet Vanhinta? Hän on kysellyt teitä.",
+    "intro1": "Kai! Aino! Täydellinen ajoitus. Minun pitäisi kylvää uusi peltoni, mutta se on vino kummajainen.",
+    "intro2": "Se on kuin suorakulmio, josta on haukattu kulma pois. Tarvitsen 3 siementä jokaista neliömetriä kohti.",
+    "intro3": "Jos ostan liian vähän, osa jää paljaaksi. Liian paljon, ja tuhlaan kolikoita. Osaatteko laskea, paljonko tarvitaan?",
+    "ask": "Autatteko suunnittelemaan pellon?",
+    "optHelp": "Suunnitellaan yhdessä.",
+    "optLater": "Ehkä myöhemmin.",
+    "later": "Ei hätää. Pelto ei karkaa mihinkään.",
+    "comeBack": "Tulkaa takaisin, kun olette valmiita viimeistelemään suunnitelman.",
+    "planned": "{area} m², eli {seeds} siementä! Pekka myy niitä {bag} siemenen pusseissa. Voisitteko ostaa tarvittavat ja tuoda ne tänne?",
+    "needSeeds": "Tarvitsemme {seeds} siementä. Pekka myy niitä {bag} siemenen pusseissa.",
+    "short": "Teillä on {have} siementä, mutta pelto tarvitsee {need}. Siitä puuttuu {missing}.",
+    "optMore": "Ostan ensin lisää.",
+    "optPlantAnyway": "Kylvetään mitä on.",
+    "under": "Kylvimme minkä pystyimme, noin {pct} % pellosta. Kelpaa, mutta muutama rivi jää paljaaksi.",
+    "over": "Kaikki kylvetty! Tosin... {extra} siementä liikaa, eli {bags} pussia, joita ei olisi tarvittu. Kiitos silti!",
+    "exact": "Täydellistä! {bags} pussia, ja vain {left} siementä jäi yli. Pussin osaa ei voi ostaa, joten tuo on juuri oikein. Ottakaa nämä juomat myös!",
+    "reward": "+{n} kultaa",
+    "done": "Pelto kasvaa. Kiitos avusta!",
+    "doneExact": "Katsokaa noita taimia, joka neliömetri on peitetty. Olette syntyneitä maanviljelijöitä!"
+  },
+  "farm": {
+    "title": "Helmin pellon suunnittelu",
+    "intro": "Jokainen ruutu on 1 m². Helmi tarvitsee {rate} siementä neliömetrille. Valitse mikä tahansa tapa laskea pinta-ala. Kaikki antavat saman vastauksen!",
+    "m": "m",
+    "tools": "Ajattelutavat:",
+    "approach": {
+      "count": "Laske ruudut",
+      "split": "Jaa suorakulmioihin",
+      "subtract": "Suorakulmio miinus kulma"
+    },
+    "qArea": "Mikä on pellon pinta-ala neliömetreinä?",
+    "qSeeds": "Pelto on {area} m². Kun neliömetrille tarvitaan {rate} siementä, montako siementä tarvitaan?",
+    "areaRight": "Kyllä! Pelto on {area} m².",
+    "forgotCorner": "Tuo on koko 8 × 6 -suorakulmio, mutta siitä puuttuu kulma!",
+    "hint": {
+      "none": "Kokeile jotain yllä olevista ajattelutavoista.",
+      "count": "Laske jokainen pellon ruutu. Numerot auttavat.",
+      "split": "Laske A:n ja B:n pinta-alat erikseen ja laske ne yhteen.",
+      "subtract": "Iso 8 × 6 -suorakulmio, josta vähennetään puuttuva 3 × 2 -kulma."
+    },
+    "seedsHint": "Jokainen m² tarvitsee {rate} siementä: {area} × {rate}."
+  },
+  "gate": {
+    "locked": "Riimut hehkuvat sinetöidyssä kiviportissa. Ääni jyrähtää: \"Vain ne, jotka osaavat löytää piilotetun luvun, saavat kulkea.\" (Opettele ensin Koetteluisku tai Sinetinpurku.)",
+    "intro": "Portin riimut hehkuvat, jokaisessa kivessä on luku. Niissä on jokin sääntö...",
+    "opened": "Viimeinen riimu leimahtaa, ja portti aukeaa raapien. Raunioista virtaa kylmää ilmaa.",
+    "foreshadow": "Kai, näitkö? Sääntö oli 3 × n + 4, ja 25 oli riimussa 7. Veikkaan, että golemin sinetit toimivat samalla tavalla."
+  },
+  "runes": {
+    "title": "Riimuportti",
+    "pos": "#{n}",
+    "s1": "Viisi riimukiveä. Viimeisessä ei ole lukua.",
+    "q1": "Mikä luku kuuluu riimuun #5?",
+    "h1": "Kuinka paljon suurempi jokainen riimu on kuin edellinen?",
+    "e1": "Jokainen riimu on {d} enemmän kuin edellinen: {last} + {d} = {ans}.",
+    "s2": "Kauempana seinässä syttyy toinen riimu: riimu #10.",
+    "q2": "Mikä luku on riimussa #10?",
+    "h2": "Riimu #1 on {m} × 1 + {a}. Riimu #2 on {m} × 2 + {a}. Näetkö säännön?",
+    "e2": "Sääntö on {m} × paikka + {a}. Siis riimu #10 on {m} × 10 + {a} = {ans}.",
+    "s3": "Nyt portti kysyy päinvastaisen kysymyksen.",
+    "q3": "Missä riimussa on luku {v}?",
+    "h3": "{m} × n + {a} = {v}. Pura vaiheet: vähennä {a}, ja jaa sitten luvulla {m}.",
+    "e3a": "{m} × n + {a} = {v}, joten {m} × n = {v} − {a}.",
+    "e3b": "{m} × n = {d}, joten n = {d} : {m} = {ans}."
+  },
+  "battle": {
+    "forest1": "Limoja! Varo, Aino. Ne ovat tehty irrallisista luvuista.",
+    "golem1": "KUKA... HÄIRITSEE... LÄHDETTÄNI?",
+    "golem2": "MIKÄÄN TERÄ EI LEIKKAA MINUA. MIKÄÄN TULI EI POLTA MINUA. VAIN PIILOTETTU LUKU.",
+    "golemAino": "Katso sen ympärillä olevaa sinettiä. Se on yhtälö! Löydä x, niin se murtuu.",
+    "sealTitle": "Sinetti",
+    "sealRule": "Kun golemi on sinetöity, se ei ota vahinkoa. Murra sinetti, niin golemi on haavoittuvainen ja menettää myös seuraavan vuoronsa. Kun sen terveys laskee tarpeeksi, tilalle syntyy uusi, vaikeampi sinetti.",
+    "tipProbe": "Kai, Koetteluisku: arvaa x:lle arvo ja laske. Liian pieni vai liian iso? Korjaa ja yritä uudelleen.",
+    "tipUnbind": "Aino, Sinetinpurku: ratkaise yhtälö kuin vaaka. Yksi oikea vastaus murtaa sinetin."
+  },
+  "tutorial": {
+    "title": "Taistelun perusteet",
+    "l1": "Taistelut ovat vuoropohjaisia ruudukolla. Joka vuorolla hahmo saa 4 toimintapistettä (TP), ja voi säästää niitä enintään 6.",
+    "l2": "Klikkaa sinistä ruutua liikkuaksesi (1 TP = 3 ruutua). Klikkaa vieressä olevaa vihollista hyökätäksesi.",
+    "l3": "Käytä taitoja numeronäppäimillä 1–4 tai napeilla. Jokainen näyttää TP-hintansa. Osa taidoista latautuu muutaman vuoron.",
+    "l4": "Opitut taidot toimivat ilman matematiikkaa. Laita ⚡ Ylilataus (O) päälle ja vastaa kysymykseen, niin vaikutus on vahvempi.",
+    "l5": "Paina välilyöntiä tai Lopeta vuoro, kun olet valmis. Hiiren oikea painike tai Esc peruu taidon."
+  },
+  "combat": {
+    "begin": "Taistelu!",
+    "burns": "{name} kärsii liekeistä.",
+    "staggered": "{name} horjuu ja menettää vuoronsa!",
+    "staggerFloat": "Horjuu!",
+    "sealedFloat": "Sinetöity!",
+    "sealAbsorbs": "Sinetti imee iskun ({name}).",
+    "resealFloat": "Uusi sinetti!",
+    "reseal": "Uusi sinetti syntyy: {eq}",
+    "down": "{name} kaatui!",
+    "defeated": "{name} on voitettu!",
+    "shatterFloat": "Sinetti murtui!",
+    "shatter": "Sinetti murtuu ({name})!",
+    "outOfRange": "Liian kaukana. Mene lähemmäs.",
+    "ocTitle": "Ylilataus: {skill}",
+    "uses": "{name} käyttää taitoa {skill}.",
+    "combo": "Sarja ×{n}!",
+    "stepFloat": "Suhh!",
+    "hiddenFloat": "Piilossa",
+    "holdsFloat": "Kestää!",
+    "sealHolds": "Sinetti kestää. Katso vaiheet ja yritä seuraavalla vuorolla.",
+    "usesItem": "{name} käyttää: {item}.",
+    "enemyAttack": "{name}: {attack} kohteeseen {target}.",
+    "attacks": {
+      "bite": "Purema",
+      "slam": "Murskaus",
+      "throw": "Kiviheitto"
+    },
+    "apCost": "{n} TP",
+    "round": "Kierros {n}",
+    "apTitle": "Toimintapisteet",
+    "hp": "HP",
+    "moveLeft": "{n} ilmaista liikeruutua",
+    "endTurn": "Lopeta vuoro",
+    "hintTarget": "Klikkaa korostettua kohdetta",
+    "hintMove": "Klikkaa liikkuaksesi · klikkaa vihollista hyökätäksesi",
+    "enemyTurn": "{name} miettii...",
+    "loseTitle": "Tappio...",
+    "loseText": "Ryhmäsi kaatuu, mutta sankarit nousevat aina. Yritä taistelua uudelleen täysillä voimilla.",
+    "retry": "Yritä uudelleen",
+    "winTitle": "Voitto!",
+    "winForest": "Limat hajoavat sinne tänne sinkoileviksi numeroiksi. Metsäpolku on vapaa.",
+    "attuneNote": "Vinkki: taidot, joita et ylilatannut, menettävät hieman viritystä joka taistelun jälkeen. Harjoittele opettajien kanssa, niin ne terävöityvät taas.",
+    "winGolem": "Viimeinen sinetti halkeaa, ja golemi murenee hiekaksi. Vesi purskahtaa lähteestä!",
+    "goldGained": "+{n} kultaa"
+  },
+  "probe": {
+    "intro": "Sinetissä lukee: {eq}. Valitse x:lle kokonaisluku, jota kokeilet.",
+    "logTitle": "Aiemmat arvauksesi:",
+    "pick": "x =",
+    "wholeNumber": "Valitse kokonaisluku väliltä 0–99.",
+    "left": "Kokeile x = {n} yhtälön {eq} vasemmalle puolelle.",
+    "right": "Nyt yhtälön {eq} oikea puoli, kun x = {n}.",
+    "compute": "{expr} = ?",
+    "explain": "{expr} = {v}",
+    "logSlip": "x = {n}: lasku lipsahti ja isku meni ohi.",
+    "logHit": "x = {n}: {lhs} = {rhs}. Täsmää!",
+    "less": "pienempi kuin",
+    "more": "suurempi kuin",
+    "tryBigger": "Kokeile isompaa x:ää.",
+    "trySmaller": "Kokeile pienempää x:ää.",
+    "logMiss": "x = {n}: vasen puoli {lhs} on {rel} oikea puoli {rhs}."
+  },
+  "unbind": {
+    "prompt": "{eq}     x = ?",
+    "hint": "Ota ensin irtopunnukset pois molemmilta puolilta, ja jaa sitten yhtä suuriin ryhmiin.",
+    "hintBags": "Ota ensin yhtä monta pussia pois molemmilta puolilta.",
+    "story": "Sinetti näkyy vaakana. Löydä x purkaaksesi sen."
+  },
+  "balance": {
+    "bag": "Pussi (sisällä x punnusta)",
+    "removeBag": "Ota tämä pussi pois",
+    "removeUnit": "Ota tämä punnus pois",
+    "split": "Jaa ryhmiin",
+    "splitN": "Jaa molemmat puolet {n} ryhmään",
+    "howto": "Klikkaa pussia tai punnusta ottaaksesi sen pois. Pidä vaaka tasapainossa!",
+    "tipped": "Kallistui! Tee sama toisella puolella, niin vaaka tasaantuu.",
+    "alone": "Yksi pussi on yksin!",
+    "level": "Tasapainossa. Jatka, kunnes yksi pussi on yksin.",
+    "soX": "Siis x =",
+    "countAgain": "Laske toisen puolen punnukset."
+  },
+  "q": {
+    "add": "{a} + {b} = ?",
+    "sub": "{a} − {b} = ?",
+    "mul": "{a} × {b} = ?",
+    "area": "Suorakulmio on {w} m leveä ja {h} m korkea. Mikä on sen pinta-ala neliömetreinä?",
+    "missingAdd": "□ + {a} = {c}     □ = ?",
+    "missingSub": "{c} − □ = {a}     □ = ?",
+    "missingMul": "{a} × □ = {c}     □ = ?",
+    "opsMulAdd": "{a} × {b} + {c} = ?",
+    "opsAddMul": "{c} + {a} × {b} = ?",
+    "opsParen": "({c} + {a}) × {b} = ?",
+    "opsMulSub": "{a} × {b} − {c} = ?",
+    "eqAdd": "x + {a} = {b}     x = ?",
+    "eqSub": "x − {a} = {b}     x = ?",
+    "eqMul": "{a}x = {b}     x = ?",
+    "eq2": "{a}x + {b} = {c}     x = ?",
+    "percent": "Hinta on {p} kultaa. Kun alennus on {pct} %, paljonko maksat?"
+  },
+  "hint": {
+    "add": "Aloita luvusta {a} ja laske {b} eteenpäin.",
+    "sub": "Laske luvusta {b} lukuun {a}. Montako askelta?",
+    "mul": "Laske {big}:n hypyin: {seq}, … ({small} kertaa).",
+    "area": "Jokaisessa rivissä on {w} ruutua, ja rivejä on {h}.",
+    "missingAdd": "Mitä lukuun {a} pitää lisätä, jotta saadaan {c}? Tai laske {c} − {a}.",
+    "missingSub": "Mitä luvusta {c} otetaan pois, jotta jää {a}? Kokeile {c} − {a}.",
+    "missingMul": "Montako {a}:a tarvitaan, että saadaan {c}? Se on {c} : {a}.",
+    "opsMulFirst": "Kertolasku ensin, sitten yhteen- tai vähennyslasku.",
+    "opsParen": "Sulut ensin! Sitten kertolasku.",
+    "eqAdd": "Vähennä {a} molemmilta puolilta.",
+    "eqSub": "Lisää {a} molemmille puolille.",
+    "eqMul": "Jaa molemmat puolet luvulla {a}.",
+    "eq2": "Vähennä ensin {b} molemmilta puolilta, ja jaa sitten luvulla {a}.",
+    "percent": "{pct} % luvusta {p} on {p} × {pct} : 100. Vähennä se sitten luvusta {p}."
+  },
+  "explain": {
+    "add": "{a} + {b} = {ans}.",
+    "addTens": "{a} + {bt} = {s1}, sitten {s1} + {bo} = {ans}.",
+    "sub": "{a} − {b} = {ans}. Tarkistus: {ans} + {b} = {a}.",
+    "mul": "{small} kertaa {big} on {ans}.",
+    "area": "{h} riviä × {w} ruutua = {ans} m².",
+    "missingAdd": "□ = {c} − {a} = {ans}. Tarkistus: {ans} + {a} = {c}.",
+    "missingSub": "□ = {c} − {a} = {ans}. Tarkistus: {c} − {ans} = {a}.",
+    "missingMul": "□ = {c} : {a} = {ans}. Tarkistus: {a} × {ans} = {c}.",
+    "opsMulAdd": "Ensin {a} × {b} = {p}, sitten {p} + {c} = {ans}.",
+    "opsAddMul": "Ensin {a} × {b} = {p}, sitten {c} + {p} = {ans}.",
+    "opsParen": "Ensin {c} + {a} = {s}, sitten {s} × {b} = {ans}.",
+    "opsMulSub": "Ensin {a} × {b} = {p}, sitten {p} − {c} = {ans}.",
+    "eqAdd": "Vähennä {a} molemmilta puolilta: x = {b} − {a} = {ans}.",
+    "eqSub": "Lisää {a} molemmille puolille: x = {b} + {a} = {ans}.",
+    "eqMul": "Jaa molemmat puolet luvulla {a}: x = {b} : {a} = {ans}.",
+    "eq2a": "Vähennä {b} molemmilta puolilta: {a}x = {c} − {b} = {d}.",
+    "eq2b": "Jaa molemmat puolet luvulla {a}: x = {d} : {a} = {ans}.",
+    "percent": "{pct} % luvusta {p} on {off}. {p} − {off} = {ans}.",
+    "sealBags": "Ota {c} pussi(a) pois molemmilta puolilta: {eq}",
+    "sealUnits": "Ota {b} punnusta pois molemmilta puolilta: {eq}",
+    "sealSplit": "Jaa molemmat puolet {a} yhtä suureen ryhmään: {eq}",
+    "sealCheck": "Tarkistus, kun x = {x}: {lhs} = {v} ja {rhs} = {v}. ✔"
+  },
+  "ending": {
+    "title": "Lähde virtaa taas!",
+    "p1": "Arvoitusgolemi murenee, ja kirkas vesi syöksyy alas Numerolaan.",
+    "p2": "Kai oppi, että kokeile ja tarkista toimii aina, ja Aino oppi, että algebra on oikotie.",
+    "solved": "Oikein vastatut kysymykset: {n} / {total} ({pct} %)",
+    "skills": "Opitut taidot: {n} / 8",
+    "farm": "Helmin pelto: {result}",
+    "farmResult": {
+      "exact": "kylvetty täydellisesti",
+      "over": "kylvetty, siemeniä jäi yli",
+      "under": "osittain kylvetty",
+      "none": "ei kylvetty"
+    },
+    "approaches": "Tavat, joilla mittasit pellon: {list}",
+    "thanks": "Kiitos, että pelasit prototyyppiä!"
+  }
+}

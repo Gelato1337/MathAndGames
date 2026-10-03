@@ -1,0 +1,544 @@
+{
+  "meta": {
+    "title": "Numerola",
+    "subtitle": "The Riddle Golem"
+  },
+  "langs": {
+    "en": "English",
+    "fi": "Suomi"
+  },
+  "math": {
+    "var": "x"
+  },
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "leave": "Leave",
+    "submit": "Answer",
+    "hint": "Hint",
+    "close": "Close",
+    "next": "Next",
+    "undo": "Undo",
+    "reset": "Reset",
+    "correct": "Correct!",
+    "wrong": "Not quite.",
+    "theAnswer": "The answer was {answer}.",
+    "timeUp": "Time's up!",
+    "typeNumber": "Type a number (e.g. 12, 2.5 or 1/2).",
+    "answerLabel": "Your answer",
+    "gold": "{n} gold",
+    "advance": "▼ click / Enter"
+  },
+  "title": {
+    "newGame": "New game",
+    "help": "How to play",
+    "tagline": "A math RPG prototype · learn once, cast many"
+  },
+  "intro": {
+    "p1": "In the valley village of Numerola, everything runs on numbers: harvests, trade, even magic.",
+    "p2": "But an ancient Riddle Golem has woken in the eastern ruins and sealed the village spring. The wells are drying up.",
+    "p3": "You are Kai, a young ninja, and Aino, an apprentice mage. Elder Vesa is waiting for you at the west end of the village.",
+    "start": "Begin"
+  },
+  "hud": {
+    "talk": "E: Talk to {name}",
+    "examine": "E: Examine",
+    "quests": "Quests",
+    "skills": "Skills",
+    "bag": "Bag",
+    "menu": "Menu",
+    "objective": "Objective",
+    "side": "Side quest"
+  },
+  "menu": {
+    "title": "Menu",
+    "resume": "Resume",
+    "quests": "Quests",
+    "skills": "Skills",
+    "bag": "Bag",
+    "settings": "Settings",
+    "help": "How to play",
+    "toTitle": "Back to title",
+    "skillsHelp": "Learn a skill from a trainer once, then use it freely. Overcharge it in battle for bonus power."
+  },
+  "settings": {
+    "language": "Language",
+    "timersTitle": "Question timers",
+    "timersHelp": "Ninja overcharges are timed. Relaxed doubles the time, Off removes timers completely.",
+    "timers": {
+      "normal": "Normal",
+      "relaxed": "Relaxed",
+      "off": "Off"
+    }
+  },
+  "help": {
+    "title": "How to play",
+    "move": "Move: WASD / arrow keys, or click where you want to go.",
+    "talk": "Talk / examine: E, Space or Enter (or click a person).",
+    "menu": "Menu: Esc · Quests: Q · Skills: K · Bag: I",
+    "combat1": "Battle: each turn a character gains AP (Action Points). Moving costs 1 AP per 3 tiles, and skills show their AP cost.",
+    "combat2": "Click a blue tile to move. Pick a skill with 1–4, then click a target.",
+    "combat3": "⚡ Overcharge (O): answer a question for a stronger skill. A wrong answer still casts normally.",
+    "combat4": "Space ends the turn. Right-click or Esc cancels a skill.",
+    "learn1": "Learn once, cast many: trainers teach skills through a short trial.",
+    "learn2": "Attunement: skills fade a little after each battle unless you overcharge them. Practise with trainers to restore them.",
+    "learn3": "Stuck? Use the Hint button. Every wrong answer shows the steps."
+  },
+  "chars": {
+    "kai": "Kai",
+    "aino": "Aino",
+    "elder": "Elder Vesa",
+    "ren": "Master Ren",
+    "lumi": "Sage Lumi",
+    "pekka": "Pekka",
+    "helmi": "Helmi",
+    "slime": "Number Slime",
+    "golem": "Riddle Golem"
+  },
+  "classes": {
+    "kai": "Ninja",
+    "aino": "Mage",
+    "kaiDesc": "Fast thinking: quick sums, times tables, guess and check.",
+    "ainoDesc": "Deep thinking: areas, missing numbers, equations."
+  },
+  "skills": {
+    "strike": {
+      "name": "Strike",
+      "desc": "A quick blade strike. 6–8 damage."
+    },
+    "flurry": {
+      "name": "Flurry",
+      "desc": "Two fast hits of 4 damage each.",
+      "oc": "Overcharge: a chain of quick sums against the clock. Every correct answer adds a hit, up to 6 hits."
+    },
+    "shadowStep": {
+      "name": "Shadow Step",
+      "desc": "Teleport to an empty tile up to 5 tiles away.",
+      "oc": "Overcharge: answer a quick multiplication to become Hidden. Your next attack deals 50% more."
+    },
+    "probe": {
+      "name": "Probe Strike",
+      "desc": "A testing strike: 5 damage. Against a seal, guess x and calculate. If both sides match, the seal shatters."
+    },
+    "bolt": {
+      "name": "Staff Bolt",
+      "desc": "A spark of magic. 5–7 damage, range 5."
+    },
+    "fireball": {
+      "name": "Fireball",
+      "desc": "Burns a 3 × 3 area for 9 damage and leaves fire for 2 rounds. Hits allies too!",
+      "oc": "Overcharge: solve an area question for 50% more damage."
+    },
+    "mend": {
+      "name": "Mend",
+      "desc": "Heal an ally (or yourself) for 10 HP.",
+      "oc": "Overcharge: solve a missing-number puzzle to heal 16 HP instead."
+    },
+    "unbind": {
+      "name": "Unbind",
+      "desc": "Read a seal as a balance scale and solve for x. A correct answer shatters the seal."
+    },
+    "ap": "{n} AP",
+    "range": "Range {n}",
+    "cooldown": "Cooldown {n}",
+    "attunement": "Attunement {n}% (fades between battles; practise or overcharge to restore)",
+    "notLearned": "Not learned yet. Train with {who}.",
+    "overcharge": "Overcharge",
+    "overchargeDesc": "Answer a question while casting. Right: a stronger effect, and the skill stays sharp. Wrong: a normal cast, never a miss."
+  },
+  "items": {
+    "tonic": {
+      "name": "Herb Tonic",
+      "short": "Tonic",
+      "desc": "Restores 15 HP. In battle it costs 1 AP."
+    },
+    "tea": {
+      "name": "Focus Tea",
+      "short": "Tea",
+      "desc": "In battle: gain 2 AP right away. Costs 0 AP."
+    },
+    "seeds": {
+      "name": "Seed Bag",
+      "desc": "A bag of 10 seeds. Helmi needs some for her field."
+    }
+  },
+  "quests": {
+    "main": {
+      "title": "The Hidden Number",
+      "desc": "The Riddle Golem has sealed Numerola's spring.",
+      "s1": "Talk to Elder Vesa",
+      "s2": "Learn a seal-breaking skill (Probe Strike or Unbind)",
+      "s3": "Open the rune gate in the east",
+      "s4": "Defeat the Riddle Golem",
+      "started": "New quest: The Hidden Number"
+    },
+    "farm": {
+      "title": "The Crooked Field",
+      "desc": "Helmi needs seeds for her oddly shaped field.",
+      "s1": "Work out the field's area",
+      "s2": "Work out how many seeds it needs",
+      "s3": "Buy enough seed bags from Pekka",
+      "s4": "Bring the seeds to Helmi",
+      "started": "New quest: The Crooked Field"
+    },
+    "none": "No side quests yet. Maybe someone in the village needs help?"
+  },
+  "obj": {
+    "talkElder": "Talk to Elder Vesa at the west end of the village.",
+    "train": "Learn Probe Strike (Master Ren, dojo) or Unbind (Sage Lumi, library).",
+    "gate": "Go east over the bridge and through the forest to the rune gate.",
+    "golem": "Enter the ruins and break the Riddle Golem's seals.",
+    "done": "The spring flows again!",
+    "farm0": "Helmi at the farm (south) might need help.",
+    "farm1": "Plan Helmi's field (talk to Helmi).",
+    "farm2": "Finish planning Helmi's field.",
+    "farm3": "Buy seed bags from Pekka ({seeds} seeds needed), then bring them to Helmi."
+  },
+  "elder": {
+    "intro1": "Kai, Aino, thank goodness you're here. The Riddle Golem sits on our spring, and no blade can cut its stone shell.",
+    "intro2": "Its shell is bound by a seal: a hidden number. Find the number and the seal shatters.",
+    "intro3": "Master Ren at the dojo teaches the ninja way: fast thinking, guess and check. Sage Lumi at the library teaches the mage way: equations that reveal the unknown.",
+    "intro4": "Learn what you can. Then go east through the forest to the rune gate of the old ruins.",
+    "kaiReply": "Fast thinking? Sounds like my kind of training.",
+    "ainoReply": "And mine is the slow, clever kind. We'll find that number, Elder.",
+    "intro5": "Oh, and Helmi at the farm could use a hand. Even heroes need bread.",
+    "again": "How goes the training?",
+    "optGolem": "Tell us about the golem.",
+    "optHint": "What should we do next?",
+    "golem1": "The golem's seals are equations. The first one is simple, but each time you break one, a harder one forms.",
+    "golem2": "Break its seals, strike while it is open, and the spring is ours again.",
+    "hintTrain": "You can't break a seal yet. Learn Probe Strike from Master Ren, or Unbind from Sage Lumi. Both is even better.",
+    "hintGate": "Go east, over the bridge and through the forest. The rune gate guards the ruins.",
+    "hintGolem": "The gate is open. The golem waits in the ruins. Be brave, and check your answers.",
+    "thanks": "The spring flows again! Numerola will remember you, Kai and Aino."
+  },
+  "ren": {
+    "busy": "Hmph. Speak with Elder Vesa first, then come back.",
+    "intro1": "So, you want to learn the ninja way. A ninja does not stop to ponder. A ninja knows.",
+    "intro2": "Each technique starts with a trial. Pass it once and the move is yours. Practise it and it stays sharp.",
+    "menu": "What will it be, student?",
+    "menuDone": "You have learned all I teach. Keep your mind sharp.",
+    "about1": "Ninja moves cost little and strike fast. Overcharge them and I throw quick questions at you. Answer before the timer runs out!",
+    "about2": "Probe Strike is guess and check: pick a number, test it on the seal, adjust. Slow? Maybe. But it always works.",
+    "sealHint": "Remember: against a seal, pick a number for x and calculate. Too small? Go bigger. Too big? Go smaller."
+  },
+  "lumi": {
+    "busy": "Ah, visitors! Do talk to Elder Vesa first. He has news.",
+    "intro1": "Welcome to the library. A mage's power comes from understanding, not speed.",
+    "intro2": "My trials are untimed. Take your time, use hints, and learn to see the shape of a problem.",
+    "menu": "Which lesson shall we study?",
+    "menuDone": "You've mastered my lessons. The rest is practice.",
+    "about1": "Mage spells are strong but cost more AP. Overcharge one and you solve a problem, with no timer, for a bigger effect.",
+    "about2": "Unbind reads a seal like a balance scale. Whatever you do to one side, do to the other, until x stands alone.",
+    "sealHint": "When you face the golem, cast Unbind and solve its equation. One correct answer breaks the seal."
+  },
+  "trainer": {
+    "train": "Take the trial: {skill}",
+    "practice": "Practise faded skills ({n})",
+    "about": "Tell me about your way.",
+    "practiced": "{n} of {total} skills are sharp again."
+  },
+  "trial": {
+    "title": "Trial: {skill}",
+    "progress": "Correct answers: {n} / {need}",
+    "learnedTitle": "Learned: {skill}!",
+    "flurry": {
+      "intro": "Flurry! Strike, strike, strike. To learn it, add and subtract quickly in your head. Four correct answers.",
+      "outro": "In battle, turn on Overcharge and every quick correct answer adds one more hit to the combo."
+    },
+    "shadowStep": {
+      "intro": "Shadow Step. Times tables, student. A ninja knows them without counting. Four correct.",
+      "outro": "Overcharge it with a quick multiplication and you vanish into the shadows: your next attack hits 50% harder."
+    },
+    "probe": {
+      "intro": "Probe Strike. First, the order of operations: multiply before you add, unless brackets say otherwise.",
+      "guess": "Now the real lesson. This practice seal says 2x + 1 = 11. Pick a value for x, work out 2x + 1, and see if it makes 11.",
+      "keepTrying": "Giving up already? A ninja tries again. Pick another number.",
+      "outro": "Against a seal, Probe Strike lets you test one guess each time. Every miss tells you whether to go bigger or smaller."
+    },
+    "fireball": {
+      "intro": "Fireball covers an area: a rectangle of burning ground. Let's learn to measure areas. Rows times columns. Three correct.",
+      "outro": "Fireball burns a 3 × 3 area (9 tiles) and leaves flames for 2 rounds. Careful, it burns friends too! Overcharge it with an area question for 50% more damage."
+    },
+    "mend": {
+      "intro": "Mend heals by filling in what is missing. So: missing-number puzzles. What goes in the box? Four correct.",
+      "outro": "Overcharge Mend with a missing-number puzzle and it heals 16 instead of 10."
+    },
+    "unbind": {
+      "intro": "Unbind is the deepest lesson: the balance scale. A bag hides an unknown number of weights. Keep the scale level and find out how many.",
+      "stage1": "One bag and 3 weights balance 7 weights. Take weights off, but always the same on both sides!",
+      "stage2": "Two bags and 1 weight balance 9 weights. When only bags are left on one side, split both sides into equal groups.",
+      "stage3": "Bags on both sides! You can take a bag off each side too, because a bag weighs the same everywhere.",
+      "symbols": "Wonderful. Now the same thing without the scale, just symbols. x is the bag, and the numbers are weights.",
+      "outro": "With Unbind, one correct answer shatters a seal. Picture the scale and it will help you think."
+    }
+  },
+  "practice": {
+    "title": "Practice: {skill}"
+  },
+  "pekka": {
+    "busy": "Shop's not open yet, friend. The Elder was looking for you!",
+    "hello": "Welcome to Pekka's! Tonics, tea, seeds, all honestly priced. Mostly.",
+    "optShop": "Let me see your wares.",
+    "optChat": "How's business?",
+    "chat1": "Business? Everyone counts their coins twice since the spring dried up.",
+    "chat2": "Tip: if you can work out a discount in your head, I might just throw in something for free."
+  },
+  "shop": {
+    "title": "Pekka's Shop",
+    "greeting": "Prices are per piece. Type how many you want.",
+    "haggle": "Haggle (once)",
+    "qty": "Quantity",
+    "buy": "Buy",
+    "badQty": "Type a whole number, 1 or more.",
+    "noGold": "That costs {cost} gold, but you only have {gold}.",
+    "bought": "Bought {n} × {item} for {cost} gold.",
+    "owned": "Have: {n}",
+    "haggleTitle": "Haggling with Pekka",
+    "haggleStory": "Pekka grins: \"Work this out and I'll throw in a Herb Tonic.\"",
+    "haggleWin": "\"Sharp! Here, a Herb Tonic on the house.\"",
+    "haggleLose": "\"Ha! Better luck next time, friend.\" (Pekka only haggles once.)"
+  },
+  "helmi": {
+    "busy": "Oh, hello! Have you seen the Elder? He's been asking for you.",
+    "intro1": "Kai! Aino! Perfect timing. I need to sow my new field, but it's a crooked thing.",
+    "intro2": "It's like a rectangle with a corner bitten off. I need 3 seeds for every square metre.",
+    "intro3": "If I buy too few, part of it stays bare. Too many and I waste coins. Can you work out how much it needs?",
+    "ask": "Will you help me plan the field?",
+    "optHelp": "Let's plan it together.",
+    "optLater": "Maybe later.",
+    "later": "No worries. The field isn't going anywhere.",
+    "comeBack": "Come back whenever you're ready to finish the plan.",
+    "planned": "{area} m², so {seeds} seeds! Pekka sells them in bags of {bag}. Could you buy what we need and bring it here?",
+    "needSeeds": "We need {seeds} seeds. Pekka sells them in bags of {bag}.",
+    "short": "You have {have} seeds, but the field needs {need}. That's {missing} short.",
+    "optMore": "I'll buy more first.",
+    "optPlantAnyway": "Plant what we have.",
+    "under": "We planted what we could, about {pct}% of the field. It'll do, but a few rows stay bare.",
+    "over": "All planted! Though... that's {extra} seeds too many, {bags} bag(s) you didn't need. Thanks anyway!",
+    "exact": "Perfect! {bags} bags and only {left} seeds left over. You can't buy part of a bag, so that's spot on. Take these tonics too!",
+    "reward": "+{n} gold",
+    "done": "The field is growing. Thank you for your help!",
+    "doneExact": "Look at those sprouts, every square metre covered. You're a natural farmer!"
+  },
+  "farm": {
+    "title": "Planning Helmi's field",
+    "intro": "Each square is 1 m². Helmi needs {rate} seeds per m². Choose any way to work out the area. They all give the same answer!",
+    "m": "m",
+    "tools": "Ways to think:",
+    "approach": {
+      "count": "Count squares",
+      "split": "Split into rectangles",
+      "subtract": "Rectangle minus corner"
+    },
+    "qArea": "What is the area of the field in m²?",
+    "qSeeds": "The field is {area} m². With {rate} seeds per m², how many seeds are needed?",
+    "areaRight": "Yes! The field is {area} m².",
+    "forgotCorner": "That's the whole 8 × 6 rectangle, but a corner is missing!",
+    "hint": {
+      "none": "Try one of the ways to think above.",
+      "count": "Count every square inside the field. The numbers help.",
+      "split": "Find the areas of A and B separately, then add them.",
+      "subtract": "The big 8 × 6 rectangle, minus the missing 3 × 2 corner."
+    },
+    "seedsHint": "Every m² needs {rate} seeds: {area} × {rate}."
+  },
+  "gate": {
+    "locked": "Runes glow on a sealed stone gate. A voice rumbles: \"Only those who can find a hidden number may pass.\" (Learn Probe Strike or Unbind first.)",
+    "intro": "The runes on the gate glow, one number on each stone. There's a pattern...",
+    "opened": "The last rune flares and the gate grinds open. Cold air flows out of the ruins.",
+    "foreshadow": "Kai, did you see? The rule was 3 × n + 4, and 25 was on rune 7. I bet the golem's seals work the same way."
+  },
+  "runes": {
+    "title": "The Rune Gate",
+    "pos": "#{n}",
+    "s1": "Five rune stones. The last one has no number.",
+    "q1": "What number belongs on rune #5?",
+    "h1": "How much bigger is each rune than the one before?",
+    "e1": "Each rune is {d} more than the one before: {last} + {d} = {ans}.",
+    "s2": "Far down the wall, another rune lights up: rune #10.",
+    "q2": "What number is on rune #10?",
+    "h2": "Rune #1 is {m} × 1 + {a}. Rune #2 is {m} × 2 + {a}. See the rule?",
+    "e2": "The rule is {m} × position + {a}. So rune #10 is {m} × 10 + {a} = {ans}.",
+    "s3": "Now the gate asks the opposite question.",
+    "q3": "Which rune has the number {v}?",
+    "h3": "{m} × n + {a} = {v}. Undo the steps: take away {a}, then divide by {m}.",
+    "e3a": "{m} × n + {a} = {v}, so {m} × n = {v} − {a}.",
+    "e3b": "{m} × n = {d}, so n = {d} ÷ {m} = {ans}."
+  },
+  "battle": {
+    "forest1": "Slimes! Watch out, Aino. They're made of loose numbers.",
+    "golem1": "WHO... DISTURBS... MY SPRING?",
+    "golem2": "NO BLADE CAN CUT ME. NO FIRE CAN BURN ME. ONLY THE HIDDEN NUMBER.",
+    "golemAino": "Look at the seal around it. It's an equation! Find x and it breaks.",
+    "sealTitle": "The Seal",
+    "sealRule": "While the golem is sealed, it takes no damage. Break the seal to make it vulnerable, and it also loses its next turn. When its health drops far enough, a new, harder seal forms.",
+    "tipProbe": "Kai, Probe Strike: guess a value for x and calculate. Too small or too big? Adjust and try again.",
+    "tipUnbind": "Aino, Unbind: solve the equation like a balance scale. One correct answer breaks the seal."
+  },
+  "tutorial": {
+    "title": "Battle basics",
+    "l1": "Battles are turn-based on a grid. Each turn a character gains 4 Action Points (AP), and can save up to 6.",
+    "l2": "Click a blue tile to move (1 AP buys 3 tiles). Click an enemy next to you to attack.",
+    "l3": "Use number keys 1–4 or the buttons for skills. Each shows its AP cost. Some need a few turns to cool down.",
+    "l4": "Skills you've learned work without any math. Turn on ⚡ Overcharge (O) to answer a question for a stronger effect.",
+    "l5": "Press Space or End turn when you're done. Right-click or Esc cancels a skill."
+  },
+  "combat": {
+    "begin": "Battle!",
+    "burns": "{name} is burned by the flames.",
+    "staggered": "{name} is staggered and loses its turn!",
+    "staggerFloat": "Staggered!",
+    "sealedFloat": "Sealed!",
+    "sealAbsorbs": "The seal absorbs the blow on {name}.",
+    "resealFloat": "New seal!",
+    "reseal": "A new seal forms: {eq}",
+    "down": "{name} is down!",
+    "defeated": "{name} is defeated!",
+    "shatterFloat": "Seal shattered!",
+    "shatter": "The seal on {name} shatters!",
+    "outOfRange": "Out of range. Move closer.",
+    "ocTitle": "Overcharge: {skill}",
+    "uses": "{name} uses {skill}.",
+    "combo": "Combo ×{n}!",
+    "stepFloat": "Whoosh!",
+    "hiddenFloat": "Hidden",
+    "holdsFloat": "Holds!",
+    "sealHolds": "The seal holds. Check the steps and try again next turn.",
+    "usesItem": "{name} uses {item}.",
+    "enemyAttack": "{name} uses {attack} on {target}.",
+    "attacks": {
+      "bite": "Bite",
+      "slam": "Slam",
+      "throw": "Rock Throw"
+    },
+    "apCost": "{n} AP",
+    "round": "Round {n}",
+    "apTitle": "Action Points",
+    "hp": "HP",
+    "moveLeft": "{n} free tiles of movement",
+    "endTurn": "End turn (Space)",
+    "hintTarget": "Click a highlighted target",
+    "hintMove": "Click to move · click an enemy to attack",
+    "enemyTurn": "{name} is thinking...",
+    "loseTitle": "Defeated...",
+    "loseText": "Your party falls, but heroes get back up. Try the battle again with full health.",
+    "retry": "Try again",
+    "winTitle": "Victory!",
+    "winForest": "The slimes dissolve into scattered digits. The forest path is clear.",
+    "attuneNote": "Tip: skills you didn't overcharge lose a little attunement after each battle. Practise with your trainers to make them sharp again.",
+    "winGolem": "The last seal cracks and the golem crumbles into sand. Water bursts from the spring!",
+    "goldGained": "+{n} gold"
+  },
+  "probe": {
+    "intro": "The seal reads: {eq}. Pick a whole number for x to test.",
+    "logTitle": "Your earlier guesses:",
+    "pick": "x =",
+    "wholeNumber": "Pick a whole number from 0 to 99.",
+    "left": "Test x = {n} in the left side of {eq}.",
+    "right": "Now the right side of {eq}, with x = {n}.",
+    "compute": "{expr} = ?",
+    "explain": "{expr} = {v}",
+    "logSlip": "x = {n}: the calculation slipped and the strike went wide.",
+    "logHit": "x = {n}: {lhs} = {rhs}. It matches!",
+    "less": "smaller than",
+    "more": "bigger than",
+    "tryBigger": "Try a bigger x.",
+    "trySmaller": "Try a smaller x.",
+    "logMiss": "x = {n}: the left side, {lhs}, is {rel} the right side, {rhs}."
+  },
+  "unbind": {
+    "prompt": "{eq}     x = ?",
+    "hint": "Take the plain weights off both sides first, then split into equal groups.",
+    "hintBags": "First take the same number of bags off both sides.",
+    "story": "The seal appears as a balance scale. Find x to unbind it."
+  },
+  "balance": {
+    "bag": "Bag (x weights inside)",
+    "removeBag": "Remove this bag",
+    "removeUnit": "Remove this weight",
+    "split": "Split into groups",
+    "splitN": "Split both sides into {n} groups",
+    "howto": "Click a bag or a weight to take it off. Keep the scale level!",
+    "tipped": "Tipped! Do the same on the other side to level it.",
+    "alone": "One bag stands alone!",
+    "level": "Level. Keep going until one bag stands alone.",
+    "soX": "So x =",
+    "countAgain": "Count the weights on the other side."
+  },
+  "q": {
+    "add": "{a} + {b} = ?",
+    "sub": "{a} − {b} = ?",
+    "mul": "{a} × {b} = ?",
+    "area": "A rectangle is {w} m wide and {h} m tall. What is its area in m²?",
+    "missingAdd": "□ + {a} = {c}     □ = ?",
+    "missingSub": "{c} − □ = {a}     □ = ?",
+    "missingMul": "{a} × □ = {c}     □ = ?",
+    "opsMulAdd": "{a} × {b} + {c} = ?",
+    "opsAddMul": "{c} + {a} × {b} = ?",
+    "opsParen": "({c} + {a}) × {b} = ?",
+    "opsMulSub": "{a} × {b} − {c} = ?",
+    "eqAdd": "x + {a} = {b}     x = ?",
+    "eqSub": "x − {a} = {b}     x = ?",
+    "eqMul": "{a}x = {b}     x = ?",
+    "eq2": "{a}x + {b} = {c}     x = ?",
+    "percent": "The price is {p} gold. With {pct}% off, how much do you pay?"
+  },
+  "hint": {
+    "add": "Start from {a} and count up {b} more.",
+    "sub": "Count up from {b} to {a}. How many steps?",
+    "mul": "Skip-count by {big}: {seq}, … ({small} times).",
+    "area": "Each row has {w} squares, and there are {h} rows.",
+    "missingAdd": "What do you add to {a} to get {c}? Or work out {c} − {a}.",
+    "missingSub": "Take away something from {c} to get {a}. Try {c} − {a}.",
+    "missingMul": "How many {a}s make {c}? That's {c} ÷ {a}.",
+    "opsMulFirst": "Multiply first, then add or subtract.",
+    "opsParen": "Brackets first! Then multiply.",
+    "eqAdd": "Take {a} away from both sides.",
+    "eqSub": "Add {a} to both sides.",
+    "eqMul": "Divide both sides by {a}.",
+    "eq2": "First take {b} away from both sides, then divide by {a}.",
+    "percent": "{pct}% of {p} is {p} × {pct} ÷ 100. Then take that away from {p}."
+  },
+  "explain": {
+    "add": "{a} + {b} = {ans}.",
+    "addTens": "{a} + {bt} = {s1}, then {s1} + {bo} = {ans}.",
+    "sub": "{a} − {b} = {ans}. Check: {ans} + {b} = {a}.",
+    "mul": "{small} groups of {big} make {ans}.",
+    "area": "{h} rows × {w} squares = {ans} m².",
+    "missingAdd": "□ = {c} − {a} = {ans}. Check: {ans} + {a} = {c}.",
+    "missingSub": "□ = {c} − {a} = {ans}. Check: {c} − {ans} = {a}.",
+    "missingMul": "□ = {c} ÷ {a} = {ans}. Check: {a} × {ans} = {c}.",
+    "opsMulAdd": "First {a} × {b} = {p}, then {p} + {c} = {ans}.",
+    "opsAddMul": "First {a} × {b} = {p}, then {c} + {p} = {ans}.",
+    "opsParen": "First {c} + {a} = {s}, then {s} × {b} = {ans}.",
+    "opsMulSub": "First {a} × {b} = {p}, then {p} − {c} = {ans}.",
+    "eqAdd": "Take {a} from both sides: x = {b} − {a} = {ans}.",
+    "eqSub": "Add {a} to both sides: x = {b} + {a} = {ans}.",
+    "eqMul": "Divide both sides by {a}: x = {b} ÷ {a} = {ans}.",
+    "eq2a": "Take {b} from both sides: {a}x = {c} − {b} = {d}.",
+    "eq2b": "Divide both sides by {a}: x = {d} ÷ {a} = {ans}.",
+    "percent": "{pct}% of {p} is {off}. {p} − {off} = {ans}.",
+    "sealBags": "Take {c} bag(s) off both sides: {eq}",
+    "sealUnits": "Take {b} weights off both sides: {eq}",
+    "sealSplit": "Split both sides into {a} equal groups: {eq}",
+    "sealCheck": "Check with x = {x}: {lhs} = {v} and {rhs} = {v}. ✔"
+  },
+  "ending": {
+    "title": "The spring flows again!",
+    "p1": "The Riddle Golem crumbles, and clear water rushes down to Numerola.",
+    "p2": "Kai learned that guess and check always works, and Aino learned that algebra is the shortcut.",
+    "solved": "Questions answered correctly: {n} / {total} ({pct}%)",
+    "skills": "Skills learned: {n} / 8",
+    "farm": "Helmi's field: {result}",
+    "farmResult": {
+      "exact": "planted perfectly",
+      "over": "planted, with seeds to spare",
+      "under": "partly planted",
+      "none": "not planted"
+    },
+    "approaches": "Ways you measured the field: {list}",
+    "thanks": "Thanks for playing the prototype!"
+  }
+}
