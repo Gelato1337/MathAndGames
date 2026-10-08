@@ -981,3 +981,309 @@ input[type='text'].tutor-input {
   min-height: 1.2em;
   font-size: 0.85em;
 }
+
+/* ---------- colour-linked formulas (same palette as the plots) ---------- */
+:root {
+  --t0: #94b0c2;
+  --t1: #a992ff;
+  --t2: #52cc94;
+  --t3: #f27db0;
+  --t4: #73a8ff;
+  --t5: #f0a24c;
+  --t6: #4fc8d8;
+}
+.t0 { color: var(--t0); }
+.t1 { color: var(--t1); }
+.t2 { color: var(--t2); }
+.t3 { color: var(--t3); }
+.t4 { color: var(--t4); }
+.t5 { color: var(--t5); }
+.t6 { color: var(--t6); }
+
+.term {
+  cursor: pointer;
+  font-weight: 600;
+  transition: opacity 0.15s;
+  border-radius: 0.15em;
+}
+.term:focus-visible {
+  outline: 0.12em solid currentColor;
+  outline-offset: 0.1em;
+}
+.eq-focus .term {
+  opacity: 0.3;
+}
+.eq-focus .term.on {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .term {
+    transition: none;
+  }
+}
+
+.eq {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35em;
+  font-size: 1.15em;
+}
+.eq.big {
+  font-size: 1.7em;
+  margin: 0.3em 0 0.4em;
+}
+.eq.small {
+  font-size: 1em;
+  justify-content: flex-start;
+}
+.eq.inline {
+  display: inline-flex;
+  font-size: 1em;
+  justify-content: flex-start;
+}
+.eq .op {
+  color: var(--light);
+}
+.mat-wrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.05em;
+  margin: 0 0.15em;
+}
+.mat-name {
+  font-size: 0.55em;
+  line-height: 1;
+}
+.bracket {
+  display: inline-block;
+  border-left: 0.14em solid currentColor;
+  border-right: 0.14em solid currentColor;
+  border-radius: 0.35em;
+  padding: 0.1em 0.3em;
+  color: var(--light);
+}
+.bracket.b1 { color: var(--t1); }
+.bracket.b2 { color: var(--t2); }
+.bracket.b3 { color: var(--t3); }
+.mat {
+  display: inline-grid;
+  gap: 0.1em 0.6em;
+  text-align: center;
+  color: var(--white);
+}
+.mat .term {
+  font-weight: 600;
+}
+.eq-text {
+  font-size: 1.05em;
+  line-height: 1.5;
+  max-width: 34em;
+  margin: 0.2em auto;
+  text-align: left;
+}
+.eq-info {
+  font-size: 0.85em;
+  min-height: 2.6em;
+  border-top: 0.08em solid var(--slate);
+  padding-top: 0.35em;
+  margin-top: 0.3em;
+  text-align: left;
+}
+.eq-card {
+  background: rgba(51, 60, 87, 0.35);
+  border-radius: 0.3em;
+  padding: 0.5em 0.8em;
+}
+
+/* ---------- step puzzles ---------- */
+.question.steps {
+  min-width: 58%;
+  text-align: left;
+}
+.question.steps h2 {
+  text-align: center;
+}
+.steps-body {
+  display: flex;
+  gap: 1em;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.steps-main {
+  flex: 1 1 26em;
+  min-width: 0;
+}
+.steps-side {
+  flex: 0 1 15em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  min-width: 0;
+}
+canvas.plot {
+  width: 15em;
+  height: 15em;
+  max-width: 100%;
+  border-radius: 0.3em;
+  border: 0.1em solid var(--slate);
+}
+.plot-caption {
+  font-size: 0.75em;
+}
+.work {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+  margin: 0.6em 0;
+}
+.work-head {
+  color: var(--yellow);
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.step-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  flex-wrap: wrap;
+}
+.step-row.final {
+  border-top: 0.08em dashed var(--slate);
+  padding-top: 0.4em;
+  margin-top: 0.2em;
+}
+.step-n {
+  color: var(--light);
+  min-width: 1.4em;
+}
+.field {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+}
+input[type='text'].cell {
+  width: 3.2em;
+  font-size: 1em;
+  padding: 0.1em 0.2em;
+}
+.step-mark {
+  min-width: 1em;
+  font-weight: 600;
+}
+
+/* ---------- notebook ---------- */
+.notebook {
+  background: var(--ink);
+  border: 0.12em solid var(--slate);
+  border-radius: 0.3em;
+  padding: 0.5em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+  min-width: 14em;
+}
+.nb-head {
+  color: var(--yellow);
+}
+.nb-tabs button {
+  font-size: 0.85em;
+  padding: 0.2em 0.6em;
+}
+.nb-tabs button.on {
+  border-color: var(--yellow);
+  color: var(--yellow);
+}
+textarea.notes {
+  font: inherit;
+  font-size: 0.95em;
+  width: 100%;
+  min-height: 8em;
+  resize: vertical;
+  color: var(--ink);
+  background: #f4f1e6;
+  border: 0.12em solid var(--gray);
+  border-radius: 0.2em;
+  padding: 0.4em;
+  background-image: linear-gradient(rgba(65, 166, 246, 0.18) 1px, transparent 1px);
+  background-size: 100% 1.5em;
+  line-height: 1.5em;
+}
+.formula-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  max-height: 22em;
+  overflow-y: auto;
+}
+.formula {
+  background: var(--slate);
+  border-radius: 0.2em;
+  padding: 0.4em 0.6em;
+}
+.formula-name {
+  color: var(--yellow);
+  font-size: 0.85em;
+}
+.formula .eq-text {
+  font-size: 0.85em;
+  margin: 0.2em 0 0;
+}
+
+/* ---------- title: campaign picker ---------- */
+.campaigns {
+  display: flex;
+  gap: 1em;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0.4em 0 0.8em;
+}
+button.campaign-card {
+  width: 18em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3em;
+  padding: 0.9em 1em;
+  background: rgba(26, 28, 44, 0.9);
+  border: 0.18em solid var(--gray);
+  white-space: normal;
+}
+button.campaign-card:hover,
+button.campaign-card:focus-visible {
+  border-color: var(--yellow);
+  background: rgba(51, 60, 87, 0.95);
+}
+.camp-sprites {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.4em;
+}
+.camp-sprites img {
+  width: 3.4em;
+  height: 3.4em;
+  image-rendering: pixelated;
+}
+.camp-name {
+  font-size: 1.5em;
+  color: var(--yellow);
+  font-weight: 600;
+}
+.camp-tier {
+  color: var(--ice);
+  font-size: 0.9em;
+}
+.camp-desc {
+  color: var(--light);
+  font-size: 0.85em;
+  line-height: 1.35;
+}
+.skill-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16em, 1fr));
+  gap: 0.8em;
+  align-items: start;
+}

@@ -1,3 +1,4 @@
+import type { EnemyKind } from '../combat/units';
 import { randInt } from '../math/problems';
 
 export const MAP_W = 60;
@@ -10,27 +11,28 @@ export interface Rect {
   h: number;
 }
 
+/** A person in the world; `id` is also their sprite and name key (chars.<id>). */
 export interface NpcDef {
-  id: 'elder' | 'ren' | 'lumi' | 'pekka' | 'helmi';
+  id: string;
   x: number;
   y: number;
 }
 
 export interface EnemyPlacement {
-  kind: 'slime' | 'golem';
+  kind: EnemyKind;
   x: number;
   y: number;
 }
 
 export interface EncounterDef {
-  id: 'forest' | 'ruins';
+  id: string;
   region: Rect;
   /** Leader entering this rect starts the fight. */
   trigger: Rect;
   enemies: EnemyPlacement[];
 }
 
-const BLOCKING = new Set(['T', 'R', 'H', 'w', 'D', 'F', '#', 'G', 'o', 'O', '~', 'L', 'l']);
+const BLOCKING = new Set(['T', 'R', 'H', 'w', 'D', 'F', '#', 'G', 'o', 'O', '~', 'L', 'l', 'X']);
 
 export const NPCS: NpcDef[] = [
   { id: 'elder', x: 5, y: 12 },
@@ -58,6 +60,7 @@ export const ENCOUNTERS: EncounterDef[] = [
     enemies: [
       { kind: 'slime', x: 42, y: 11 },
       { kind: 'slime', x: 43, y: 17 },
+      { kind: 'slime', x: 40, y: 16 },
     ],
   },
   {
@@ -76,15 +79,18 @@ export function inRect(r: Rect, x: number, y: number): boolean {
 export const MAX_STEP = 1;
 
 export class WorldMap {
-  readonly w = MAP_W;
-  readonly h = MAP_H;
+  readonly w: number;
+  readonly h: number;
   tiles: string[][];
   /** Height level of every tile (water is below 0, buildings are tall blocks). */
   heights: number[][];
 
-  constructor() {
-    this.tiles = buildTiles();
-    this.heights = buildHeights(this.tiles);
+  /** Defaults to Numerola's map; other campaigns pass their own tiles and heights. */
+  constructor(build: { tiles: string[][]; heights: number[][] } = numerolaWorld()) {
+    this.tiles = build.tiles;
+    this.heights = build.heights;
+    this.h = this.tiles.length;
+    this.w = this.tiles[0].length;
   }
 
   height(x: number, y: number): number {
@@ -110,8 +116,13 @@ export class WorldMap {
     return !BLOCKING.has(this.get(x, y));
   }
 
+  /** Turn the given tiles into something else (e.g. open a gate). */
+  replace(tiles: Array<{ x: number; y: number }>, ch: string): void {
+    for (const g of tiles) this.set(g.x, g.y, ch);
+  }
+
   openGate(): void {
-    for (const g of GATE_TILES) this.set(g.x, g.y, '_');
+    this.replace(GATE_TILES, '_');
   }
 }
 
@@ -129,6 +140,11 @@ export function chimneys(map: WorldMap): Array<{ x: number; y: number; z: number
 
 /** The boss stands on a raised dais inside the ruins. */
 export const DAIS = { x: 53, y: 12, w: 4, h: 6 };
+
+export function numerolaWorld(): { tiles: string[][]; heights: number[][] } {
+  const tiles = buildTiles();
+  return { tiles, heights: buildHeights(tiles) };
+}
 
 function buildHeights(t: string[][]): number[][] {
   const hgt: number[][] = t.map((row) => row.map(() => 0));
@@ -184,6 +200,8 @@ export function tileLook(ch: string): { top: string; left: string; right: string
       return { top: '_', left: '#', right: '#', object: 'rock' };
     case 'L':
       return { top: '_', left: '#', right: '#', object: 'brazier' };
+    case 'X':
+      return { top: '_', left: '#', right: '#', object: 'crystals' };
     case 'l':
       return { top: '.', left: 'dirt', right: 'dirt', object: 'lantern' };
     case '_':

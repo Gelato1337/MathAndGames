@@ -2,7 +2,8 @@ import { spriteUrl } from '../art/sprites';
 import { t } from '../i18n';
 import { h, img, openModal } from './dom';
 
-export type Speaker = 'elder' | 'ren' | 'lumi' | 'pekka' | 'helmi' | 'kai' | 'aino' | 'golem' | null;
+/** A character id (sprite + chars.<id> name), or null for the narrator. */
+export type Speaker = string | null;
 
 export interface Choice {
   id: string;

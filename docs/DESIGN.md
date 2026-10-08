@@ -7,10 +7,12 @@ Balancing character learning against player learning is the central problem. Eve
 | Layer | When | Math |
 |---|---|---|
 | **Learn** | Once, at a trainer | A short, untimed trial with hints. Wrong answers show the worked steps and never fail you; you just get another problem. |
-| **Cast** | Any time after | None. It costs AP and has a cooldown, like any RPG. |
-| **Overcharge** | Optional (⚡ / `O`) | One question, or a chain of them for Flurry. Right gives a stronger effect. Wrong gives a normal cast, never a miss. |
+| **Cast** | Any time after | None. It costs AP and has a cooldown, like any RPG. **Auto** (`Q`) plays the whole turn with learned skills. |
+| **Focus** | Optional (✦ / `F`) | Costs +1 AP and ends the turn. At the start of your next turn the skill fires after a puzzle (a chain of quick ones for timed skills). Right: ×2.5 and pierces armor (×1.8 if you were hit while charging). Wrong: a normal cast, never a miss. In step puzzles every right step adds partial credit. |
 
-**Attunement** is spaced repetition dressed up as lore. After each battle, every learned skill that wasn't successfully overcharged loses 25% attunement. Its power scales from 100% down to a 60% floor; the skill is never lost. A correct overcharge, or one practice question at the trainer, restores it to 100%.
+Battles are tuned so learned skills alone are not enough against hard enemies: armor subtracts from every learned hit, crystal golems reflect damage, and bosses are sealed. Focus is the answer, and Focus is math. Auto keeps easy fights quick, so the math lands where it matters.
+
+**Attunement** is spaced repetition dressed up as lore. After each battle, every learned skill that wasn't released with a right Focus answer loses 25% attunement. Its power scales from 100% down to a 60% floor; the skill is never lost. A correct Focus, or one practice question at the trainer, restores it to 100%.
 
 Wrong answers never block progress. Trials keep generating new problems until you pass. Losing a battle restarts it at full health.
 
@@ -19,7 +21,7 @@ Wrong answers never block progress. Trials keep generating new problems until yo
 | | Ninja (Kai) | Mage (Aino) |
 |---|---|---|
 | Style | Fast, fluent, timed | Deep, structured, untimed |
-| Overcharge | 8 s timer (doubled with "Relaxed", off with "Off") | No timer |
+| Focus | 8 s timer (doubled with "Relaxed", off with "Off") | No timer |
 | Topics | Addition and subtraction, times tables, order of operations | Area, missing numbers, equations |
 | Seal-breaker | **Probe Strike**: guess and check | **Unbind**: solve directly |
 
@@ -92,12 +94,26 @@ Rules in battle (still grid-based, so AP, ranges and areas stay exact):
 - From lower ground: −15% damage.
 - The golem holds the dais, so the players have a reason to climb it.
 
+## Campaigns, not difficulty sliders
+
+Different math levels are separate campaigns (`src/campaigns/`), not a difficulty setting on one story. A first-grader's world and a linear algebra student's world need different stories, enemies and puzzle types; the engine (map, combat, dialog, trials, tutor) is shared. Within a campaign, `mastery.ts` still adapts problem levels 1–3 per topic. [CURRICULUM.md](CURRICULUM.md) maps tiers from grade 1 to university and lists candidate campaigns.
+
+## Step puzzles and the notebook (Eigenvale)
+
+Longer formulas are split into **working steps** (`src/math/linalg.ts` → `StepProblem`). Each step has its own box and is checked separately, so the working is literally part of the answer: Focus gives `1 + 0.5 × stepsRight / steps` even when the final answer slips. For matrix products the steps *are* the answer.
+
+**Colour-coded terms** (as in the user's physics card): every term in the formula has a colour t1–t6, the same colour is used in the sentence below it and in the plot, and hovering or tapping a term shows what it means (`src/ui/eq.ts`, `plot.ts`).
+
+The **Notebook** (`N`, and inside every untimed puzzle) has a free-text page for the player's own working, plus a formula sheet that fills up as skills are learned.
+
 ## Combat (DOS2 / BG3-style)
 
 - Grid, 8-directional movement, initiative order shown at the top.
 - **AP:** +4 per turn, store up to 6. Movement costs 1 AP per 3 tiles; leftover tiles carry over within the turn.
 - Cooldowns, area effects with friendly fire (Fireball), surfaces (fire that burns for 2 rounds).
-- **Boss seals:** a sealed golem takes no damage. Breaking a seal staggers it for a turn. At 50 and 25 HP a new, harder seal forms.
+- **Boss seals:** a sealed boss takes no damage. Breaking a seal staggers it for a turn. A new, harder seal forms at HP thresholds (golem 50/25, Eigenwarden 70/35).
+- **Armor** subtracts from every hit except focused ones. **Shields** (Ward) absorb damage first. **Taunt** forces enemies to attack Otso; **Mark** makes a target take +50%.
+- **Enemy abilities:** blink (wisps teleport), grow (scalar slimes gain damage each round), reflect (crystal golems), drain (bats heal), push (the Eigenwarden shoves heroes back).
 
 ## Tuning knobs
 
@@ -110,14 +126,16 @@ Rules in battle (still grid-based, so AP, ranges and areas stay exact):
 | Seal thresholds | `src/combat/units.ts` → `GOLEM_THRESHOLDS` |
 | Attunement fade / floor | `src/state.ts` → `fadeAttunement`, `attuneMult` |
 | Trial lengths | `SKILLS[*].trial.need` |
-| Overcharge timer | `combat.ts` → `timerSeconds(8)` |
+| Focus multipliers | `src/data.ts` → `FOCUS_MULT` |
+| Focus timer | `combat.ts` → `timerSeconds(8)` |
+| Eigenwarden seals | `src/math/eigenseal.ts` → `WARDEN_SEALS` |
 | Field shape / seed rate | `src/world/map.ts` → `FIELD`, `src/data.ts` → `SEEDS_PER_M2` |
 
 ## AI tutor
 
 The main problem is balancing *character learning* against *player learning*. The tutor sits on the player side: it is help for thinking, never a way around the thinking.
 
-- Owl only appears on untimed questions. Overcharges are about fluency, so no help appears there.
+- Owl only appears on untimed questions. Timed Focus puzzles are about fluency, so no help appears there.
 - Escalation goes in-game hint → Owl level 1 (nudge) → level 2 (strategy) → level 3 (analogous example or first step).
 - The model never sees the answer. The client checks every reply for the answer and asks for a rewrite, or hides the number (`src/tutor/guard.ts`).
 - The system prompt is a plain file (`tutor/rules.md`) so a teacher can tune tone and strictness.

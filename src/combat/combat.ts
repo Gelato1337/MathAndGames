@@ -1,19 +1,20 @@
 import { TILE } from '../art/tiles';
-import { HERO_SKILLS, SKILLS, TEA_AP, TONIC_HEAL, type HeroId, type ItemId, type SkillId } from '../data';
+import { FOCUS_MULT, PARTY_SKILLS, SKILLS, TEA_AP, TONIC_HEAL, type HeroId, type ItemId, type SkillId } from '../data';
 import { t } from '../i18n';
 import { mousePos, takeClicks, takePressed } from '../input';
+import { generateLA, isLinalg } from '../math/linalg';
 import { level } from '../math/mastery';
 import { generate } from '../math/problems';
-import { fmtSeal, GOLEM_SEALS } from '../math/seal';
 import type { Renderer } from '../render';
 import { attuneMult, game, timerSeconds } from '../state';
 import { wait } from '../ui/dom';
 import { ask } from '../ui/question';
-import { probeSeal, unbindSeal } from '../ui/seals';
+import { probeAny, sealLabel, unbindAny } from '../ui/seals';
+import { askSteps } from '../ui/steps';
 import { inRect, type EncounterDef, type WorldMap } from '../world/map';
 import { tileCenter } from '../art/iso';
 import { CombatHud } from './hud';
-import { ENEMY_ATTACKS, GOLEM_THRESHOLDS, makeEnemy, makeHero, occupies, unitDist, type Unit } from './units';
+import { ENEMIES, makeEnemy, makeHero, occupies, unitDist, type Attack, type EnemyKind, type Unit } from './units';
 
 interface Float {
   text: string;
@@ -32,9 +33,15 @@ interface Reach {
 
 const FIRE_TURNS = 2;
 const FIRE_DMG = 3;
+const REFLECT_DMG = 2;
 const rand = (min: number, max: number) => min + Math.floor(Math.random() * (max - min + 1));
 
 export type CombatResult = 'win' | 'lose';
+
+interface DamageOpts {
+  /** a focused attack: ignores armor and reflection */
+  pierce?: boolean;
+}
 
 export class Combat {
   units: Unit[] = [];
@@ -43,11 +50,12 @@ export class Combat {
   round = 1;
   state: 'player' | 'busy' | 'enemy' | 'over' = 'busy';
   selected: SkillId | null = null;
-  overcharge = false;
+  /** the selected skill will be charged instead of cast */
+  focusMode = false;
   fire = new Map<number, number>();
   floats: Float[] = [];
   log: string[] = [];
-  /** Skills overcharged successfully this fight (they stay attuned). */
+  /** Skills released with a right answer this fight (they stay attuned). */
   refreshed = new Set<SkillId>();
   hover: { x: number; y: number } | null = null;
   reach: Reach | null = null;
@@ -63,7 +71,7 @@ export class Combat {
     readonly onEnd: (result: CombatResult, c: Combat) => void,
   ) {
     for (const h of heroes) this.units.push(makeHero(h.id, h.x, h.y));
-    for (const e of enc.enemies) this.units.push(makeEnemy(e.kind, e.x, e.y));
+    for (const e of enc.enemies) this.units.push(makeEnemy(e.kind as EnemyKind, e.x, e.y));
     // make sure heroes stand on valid tiles inside the arena
     for (const u of this.units) if (u.team === 'hero' && !this.canStand(u, u.x, u.y)) this.nudgeInside(u);
     this.hud = new CombatHud(this);
@@ -122,12 +130,14 @@ export class Combat {
         if (!best || d < best.d) best = { x, y, d };
       }
     }
-    if (best) {
-      u.x = best.x;
-      u.y = best.y;
-      u.px = u.x * TILE;
-      u.py = u.y * TILE;
-    }
+    if (best) this.place(u, best.x, best.y);
+  }
+
+  private place(u: Unit, x: number, y: number): void {
+    u.x = x;
+    u.y = y;
+    u.px = x * TILE;
+    u.py = y * TILE;
   }
 
   /** Height of the ground a unit stands on. */
@@ -147,7 +157,6 @@ export class Combat {
     dist.set(start, 0);
     const open: number[] = [start];
     while (open.length) {
-      // small grids: a linear scan for the cheapest open node is plenty
       let bi = 0;
       for (let i = 1; i < open.length; i++) if (dist.get(open[i])! < dist.get(open[bi])!) bi = i;
       const k = open.splice(bi, 1)[0];
@@ -216,7 +225,7 @@ export class Combat {
 
   // ---------- turn flow ----------
 
-  private beginTurn(): void {
+  private async beginTurn(): Promise<void> {
     if (this.state === 'over') return;
     const u = this.active;
     if (u.dead) {
@@ -226,10 +235,12 @@ export class Combat {
     for (const k of Object.keys(u.cooldowns) as SkillId[]) {
       if ((u.cooldowns[k] ?? 0) > 0) u.cooldowns[k]!--;
     }
+    if (u.taunt > 0) u.taunt--;
+    if (u.mark > 0) u.mark--;
     u.ap = Math.min(u.maxAp, u.ap + u.regen);
     u.moveLeft = 0;
     this.selected = null;
-    this.overcharge = false;
+    this.focusMode = false;
 
     if (this.onFire(u)) {
       this.addLog(t('combat.burns', { name: this.name(u) }));
@@ -239,6 +250,11 @@ export class Combat {
         this.nextTurn();
         return;
       }
+    }
+    if (u.abilities.includes('grow')) {
+      u.maxHp += 3;
+      u.hp += 3;
+      this.float(u, t('combat.growFloat'), '#a7f070');
     }
     if (u.stagger) {
       u.stagger = false;
@@ -250,6 +266,12 @@ export class Combat {
       return;
     }
     if (u.team === 'hero') {
+      if (u.focus) {
+        this.state = 'busy';
+        this.hud.render();
+        await this.releaseFocus(u);
+        if (this.checkEnd()) return;
+      }
       this.state = 'player';
       this.refreshReach();
     } else {
@@ -280,7 +302,7 @@ export class Combat {
         else this.fire.set(k, v - 1);
       }
     }
-    this.beginTurn();
+    void this.beginTurn();
   }
 
   private refreshReach(): void {
@@ -327,8 +349,12 @@ export class Combat {
     return false;
   }
 
-  damage(target: Unit, amount: number, from?: Unit): void {
-    if (target.dead) return;
+  /**
+   * Deal damage. Order: high ground, mark (+50%), seal (absorbs all), armor
+   * (unless pierced), shield, then HP. Returns the HP actually lost.
+   */
+  damage(target: Unit, amount: number, from?: Unit, opts: DamageOpts = {}): number {
+    if (target.dead) return 0;
     if (from) {
       const hm = this.heightMult(from, target);
       const label = t('combat.highGround');
@@ -336,31 +362,61 @@ export class Combat {
       if (hm > 1 && !target.seal && !shown) this.float(target, label, '#ffcd75', 10);
       amount *= hm;
     }
+    if (target.mark > 0) amount *= 1.5;
     if (target.seal) {
       this.float(target, t('combat.sealedFloat'), '#73eff7');
       this.addLog(t('combat.sealAbsorbs', { name: this.name(target) }));
-      return;
+      return 0;
     }
-    const dmg = Math.max(1, Math.round(amount));
+    let dmg = Math.max(1, Math.round(amount));
+    if (target.armor && !opts.pierce) {
+      dmg = Math.max(0, dmg - target.armor);
+      if (dmg === 0) {
+        this.float(target, t('combat.armorFloat'), '#94b0c2');
+        return 0;
+      }
+    }
+    if (target.shield > 0) {
+      const absorbed = Math.min(target.shield, dmg);
+      target.shield -= absorbed;
+      dmg -= absorbed;
+      this.float(target, t('combat.shieldFloat', { n: absorbed }), '#73a8ff', 8);
+      if (dmg === 0) return 0;
+    }
     target.hp -= dmg;
     target.flash = 0.25;
-    this.float(target, `-${dmg}`, '#ef7d57');
-    if (target.kind === 'golem' && target.sealPhase < GOLEM_SEALS.length - 1) {
-      const th = GOLEM_THRESHOLDS[target.sealPhase];
+    this.float(target, `-${dmg}`, opts.pierce ? '#ffcd75' : '#ef7d57');
+    if (target.focus) target.focus.disrupted = true;
+    // crystals bite back at learned (unfocused) attacks
+    if (from && from.team === 'hero' && target.abilities.includes('reflect') && !opts.pierce && !from.dead) {
+      from.hp = Math.max(0, from.hp - REFLECT_DMG);
+      from.flash = 0.2;
+      this.float(from, `-${REFLECT_DMG}`, '#73eff7');
+      this.addLog(t('combat.reflect', { name: this.name(target), target: this.name(from) }));
+      if (from.hp <= 0) this.kill(from);
+    }
+    const seals = ENEMIES[target.kind as EnemyKind]?.seals;
+    const thresholds = ENEMIES[target.kind as EnemyKind]?.thresholds;
+    if (seals && thresholds && target.sealPhase < seals.length - 1) {
+      const th = thresholds[target.sealPhase];
       if (target.hp <= th) {
         target.hp = th;
         target.sealPhase++;
-        target.seal = GOLEM_SEALS[target.sealPhase];
+        target.seal = seals[target.sealPhase];
         target.probeLog = [];
         this.float(target, t('combat.resealFloat'), '#73eff7', 12);
-        this.addLog(t('combat.reseal', { eq: fmtSeal(target.seal) }));
+        this.addLog(t('combat.reseal', { eq: sealLabel(target.seal) }));
       }
     }
-    if (target.hp <= 0) {
-      target.hp = 0;
-      target.dead = true;
-      this.addLog(t(target.team === 'hero' ? 'combat.down' : 'combat.defeated', { name: this.name(target) }));
-    }
+    if (target.hp <= 0) this.kill(target);
+    return dmg;
+  }
+
+  private kill(u: Unit): void {
+    u.hp = 0;
+    u.dead = true;
+    u.focus = null;
+    this.addLog(t(u.team === 'hero' ? 'combat.down' : 'combat.defeated', { name: this.name(u) }));
   }
 
   heal(target: Unit, amount: number): void {
@@ -468,24 +524,39 @@ export class Combat {
 
   skillsOf(u: Unit): SkillId[] {
     if (u.team !== 'hero') return [];
-    return HERO_SKILLS[u.kind as HeroId];
+    return PARTY_SKILLS[game.campaign][u.kind as HeroId] ?? [];
   }
 
   canUse(u: Unit, id: SkillId): boolean {
     return game.learned.has(id) && u.ap >= SKILLS[id].ap && !(u.cooldowns[id] ?? 0);
   }
 
+  /** Focusing costs one extra AP and needs a skill with a focus puzzle. */
+  canFocus(u: Unit, id: SkillId): boolean {
+    return !!SKILLS[id].focus && this.canUse(u, id) && u.ap >= SKILLS[id].ap + 1 && !u.focus;
+  }
+
   select(id: SkillId | null): void {
     if (this.state !== 'player') return;
     if (id && !this.canUse(this.active, id)) return;
     this.selected = this.selected === id ? null : id;
-    if (!this.selected || !SKILLS[this.selected].overcharge) this.overcharge = false;
+    if (!this.selected || !this.canFocus(this.active, this.selected)) this.focusMode = false;
+    // self skills fire straight away
+    if (this.selected && SKILLS[this.selected].target === 'self' && !this.focusMode) {
+      const s = this.selected;
+      void this.useSkill(s, this.active.x, this.active.y);
+      return;
+    }
     this.hud.render();
   }
 
-  toggleOvercharge(): void {
-    if (this.selected && SKILLS[this.selected].overcharge) {
-      this.overcharge = !this.overcharge;
+  toggleFocus(): void {
+    if (this.selected && this.canFocus(this.active, this.selected)) {
+      this.focusMode = !this.focusMode;
+      if (this.focusMode && SKILLS[this.selected].target === 'self') {
+        void this.useSkill(this.selected, this.active.x, this.active.y);
+        return;
+      }
       this.hud.render();
     }
   }
@@ -495,7 +566,8 @@ export class Combat {
     if (n >= 1 && n <= 4) {
       const id = this.skillsOf(this.active)[n - 1];
       if (id) this.select(id);
-    } else if (k === 'o') this.toggleOvercharge();
+    } else if (k === 'f') this.toggleFocus();
+    else if (k === 'q') void this.autoTurn();
     else if (k === 'Escape') this.select(null);
     else if (k === ' ' || k === 'Enter') this.endTurn();
   }
@@ -506,9 +578,10 @@ export class Combat {
     const def = SKILLS[id];
     const tu = this.unitAt(x, y);
     const d = unitDist(u, { x, y, size: tu?.size ?? 1 });
+    if (def.target === 'self') return x === u.x && y === u.y;
     if (def.target === 'enemy') {
       if (!tu || tu.team !== 'enemy') return false;
-      if (id === 'unbind' && !tu.seal) return false;
+      if (def.effect.kind === 'unbind' && !tu.seal) return false;
       return unitDist(u, tu) <= this.rangeOf(u, id, tu.x, tu.y);
     }
     if (def.target === 'ally') return !!tu && tu.team === 'hero' && unitDist(u, tu) <= def.range;
@@ -532,18 +605,21 @@ export class Combat {
       return;
     }
     if (!this.reach) return;
-    const k = this.key(x, y);
-    const d = this.reach.dist.get(k);
+    const d = this.reach.dist.get(this.key(x, y));
     if (d === undefined || d === 0) return;
     const cost = this.moveCost(u, d);
     if (cost > u.ap) return;
+    await this.walk(u, x, y, d, cost);
+    this.afterAction();
+  }
+
+  private async walk(u: Unit, x: number, y: number, d: number, cost: number): Promise<void> {
     this.state = 'busy';
     this.hud.render();
-    const path = this.pathTo(this.reach, u, x, y);
+    const path = this.pathTo(this.reach ?? this.reachable(u, this.maxTiles(u)), u, x, y);
     u.ap -= cost;
     u.moveLeft = u.moveLeft + cost * u.speed - d;
     await this.moveAlong(u, path);
-    this.afterAction();
   }
 
   private afterAction(): void {
@@ -557,33 +633,109 @@ export class Combat {
     this.hud.render();
   }
 
-  /** Run an overcharge question; true if answered correctly. */
-  private async overchargeQuestion(id: SkillId): Promise<boolean> {
-    const oc = SKILLS[id].overcharge!;
-    const p = generate(oc.topic, level(oc.topic));
-    const r = await ask(p, {
-      title: t('combat.ocTitle', { skill: t(`skills.${id}.name`) }),
-      tag: t('skills.overcharge'),
-      seconds: oc.timed ? timerSeconds(8) : 0,
-      quick: true,
-    });
-    if (r.correct) this.refreshed.add(id);
-    return r.correct;
-  }
-
+  /**
+   * Cast a skill (the learned way: no math), or start focusing it. Focusing
+   * costs one more AP and ends the turn; the skill fires at the start of the
+   * hero's next turn, after a puzzle.
+   */
   async useSkill(id: SkillId, x: number, y: number): Promise<void> {
     const u = this.active;
     const def = SKILLS[id];
     if (!this.canUse(u, id)) return;
+    const focusing = this.focusMode && this.canFocus(u, id);
     const target = this.unitAt(x, y);
     this.state = 'busy';
     this.selected = null;
+    this.focusMode = false;
     this.hud.render();
+    if (focusing) {
+      u.ap -= def.ap + 1;
+      u.focus = { skill: id, x, y, targetUid: target?.uid ?? null, disrupted: false };
+      this.float(u, t('combat.focusFloat'), '#ffcd75', 6);
+      this.addLog(t('combat.focusStart', { name: this.name(u), skill: t(`skills.${id}.name`) }));
+      await wait(500);
+      this.nextTurn();
+      return;
+    }
     u.ap -= def.ap;
     if (def.cooldown) u.cooldowns[id] = def.cooldown;
-    const oc = this.overcharge && !!def.overcharge;
-    this.overcharge = false;
-    const mult = def.basic ? 1 : attuneMult(id);
+    this.addLog(t('combat.uses', { name: this.name(u), skill: t(`skills.${id}.name`) }));
+    await this.perform(u, id, x, y, def.basic ? 1 : attuneMult(id), false, 0);
+    this.afterAction();
+  }
+
+  /** Solve the focus puzzle and fire the charged skill. */
+  private async releaseFocus(u: Unit): Promise<void> {
+    const f = u.focus!;
+    u.focus = null;
+    const def = SKILLS[f.skill];
+    const name = t(`skills.${f.skill}.name`);
+    this.addLog(t('combat.focusRelease', { name: this.name(u), skill: name }));
+    const oc = def.focus!;
+    let mult = FOCUS_MULT.miss;
+    let pierce = false;
+    let extraHits = 0;
+    const title = t('combat.focusTitle', { skill: name });
+    const tag = t(f.disrupted ? 'combat.focusDisrupted' : 'combat.focusTag');
+    if (def.effect.kind === 'multi' && oc.timed) {
+      // ninja chain: every quick right answer adds a hit
+      for (let i = 0; i < 4; i++) {
+        const ok = isLinalg(oc.topic)
+          ? (await askSteps(generateLA(oc.topic, level(oc.topic)), { title, tag, seconds: timerSeconds(14), quick: true })).correct
+          : (await ask(generate(oc.topic, level(oc.topic)), { title, tag, seconds: timerSeconds(8), quick: true })).correct;
+        if (!ok) break;
+        extraHits++;
+      }
+      if (extraHits > 0) this.refreshed.add(f.skill);
+      pierce = extraHits >= 2;
+      this.addLog(t('combat.combo', { n: def.effect.hits + extraHits }));
+    } else if (isLinalg(oc.topic)) {
+      const r = await askSteps(generateLA(oc.topic, level(oc.topic)), { title, tag });
+      if (r.correct) {
+        mult = f.disrupted ? FOCUS_MULT.disrupted : FOCUS_MULT.perfect;
+        pierce = true;
+        this.refreshed.add(f.skill);
+      } else if (r.steps) {
+        // the working counts: partial credit for right steps
+        mult = 1 + 0.5 * (r.stepsRight / r.steps);
+      }
+    } else {
+      const r = await ask(generate(oc.topic, level(oc.topic)), { title, tag, seconds: oc.timed ? timerSeconds(8) : 0, hint: !oc.timed });
+      if (r.correct) {
+        mult = f.disrupted ? FOCUS_MULT.disrupted : FOCUS_MULT.perfect;
+        pierce = true;
+        this.refreshed.add(f.skill);
+      }
+    }
+    // aim: the chosen unit if it is still close enough, else the nearest enemy in reach
+    let x = f.x;
+    let y = f.y;
+    if (def.target === 'enemy' || def.target === 'ally') {
+      const team = def.target === 'enemy' ? 'enemy' : 'hero';
+      let tgt = this.units.find((o) => o.uid === f.targetUid && !o.dead);
+      const reach = def.range + 2;
+      if (!tgt || unitDist(u, tgt) > reach) tgt = this.alive(team).filter((o) => unitDist(u, o) <= reach).sort((a, b) => unitDist(u, a) - unitDist(u, b))[0];
+      if (!tgt) {
+        this.float(u, t('combat.fizzle'), '#94b0c2');
+        this.addLog(t('combat.fizzleLog', { skill: name }));
+        return;
+      }
+      x = tgt.x;
+      y = tgt.y;
+    } else if (def.target === 'self') {
+      x = u.x;
+      y = u.y;
+    }
+    if (def.cooldown) u.cooldowns[f.skill] = def.cooldown;
+    if (mult > 1) this.float(u, `×${mult.toFixed(1)}`, '#ffcd75', 14);
+    await this.perform(u, f.skill, x, y, attuneMult(f.skill) * mult, pierce, extraHits);
+  }
+
+  /** Apply a skill's effect. `mult` scales damage/healing; `pierce` ignores armor. */
+  private async perform(u: Unit, id: SkillId, x: number, y: number, mult: number, pierce: boolean, extraHits: number): Promise<void> {
+    const def = SKILLS[id];
+    const e = def.effect;
+    const target = this.unitAt(x, y);
     const hiddenMult = () => {
       if (u.hidden) {
         u.hidden = false;
@@ -591,93 +743,85 @@ export class Combat {
       }
       return 1;
     };
-    const sname = t(`skills.${id}.name`);
-    this.addLog(t('combat.uses', { name: this.name(u), skill: sname }));
-
-    switch (id) {
-      case 'strike': {
-        this.damage(target!, rand(6, 8) * hiddenMult(), u);
+    switch (e.kind) {
+      case 'hit': {
+        if (!target) return;
+        if (e.projectile) await this.shoot(u, target, e.projectile);
+        this.damage(target, rand(e.min, e.max) * mult * hiddenMult(), u, { pierce });
         break;
       }
-      case 'flurry': {
-        let hits = 2;
-        if (oc) {
-          for (let i = 0; i < 4; i++) {
-            if (!(await this.overchargeQuestion(id))) break;
-            hits++;
-          }
-          this.addLog(t('combat.combo', { n: hits }));
-        }
+      case 'multi': {
+        if (!target) return;
         const hm = hiddenMult();
-        for (let i = 0; i < hits && !target!.dead; i++) {
-          this.damage(target!, 4 * mult * hm, u);
-          await wait(160);
+        for (let i = 0; i < e.hits + extraHits && !target.dead; i++) {
+          this.damage(target, e.dmg * mult * hm, u, { pierce });
+          await wait(150);
         }
         break;
       }
-      case 'shadowStep': {
-        const good = oc ? await this.overchargeQuestion(id) : false;
-        u.x = x;
-        u.y = y;
-        u.px = x * TILE;
-        u.py = y * TILE;
-        u.moveLeft = 0;
-        this.float(u, t('combat.stepFloat'), '#94b0c2');
-        if (good) {
-          u.hidden = true;
-          this.float(u, t('combat.hiddenFloat'), '#ffcd75', 10);
-        }
-        break;
-      }
-      case 'probe': {
-        if (target!.seal) {
-          const res = await probeSeal(target!.seal, target!.probeLog);
-          if (res.shattered) this.breakSeal(target!);
-        }
-        this.damage(target!, 5 * mult * hiddenMult(), u);
-        break;
-      }
-      case 'bolt': {
-        await this.shoot(u, target!, '#73eff7');
-        this.damage(target!, rand(5, 7), u);
-        break;
-      }
-      case 'fireball': {
-        const good = oc ? await this.overchargeQuestion(id) : false;
-        await this.shoot(u, { x, y }, '#ef7d57');
-        const dmg = 9 * mult * (good ? 1.5 : 1);
+      case 'aoe': {
+        const cx = def.target === 'self' ? u.x : x;
+        const cy = def.target === 'self' ? u.y : y;
+        if (def.target !== 'self') await this.shoot(u, { x: cx, y: cy }, e.fire ? '#ef7d57' : '#a992ff');
         const hit = new Set<Unit>();
         for (let dy = -def.area; dy <= def.area; dy++) {
           for (let dx = -def.area; dx <= def.area; dx++) {
-            const tx = x + dx;
-            const ty = y + dy;
+            const tx = cx + dx;
+            const ty = cy + dy;
             if (!inRect(this.enc.region, tx, ty) || !this.world.walkable(tx, ty)) continue;
-            this.fire.set(this.key(tx, ty), FIRE_TURNS);
+            if (e.fire) this.fire.set(this.key(tx, ty), FIRE_TURNS);
             const tu = this.unitAt(tx, ty);
-            if (tu) hit.add(tu);
+            // quakes around yourself don't hit you; fireballs hit everyone
+            if (tu && !(def.target === 'self' && tu.team === 'hero')) hit.add(tu);
           }
         }
-        for (const tu of hit) this.damage(tu, dmg, u);
+        for (const tu of hit) this.damage(tu, e.dmg * mult, u, { pierce });
         break;
       }
-      case 'mend': {
-        const good = oc ? await this.overchargeQuestion(id) : false;
-        this.heal(target!, (good ? 16 : 10) * mult);
+      case 'heal':
+        if (target) this.heal(target, e.amount * mult);
         break;
-      }
-      case 'unbind': {
-        if (target!.seal) {
-          const ok = await unbindSeal(target!.seal);
-          if (ok) this.breakSeal(target!);
+      case 'teleport':
+        this.place(u, x, y);
+        u.moveLeft = 0;
+        this.float(u, t('combat.stepFloat'), '#94b0c2');
+        break;
+      case 'probe':
+        if (!target) return;
+        if (target.seal) {
+          const res = await probeAny(target.seal, target.probeLog);
+          if (res.shattered) this.breakSeal(target);
+        }
+        this.damage(target, e.dmg * mult * hiddenMult(), u, { pierce });
+        break;
+      case 'unbind':
+        if (target?.seal) {
+          const ok = await unbindAny(target.seal);
+          if (ok) this.breakSeal(target);
           else {
-            this.float(target!, t('combat.holdsFloat'), '#73eff7');
+            this.float(target, t('combat.holdsFloat'), '#73eff7');
             this.addLog(t('combat.sealHolds'));
           }
         }
         break;
-      }
+      case 'shield':
+        if (target) {
+          const n = Math.round(e.amount * mult);
+          target.shield += n;
+          this.float(target, t('combat.shieldGain', { n }), '#73a8ff', 6);
+        }
+        break;
+      case 'taunt':
+        u.taunt = e.turns + (mult > 1 ? 1 : 0);
+        this.float(u, t('combat.tauntFloat'), '#ef7d57', 6);
+        break;
+      case 'mark':
+        if (target) {
+          target.mark = e.turns + 1; // ticks down on its own turn
+          this.float(target, t('combat.markFloat'), '#ef7d57', 6);
+        }
+        break;
     }
-    this.afterAction();
   }
 
   async useItem(id: ItemId): Promise<void> {
@@ -697,63 +841,204 @@ export class Combat {
     this.afterAction();
   }
 
-  // ---------- enemy AI ----------
+  // ---------- AI (enemies, and heroes on Auto) ----------
+
+  /** Walk toward the closest of `targets`, keeping `keepAp` for an attack if possible. */
+  private async approach(u: Unit, targets: Unit[], wantRange: number, keepAp: number): Promise<boolean> {
+    if (!targets.length || (u.ap <= 0 && u.moveLeft <= 0)) return false;
+    const reach = this.reachable(u, this.maxTiles(u));
+    const cur = Math.min(...targets.map((h) => unitDist(u, h)));
+    let best: { k: number; score: number; cost: number } | null = null;
+    for (const [k, d] of reach.dist) {
+      const cost = this.moveCost(u, d);
+      if (cost > u.ap) continue;
+      const x = k % this.world.w;
+      const y = Math.floor(k / this.world.w);
+      const dist = Math.min(...targets.map((h) => unitDist({ x, y, size: u.size }, h)));
+      // being in range matters most, then keeping AP, then distance
+      const inRange = dist <= wantRange ? 0 : 1;
+      const short = u.ap - cost < keepAp ? 1 : 0;
+      const score = inRange * 100 + short * 10 + dist;
+      if (!best || score < best.score || (score === best.score && cost < best.cost)) best = { k, score, cost };
+    }
+    if (!best) return false;
+    const x = best.k % this.world.w;
+    const y = Math.floor(best.k / this.world.w);
+    const d = reach.dist.get(best.k)!;
+    if (d === 0 || Math.min(...targets.map((h) => unitDist({ x, y, size: u.size }, h))) >= cur) return false;
+    u.ap -= best.cost;
+    u.moveLeft = u.moveLeft + best.cost * u.speed - d;
+    await this.moveAlong(u, this.pathTo(reach, u, x, y));
+    await wait(120);
+    return true;
+  }
+
+  /** Enemies attack a taunting hero if they can, otherwise the weakest in reach. */
+  private pickTargets(): Unit[] {
+    const heroes = this.alive('hero');
+    const taunters = heroes.filter((h) => h.taunt > 0);
+    return taunters.length ? taunters : heroes;
+  }
+
+  private async enemyAttack(u: Unit, atk: Attack, tgt: Unit): Promise<void> {
+    u.ap -= atk.ap;
+    this.addLog(t('combat.enemyAttack', { name: this.name(u), attack: t(`combat.attacks.${atk.id}`), target: this.name(tgt) }));
+    if (atk.range > 1) await this.shoot(u, tgt, '#94b0c2');
+    else {
+      u.flash = 0.15;
+      await wait(250);
+    }
+    const victims = atk.aoe ? this.alive('hero').filter((h) => unitDist(h, tgt) <= atk.aoe!) : [tgt];
+    for (const v of victims) {
+      const dealt = this.damage(v, rand(atk.min, atk.max), u);
+      if (u.abilities.includes('drain') && dealt > 0) this.heal(u, Math.ceil(dealt / 2));
+      if (u.abilities.includes('push') && !v.dead) this.push(u, v);
+    }
+  }
+
+  /** Shove `v` two tiles directly away from `u` (stopping at obstacles). */
+  private push(u: Unit, v: Unit): void {
+    const dx = Math.sign(v.x - (u.x + (u.size - 1) / 2));
+    const dy = Math.sign(v.y - (u.y + (u.size - 1) / 2));
+    let moved = 0;
+    for (let i = 0; i < 2; i++) {
+      const nx = v.x + dx;
+      const ny = v.y + dy;
+      if (!this.canStand(v, nx, ny) || Math.abs(this.world.height(nx, ny) - this.z(v)) > 1) break;
+      this.place(v, nx, ny);
+      moved++;
+    }
+    if (moved) this.float(v, t('combat.pushFloat'), '#a992ff', 4);
+  }
+
+  /** Wisps hop away after acting. */
+  private blink(u: Unit): void {
+    const heroes = this.alive('hero');
+    let best: { x: number; y: number; d: number } | null = null;
+    for (let dy = -3; dy <= 3; dy++) {
+      for (let dx = -3; dx <= 3; dx++) {
+        const x = u.x + dx;
+        const y = u.y + dy;
+        if (!this.canStand(u, x, y)) continue;
+        const d = Math.min(...heroes.map((h) => unitDist({ x, y, size: 1 }, h)));
+        if (d > 4) continue; // stay close enough to keep zapping
+        if (!best || d > best.d) best = { x, y, d };
+      }
+    }
+    if (best && (best.x !== u.x || best.y !== u.y)) {
+      this.place(u, best.x, best.y);
+      this.float(u, t('combat.blinkFloat'), '#73eff7', 4);
+    }
+  }
 
   private async runAI(u: Unit): Promise<void> {
-    await wait(450);
-    const attacks = ENEMY_ATTACKS[u.kind as 'slime' | 'golem'];
+    await wait(400);
+    const attacks = ENEMIES[u.kind as EnemyKind].attacks;
     for (let guard = 0; guard < 6 && this.state !== 'over'; guard++) {
-      const heroes = this.alive('hero');
-      if (!heroes.length) return;
-      // attack if possible
+      const targets = this.pickTargets();
+      if (!targets.length) return;
       let acted = false;
       for (const atk of attacks) {
         if (u.ap < atk.ap) continue;
-        const targets = heroes
+        const inReach = targets
           .filter((h) => {
             const d = unitDist(u, h);
             const range = atk.range > 1 && this.elevation(u, h) > 0 ? atk.range + 1 : atk.range;
             return d <= range && d >= atk.minRange;
           })
           .sort((a, b) => a.hp - b.hp);
-        if (!targets.length) continue;
-        const tgt = targets[0];
-        u.ap -= atk.ap;
-        this.addLog(t('combat.enemyAttack', { name: this.name(u), attack: t(`combat.attacks.${atk.id}`), target: this.name(tgt) }));
-        if (atk.range > 1) await this.shoot(u, tgt, '#94b0c2');
-        else {
-          u.flash = 0.15;
-          await wait(250);
-        }
-        this.damage(tgt, rand(atk.min, atk.max), u);
+        if (!inReach.length) continue;
+        await this.enemyAttack(u, atk, inReach[0]);
         if (this.checkEnd()) return;
-        await wait(400);
+        await wait(380);
         acted = true;
         break;
       }
       if (acted) continue;
-      // move closer
-      if (u.ap <= 0 && u.moveLeft <= 0) return;
-      const reach = this.reachable(u, this.maxTiles(u));
-      let best: { k: number; score: number; cost: number } | null = null;
-      const curScore = Math.min(...heroes.map((h) => unitDist(u, h)));
-      for (const [k, d] of reach.dist) {
-        const cost = this.moveCost(u, d);
-        if (cost > u.ap) continue;
-        const x = k % this.world.w;
-        const y = Math.floor(k / this.world.w);
-        const score = Math.min(...heroes.map((h) => unitDist({ x, y, size: u.size }, h)));
-        if (!best || score < best.score || (score === best.score && cost < best.cost)) best = { k, score, cost };
-      }
-      if (!best || best.score >= curScore) return;
-      const x = best.k % this.world.w;
-      const y = Math.floor(best.k / this.world.w);
-      const d = reach.dist.get(best.k)!;
-      u.ap -= best.cost;
-      u.moveLeft = u.moveLeft + best.cost * u.speed - d;
-      await this.moveAlong(u, this.pathTo(reach, u, x, y));
-      await wait(150);
+      const minAp = Math.min(...attacks.map((a) => a.ap));
+      if (!(await this.approach(u, targets, Math.max(...attacks.map((a) => a.range)), minAp))) break;
     }
+    if (u.abilities.includes('blink') && !u.dead) this.blink(u);
+  }
+
+  /**
+   * Auto: the hero plays its turn with learned skills only (no math, no
+   * focus) — heal a hurt ally, otherwise walk up and use the strongest
+   * attack it can afford.
+   */
+  async autoTurn(): Promise<void> {
+    if (this.state !== 'player') return;
+    const u = this.active;
+    this.state = 'busy';
+    this.selected = null;
+    this.focusMode = false;
+    this.hud.render();
+    this.addLog(t('combat.autoLog', { name: this.name(u) }));
+    const skills = this.skillsOf(u).filter((id) => game.learned.has(id));
+    const damaging = skills.filter((id) => ['hit', 'multi', 'aoe'].includes(SKILLS[id].effect.kind));
+    for (let guard = 0; guard < 8 && !this.isOver(); guard++) {
+      // heal first
+      const heal = skills.find((id) => SKILLS[id].effect.kind === 'heal' && this.canUse(u, id));
+      const hurt = this.alive('hero').filter((h) => h.hp < h.maxHp * 0.5 && unitDist(u, h) <= SKILLS[heal ?? 'bolt'].range).sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0];
+      if (heal && hurt) {
+        await this.castAuto(u, heal, hurt.x, hurt.y);
+        continue;
+      }
+      const enemies = this.alive('enemy');
+      if (!enemies.length) break;
+      // prefer unsealed enemies; sealed ones only absorb learned hits
+      const open = enemies.filter((e) => !e.seal);
+      const pool = open.length ? open : enemies;
+      const usable = damaging.filter((id) => this.canUse(u, id)).sort((a, b) => this.expected(b) - this.expected(a));
+      let done = false;
+      for (const id of usable) {
+        const def = SKILLS[id];
+        if (def.target === 'self') {
+          if (pool.some((e) => unitDist(u, e) <= def.area)) {
+            await this.castAuto(u, id, u.x, u.y);
+            done = true;
+            break;
+          }
+          continue;
+        }
+        const tgt = pool.filter((e) => unitDist(u, e) <= this.rangeOf(u, id, e.x, e.y)).sort((a, b) => a.hp - b.hp)[0];
+        if (tgt) {
+          await this.castAuto(u, id, tgt.x, tgt.y);
+          done = true;
+          break;
+        }
+      }
+      if (done) continue;
+      const basic = skills[0];
+      const want = Math.max(1, SKILLS[basic].range);
+      if (!(await this.approach(u, pool, want, SKILLS[basic].ap))) break;
+    }
+    if (this.isOver()) return;
+    await wait(250);
+    this.nextTurn();
+  }
+
+  /** Read the state fresh (TypeScript narrows `state` after assignments). */
+  private isOver(): boolean {
+    return this.state === 'over';
+  }
+
+  private expected(id: SkillId): number {
+    const e = SKILLS[id].effect;
+    if (e.kind === 'hit') return (e.min + e.max) / 2;
+    if (e.kind === 'multi') return e.hits * e.dmg;
+    if (e.kind === 'aoe') return e.dmg;
+    return 0;
+  }
+
+  private async castAuto(u: Unit, id: SkillId, x: number, y: number): Promise<void> {
+    const def = SKILLS[id];
+    u.ap -= def.ap;
+    if (def.cooldown) u.cooldowns[id] = def.cooldown;
+    this.addLog(t('combat.uses', { name: this.name(u), skill: t(`skills.${id}.name`) }));
+    await this.perform(u, id, x, y, def.basic ? 1 : attuneMult(id), false, 0);
+    await wait(250);
+    this.hud.render();
   }
 
   // ---------- drawing ----------
@@ -834,6 +1119,15 @@ export class Combat {
       const z = next ? z0 + (this.world.height(next.x, next.y) - z0) * anim!.t : z0;
       const bob = unit === this.active && Math.sin(frame / 6) > 0 ? -1 : 0;
       r.addSprite(sx, sy, () => {
+        if (unit.focus) {
+          const c = tileCenter(fx, fy, z);
+          ctx.strokeStyle = `rgba(255,205,117,${(0.5 + 0.4 * Math.sin(frame / 5)).toFixed(2)})`;
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.ellipse(c.x, c.y, 9, 4.5, 0, 0, Math.PI * 2);
+          ctx.stroke();
+          r.addLight(c.x, c.y - 8, 26, '255,205,117', 0.4);
+        }
         r.drawSpriteAt(unit.kind, fx, fy, z, { flash: unit.flash > 0, bob, alpha: unit.hidden ? 0.55 : 1, size: unit.size });
         if (unit.seal) {
           const c = tileCenter(fx + (unit.size - 1) / 2, fy + (unit.size - 1) / 2, z);
@@ -856,7 +1150,15 @@ export class Combat {
         ctx.fillRect(c.x - w / 2, top, w, 2);
         ctx.fillStyle = unit.team === 'hero' ? '#a7f070' : '#ef7d57';
         ctx.fillRect(c.x - w / 2, top, Math.max(0, (w * unit.hp) / unit.maxHp), 2);
-        if (unit.seal) r.text(fmtSeal(unit.seal), c.x, top - 7, { size: 20, color: '#73eff7', bold: true });
+        if (unit.seal) r.text(sealLabel(unit.seal), c.x, top - 7, { size: 18, color: '#73eff7', bold: true });
+        // status badges: armor, shield, mark, taunt, focusing
+        const badges: Array<[string, string]> = [];
+        if (unit.armor) badges.push([`⛨${unit.armor}`, '#94b0c2']);
+        if (unit.shield) badges.push([`◈${unit.shield}`, '#73a8ff']);
+        if (unit.mark) badges.push(['◎', '#ef7d57']);
+        if (unit.taunt) badges.push(['!', '#ef7d57']);
+        if (unit.focus) badges.push(['✦', '#ffcd75']);
+        badges.forEach(([txt, color], i) => r.text(txt, c.x - (badges.length - 1) * 6 + i * 12, c.y + 6, { size: 13, color, bold: true }));
         if (unit === u && this.state !== 'over') {
           const ay = top - (unit.seal ? 16 : 4) + (Math.sin(frame / 5) > 0 ? -1 : 0);
           ctx.fillStyle = '#ffcd75';

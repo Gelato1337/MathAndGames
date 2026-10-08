@@ -12,7 +12,17 @@ export type Topic =
   | 'sequence'
   | 'balance'
   | 'probe'
-  | 'farm';
+  | 'farm'
+  // linear algebra (step problems, see linalg.ts)
+  | 'vec_add'
+  | 'vec_scale'
+  | 'dot'
+  | 'perp'
+  | 'mat_vec'
+  | 'mat_mul'
+  | 'det2'
+  | 'eigen_val'
+  | 'eigen_vec';
 
 export interface Step {
   key: string;

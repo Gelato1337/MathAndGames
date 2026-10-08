@@ -406,6 +406,188 @@ SPRITES.fence = [
   '................',
 ];
 
+// ---------- Eigenvale cast ----------
+SPRITES.sana = [
+  '................',
+  '......kkkk......',
+  '.....kGGGGk.....',
+  '....kGggggGk....',
+  '...kGgguuggGk...',
+  '...kGuhhhhuGk...',
+  '...kGhkhhkhGk...',
+  '....kuhhhhuk....',
+  '....kGggggGk.k..',
+  '...kGgGeeGgGkuk.',
+  '..khkgGeeGgkhku.',
+  '...kggGGGGggk.uk',
+  '...kUUUyyUUUk.k.',
+  '...kggggggggk...',
+  '...kUUk..kUUk...',
+  '...kkkk..kkkk...',
+];
+
+SPRITES.otso = [
+  '................',
+  '.....kkkkkk.....',
+  '....kssssssk....',
+  '...ksmmmmmmsk...',
+  '...kmkkkkkkmk...',
+  '...kmhkhhkhmk...',
+  '...kmmhhhhmmk...',
+  '....kmmmmmmk....',
+  '..kkssbbbbsskk..',
+  '.kbbkbbyybbk.k..',
+  '.kbybkbbbbbbkhk.',
+  '.kbbbkbbbbbbk.k.',
+  '..kbk.kmmmmk....',
+  '...k..kmmmmk....',
+  '......kmkkmk....',
+  '.....kkk..kkk...',
+];
+
+SPRITES.ilona = [
+  '................',
+  '.....kkkkkk.....',
+  '....kyyyyyyk....',
+  '...kyyhhhhyyk...',
+  '...kyhkhhkhyk...',
+  '...kyhhhhhhyk...',
+  '...kyyhhhhyyk...',
+  '....kppppppk....',
+  '...kppwwwwppk...',
+  '..kppkwwwwkppk..',
+  '..khpkwemwkphk..',
+  '...kpkkkkkkpk...',
+  '...kppppppppk...',
+  '...kppppppppk...',
+  '...kUUk..kUUk...',
+  '...kkkk..kkkk...',
+];
+
+SPRITES.kerttu = [
+  '.......kk.......',
+  '......kppk......',
+  '.....kpyppk.....',
+  '....kppppppk....',
+  '..kkppppppppkk..',
+  '...kwhhhhhhwk...',
+  '...kwhkhhkhwk...',
+  '...kwwhhhhwwk...',
+  '....kwwwwwwk....',
+  '...kppwwwwppk...',
+  '..kppppwwppppk..',
+  '..khkppppppkhk..',
+  '...kppyppyppk...',
+  '...kppppppppk...',
+  '..kppppppppppk..',
+  '..kkkkkkkkkkkk..',
+];
+
+SPRITES.vera = [
+  '................',
+  '.....kkkkkk.....',
+  '....kUUUUUUk....',
+  '...kUhhhhhhUk...',
+  '...kUhkhhkhUk...',
+  '...khhhhhhhhk...',
+  '....khhrrhhk....',
+  '...krkhhhhkrk...',
+  '..krrssssssrrk..',
+  '..krsmmmmmmsrk..',
+  '..krhmmmmmmhrk..',
+  '..krrsyyyysrrk..',
+  '..krrmmmmmmrrk..',
+  '...kkmmkkmmkk...',
+  '.....kmk..kmk...',
+  '.....kkk..kkk...',
+];
+
+SPRITES.wisp = [
+  '................',
+  '................',
+  '......kkkk......',
+  '.....kiiiik.....',
+  '....kiwwiiik....',
+  '....kiwiiiik....',
+  '....kiikkiik....',
+  '....kiiiiiik....',
+  '.....kicciik....',
+  '......kccck.....',
+  '.......kcck.....',
+  '........kck.....',
+  '.........kk.....',
+  '................',
+  '................',
+  '................',
+];
+
+SPRITES.bat = [
+  '................',
+  '................',
+  '................',
+  '................',
+  '.k............k.',
+  '.kpk..kkkk..kpk.',
+  '.kppkkppppkkppk.',
+  '.kpppkpwwpkpppk.',
+  '..kppkprrpkppk..',
+  '...kkkppppkkk...',
+  '......kppk......',
+  '.......kk.......',
+  '................',
+  '................',
+  '................',
+  '................',
+];
+
+SPRITES.crystal = [
+  '.......kk.......',
+  '......kick......',
+  '.....kiicck.....',
+  '..kk.kicbbk.kk..',
+  '.kick.kcbbk.kcbk',
+  '.kicbkkccbbkkcbk',
+  '..kcbbkkkkkkbbk.',
+  '...kbmmmmmmmbk..',
+  '...kmkimmikmmk..',
+  '...kmmmmmmmmmk..',
+  '...kmmmffmmmmk..',
+  '....kmmmmmmmk...',
+  '....kmmk.kmmk...',
+  '...kmmmk.kmmmk..',
+  '...kkkkk.kkkkk..',
+  '................',
+];
+
+SPRITES.crystals = [
+  '................',
+  '................',
+  '................',
+  '................',
+  '................',
+  '.......k........',
+  '......kik.......',
+  '..k...kick..k...',
+  '.kik.kiccbk.kik.',
+  '.kcbkkccbbkkcbk.',
+  '.kcbkcbbbbbkcbk.',
+  '..kkkkkkkkkkkk..',
+  '................',
+  '................',
+  '................',
+  '................',
+];
+
+/** Recolour a sprite by swapping palette letters. */
+function recolor(rows: string[], swap: Record<string, string>): string[] {
+  return rows.map((r) => r.replace(/./g, (c) => swap[c] ?? c));
+}
+
+// a scalar slime keeps growing: warm colours
+SPRITES.scalar = recolor(SPRITES.slime, { l: 'y', g: 'o', G: 'r' });
+// the Eigenwarden: a royal golem of purple stone with golden eyes
+SPRITES.warden = recolor(SPRITES.golem, { m: 'p', s: 'b', f: 'n', i: 'y' });
+
 const cache = new Map<string, HTMLCanvasElement>();
 
 export function renderSprite(rows: string[]): HTMLCanvasElement {

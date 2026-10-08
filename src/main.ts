@@ -1,24 +1,26 @@
 import './style.css';
 import { TILE } from './art/tiles';
+import type { CampaignCtx } from './campaign';
+import { campaign } from './campaigns/registry';
 import { Combat, type CombatResult } from './combat/combat';
-import { onLangChange, setLang, getLang, t } from './i18n';
+import type { CampaignId } from './data';
+import { getLang, onLangChange, setLang, t } from './i18n';
 import { clearInput, initInput, isHeld, takeWheel } from './input';
 import { COMBAT_ZOOM, Renderer } from './render';
-import { checkTutor } from './tutor/client';
 import { devUnlockAll, fadeAttunement, game, newGame } from './state';
-import { beforeBattle, examineGate, talk, type StoryCtx } from './story/story';
-import { isBlocking, toast, uiRoot } from './ui/dom';
-import { bagScreen, clearHud, endingScreen, introSlides, pauseMenu, questsScreen, renderExploreHud, skillsScreen, titleScreen } from './ui/menus';
+import { checkTutor } from './tutor/client';
+import { isBlocking, uiRoot } from './ui/dom';
+import { bagScreen, clearHud, endingScreen, introSlides, notebookScreen, pauseMenu, questsScreen, renderExploreHud, skillsScreen, titleScreen } from './ui/menus';
 import { messageBox } from './ui/question';
 import { Explore, type Target } from './world/explore';
-import { chimneys, ENCOUNTERS, PLAYER_START, WorldMap, type EncounterDef } from './world/map';
+import { chimneys, type EncounterDef, type WorldMap } from './world/map';
 
 const canvas = document.getElementById('view') as HTMLCanvasElement;
 const r = new Renderer(canvas);
 initInput(canvas);
 setLang(getLang());
 
-let world = new WorldMap();
+let world: WorldMap = campaign().buildWorld();
 r.setChimneys(chimneys(world));
 let mode: 'title' | 'explore' | 'combat' = 'title';
 let busy = false;
@@ -26,30 +28,19 @@ let combat: Combat | null = null;
 let lastPrompt: string | null | undefined;
 let savedZoom: number | null = null;
 
-const ENTRY: Record<EncounterDef['id'], Array<{ x: number; y: number }>> = {
-  forest: [
-    { x: 38, y: 14 },
-    { x: 37, y: 15 },
-  ],
-  ruins: [
-    { x: 49, y: 14 },
-    { x: 49, y: 15 },
-  ],
-};
-
+/** Enemies still standing in the world (shown before their fight). */
 function enemySprites(): Array<{ sprite: string; x: number; y: number }> {
   const out: Array<{ sprite: string; x: number; y: number }> = [];
-  for (const e of ENCOUNTERS) {
-    if (e.id === 'forest' && game.flags.forestDone) continue;
-    if (e.id === 'ruins' && game.flags.golemDone) continue;
+  for (const e of campaign().encounters) {
+    if (campaign().encounterCleared(e.id)) continue;
     for (const en of e.enemies) out.push({ sprite: en.kind, x: en.x, y: en.y });
   }
   return out;
 }
 
-const story: StoryCtx = {
+const ctx: CampaignCtx = {
   refresh: () => refreshHud(true),
-  openGate: () => world.openGate(),
+  world: () => world,
 };
 
 let explore = makeExplore();
@@ -61,16 +52,17 @@ function makeExplore(): Explore {
     {
       interact: (tg) => void runInteract(tg),
       encounter: (e) => void startEncounter(e, true),
-      encounterActive: (e) => (e.id === 'forest' ? !game.flags.forestDone : game.flags.gateOpen && !game.flags.golemDone),
+      encounterActive: (e) => campaign().encounterActive(e.id),
       enemySprites,
       menu: () => void openPause(),
       hotkey: (k) => {
         if (k === 'q') void guard(questsScreen);
         else if (k === 'k') void guard(skillsScreen);
         else if (k === 'i') void guard(bagScreen);
+        else if (k === 'n') void guard(notebookScreen);
       },
     },
-    PLAYER_START,
+    campaign(),
   );
 }
 
@@ -97,8 +89,8 @@ function openPause(): Promise<void> {
 
 async function runInteract(tg: Target): Promise<void> {
   await guard(async () => {
-    if (tg.kind === 'npc') await talk(tg.npc, story);
-    else await examineGate(story);
+    if (tg.kind === 'npc') await campaign().talk(tg.npc, ctx);
+    else await campaign().examine(tg.obj.id, ctx);
   });
 }
 
@@ -112,6 +104,7 @@ function refreshHud(force = false): void {
     if (b === 'menu') void openPause();
     else if (b === 'quests') void guard(questsScreen);
     else if (b === 'skills') void guard(skillsScreen);
+    else if (b === 'notebook') void guard(notebookScreen);
     else void guard(bagScreen);
   });
 }
@@ -119,25 +112,19 @@ function refreshHud(force = false): void {
 async function startEncounter(e: EncounterDef, intro: boolean): Promise<void> {
   busy = true;
   clearHud();
-  if (intro) await beforeBattle(e.id);
+  if (intro) await campaign().beforeBattle(e.id);
   mode = 'combat';
   if (savedZoom === null) {
     savedZoom = r.zoomIndex;
     r.zoomIndex = Math.min(r.zoomIndex, COMBAT_ZOOM);
   }
-  const [a, b] = ENTRY[e.id];
-  const lead = intro ? { x: explore.leader.x, y: explore.leader.y } : a;
-  const foll = intro ? { x: explore.follower.x, y: explore.follower.y } : b;
-  combat = new Combat(
-    e,
-    world,
-    r,
-    [
-      { id: 'kai', ...lead },
-      { id: 'aino', ...foll },
-    ],
-    (res, c) => void endEncounter(res, c),
-  );
+  const entry = campaign().entry[e.id];
+  const party = explore.party();
+  const heroes = campaign().party.map((id, i) => {
+    const p = intro ? { x: party[i].x, y: party[i].y } : (entry[i] ?? entry[0]);
+    return { id, ...p };
+  });
+  combat = new Combat(e, world, r, heroes, (res, c) => void endEncounter(res, c));
   clearInput();
   combat.start();
   busy = false;
@@ -159,25 +146,17 @@ async function endEncounter(res: CombatResult, c: Combat): Promise<void> {
     savedZoom = null;
   }
   fadeAttunement(c.refreshed);
-  const kai = c.units.find((u) => u.kind === 'kai')!;
-  const aino = c.units.find((u) => u.kind === 'aino')!;
-  explore.placeParty(kai.x, kai.y, aino.x, aino.y);
-  if (e.id === 'forest') {
-    game.flags.forestDone = true;
-    game.gold += 10;
-    await messageBox(t('combat.winTitle'), [t('combat.winForest'), t('combat.attuneNote')]);
-    mode = 'explore';
-    busy = false;
-    toast(t('combat.goldGained', { n: 10 }));
-    refreshHud(true);
-  } else {
-    game.flags.golemDone = true;
-    await messageBox(t('combat.winTitle'), [t('combat.winGolem')]);
-    mode = 'explore';
-    busy = true;
+  const heroes = campaign().party.map((id) => c.units.find((u) => u.kind === id)!);
+  explore.placeParty(heroes.map((u) => ({ x: u.x, y: u.y })));
+  mode = 'explore';
+  const finished = await campaign().afterBattle(e.id, ctx);
+  if (finished) {
     clearHud();
-    endingScreen(() => toTitle());
+    endingScreen(campaign().ending(), () => toTitle());
+    return;
   }
+  busy = false;
+  refreshHud(true);
 }
 
 function toTitle(): void {
@@ -187,32 +166,24 @@ function toTitle(): void {
   busy = false;
   clearHud();
   uiRoot().replaceChildren();
-  titleScreen((dev) => void startGame(dev));
+  titleScreen((id) => void startGame(id, false));
 }
 
-async function startGame(dev: boolean): Promise<void> {
-  newGame();
+async function startGame(id: CampaignId, dev: boolean): Promise<void> {
+  newGame(id);
   void checkTutor();
-  world = new WorldMap();
+  world = campaign().buildWorld();
+  r.setChimneys(chimneys(world));
   explore = makeExplore();
   mode = 'explore';
   busy = true;
   const params = new URLSearchParams(location.search);
-  const devMode = dev || params.has('dev');
-  if (devMode) {
+  if (dev || params.has('dev')) {
     devUnlockAll();
-    const where = params.get('dev');
-    if (where === 'boss') {
-      game.flags.gateOpen = true;
-      game.flags.forestDone = true;
-      world.openGate();
-      explore.placeParty(46, 14, 45, 14);
-    } else if (where === 'forest') {
-      explore.placeParty(35, 14, 34, 14);
-    }
+    campaign().dev(params.get('dev'), (x, y) => explore.placeParty([{ x, y }, ...campaign().party.slice(1).map((_, i) => ({ x: x - 1 - i, y }))]), world);
   } else {
     clearHud();
-    await introSlides();
+    await introSlides(campaign().intro);
   }
   busy = false;
   refreshHud(true);
@@ -284,13 +255,24 @@ function loop(now: number): void {
 }
 
 if (import.meta.env.DEV) {
-  Object.defineProperty(window, '__numerola', { value: { get combat() { return combat; }, get explore() { return explore; }, game: () => game } });
+  Object.defineProperty(window, '__numerola', {
+    value: {
+      get combat() {
+        return combat;
+      },
+      get explore() {
+        return explore;
+      },
+      game: () => game,
+    },
+  });
 }
 
 toTitle();
 const params = new URLSearchParams(location.search);
 if (params.has('dev')) {
   uiRoot().replaceChildren();
-  void startGame(true);
+  const id = params.get('campaign') === 'eigenvale' ? 'eigenvale' : 'numerola';
+  void startGame(id, true);
 }
 requestAnimationFrame(loop);

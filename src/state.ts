@@ -1,5 +1,5 @@
-import type { ItemId, SkillId } from './data';
-import { SKILLS } from './data';
+import type { CampaignId, ItemId, SkillId } from './data';
+import { PARTY_SKILLS, SKILLS } from './data';
 import { resetMastery } from './math/mastery';
 
 export type TimerMode = 'normal' | 'relaxed' | 'off';
@@ -15,21 +15,42 @@ export interface Flags {
   haggled: boolean;
 }
 
+/** Eigenvale (linear algebra campaign) progress. */
+export interface EvFlags {
+  metIlona: boolean;
+  plainsDone: boolean;
+  minesDone: boolean;
+  doorOpen: boolean;
+  wardenDone: boolean;
+  /** 0 not started, 1 accepted, 2 done */
+  mapStage: number;
+}
+
 export interface GameState {
+  campaign: CampaignId;
   gold: number;
   inv: Record<ItemId, number>;
   learned: Set<SkillId>;
   /** 0..1 per learned skill. Fades between battles, restored by practice. */
   attune: Partial<Record<SkillId, number>>;
   flags: Flags;
+  ev: EvFlags;
   approaches: Set<string>;
+  /** The player's own notebook, per campaign (free text). */
+  notes: string;
 }
 
-function fresh(): GameState {
+/** Every hero starts with their basic attack. */
+function basics(campaign: CampaignId): SkillId[] {
+  return Object.values(PARTY_SKILLS[campaign]).map((list) => list![0]);
+}
+
+function fresh(campaign: CampaignId = 'numerola'): GameState {
   return {
+    campaign,
     gold: 40,
-    inv: { tonic: 2, tea: 0, seeds: 0 },
-    learned: new Set<SkillId>(['strike', 'bolt']),
+    inv: { tonic: campaign === 'eigenvale' ? 3 : 2, tea: campaign === 'eigenvale' ? 1 : 0, seeds: 0 },
+    learned: new Set<SkillId>(basics(campaign)),
     attune: {},
     flags: {
       metElder: false,
@@ -40,7 +61,9 @@ function fresh(): GameState {
       golemDone: false,
       haggled: false,
     },
+    ev: { metIlona: false, plainsDone: false, minesDone: false, doorOpen: false, wardenDone: false, mapStage: 0 },
     approaches: new Set(),
+    notes: '',
   };
 }
 
@@ -69,8 +92,8 @@ export function timerSeconds(base: number): number {
   return settings.timers === 'relaxed' ? base * 2 : base;
 }
 
-export function newGame(): void {
-  game = fresh();
+export function newGame(campaign: CampaignId = 'numerola'): void {
+  game = fresh(campaign);
   resetMastery();
 }
 
@@ -89,7 +112,7 @@ export function attuneMult(id: SkillId): number {
   return 0.6 + 0.4 * attunement(id);
 }
 
-/** After each battle, skills that were not overcharged fade a bit. */
+/** After each battle, skills not released with a right Focus answer fade a bit. */
 export function fadeAttunement(refreshed: Set<SkillId>): void {
   for (const id of game.learned) {
     if (SKILLS[id].basic) continue;
@@ -99,7 +122,8 @@ export function fadeAttunement(refreshed: Set<SkillId>): void {
 }
 
 export function devUnlockAll(): void {
-  for (const id of Object.keys(SKILLS) as SkillId[]) learn(id);
+  for (const list of Object.values(PARTY_SKILLS[game.campaign])) for (const id of list!) learn(id);
   game.flags.metElder = true;
+  game.ev.metIlona = true;
   game.gold = 100;
 }

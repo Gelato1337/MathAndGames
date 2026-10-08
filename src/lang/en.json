@@ -33,7 +33,8 @@
   "title": {
     "newGame": "New game",
     "help": "How to play",
-    "tagline": "A math RPG prototype · learn once, cast many"
+    "tagline": "A math RPG prototype · learn once, cast many",
+    "chooseCampaign": "Choose a campaign"
   },
   "intro": {
     "p1": "In the valley village of Numerola, everything runs on numbers: harvests, trade, even magic.",
@@ -49,7 +50,8 @@
     "bag": "Bag",
     "menu": "Menu",
     "objective": "Objective",
-    "side": "Side quest"
+    "side": "Side quest",
+    "notebook": "Notebook"
   },
   "menu": {
     "title": "Menu",
@@ -60,12 +62,12 @@
     "settings": "Settings",
     "help": "How to play",
     "toTitle": "Back to title",
-    "skillsHelp": "Learn a skill from a trainer once, then use it freely. Overcharge it in battle for bonus power."
+    "skillsHelp": "Learn a skill from a trainer once, then use it freely. Focus it in battle for bonus power."
   },
   "settings": {
     "language": "Language",
     "timersTitle": "Question timers",
-    "timersHelp": "Ninja overcharges are timed. Relaxed doubles the time, Off removes timers completely.",
+    "timersHelp": "Timed Focus puzzles (ninja and ranger skills) have a clock. Relaxed doubles the time, Off removes timers completely.",
     "timers": {
       "normal": "Normal",
       "relaxed": "Relaxed",
@@ -84,13 +86,15 @@
     "menu": "Menu: Esc · Quests: Q · Skills: K · Bag: I",
     "combat1": "Battle: each turn a character gains AP (Action Points). Moving costs 1 AP per 3 tiles, and skills show their AP cost.",
     "combat2": "Click a blue tile to move. Pick a skill with 1–4, then click a target.",
-    "combat3": "⚡ Overcharge (O): answer a question for a stronger skill. A wrong answer still casts normally.",
+    "combat3": "✦ Focus (F): charge a skill now, release it next turn with a puzzle. A right answer makes it much stronger and lets it pierce armor.",
     "combat4": "Space ends the turn. Right-click or Esc cancels a skill.",
     "learn1": "Learn once, cast many: trainers teach skills through a short trial.",
-    "learn2": "Attunement: skills fade a little after each battle unless you overcharge them. Practise with trainers to restore them.",
+    "learn2": "Attunement: skills fade a little after each battle unless you release them with a right Focus answer. Practise with trainers to restore them.",
     "learn3": "Stuck? Use the Hint button. Every wrong answer shows the steps.",
     "combat5": "Height: higher ground gives +25% damage per level and +1 range for ranged skills. Climbing costs extra movement.",
-    "tutor": "AI tutor: when the local tutor is running, untimed questions get an \"Ask Owl\" button. Owl asks guiding questions and never gives the answer."
+    "tutor": "AI tutor: when the local tutor is running, untimed questions get an \"Ask Owl\" button. Owl asks guiding questions and never gives the answer.",
+    "combat6": "Auto (Q): let a hero play their turn with learned skills only. Good for easy fights; hard enemies need Focus.",
+    "notebook": "Notebook (N): write your own notes and working, and see the formulas you have learned. It is also inside every untimed puzzle."
   },
   "chars": {
     "kai": "Kai",
@@ -102,13 +106,27 @@
     "helmi": "Helmi",
     "slime": "Number Slime",
     "golem": "Riddle Golem",
-    "owl": "Owl"
+    "owl": "Owl",
+    "sana": "Sana",
+    "otso": "Otso",
+    "ilona": "Ilona",
+    "kerttu": "Archmage Kerttu",
+    "vera": "Captain Vera",
+    "wisp": "Vector Wisp",
+    "scalar": "Scalar Slime",
+    "crystal": "Crystal Golem",
+    "bat": "Shear Bat",
+    "warden": "Eigenwarden"
   },
   "classes": {
     "kai": "Ninja",
     "aino": "Mage",
     "kaiDesc": "Fast thinking: quick sums, times tables, guess and check.",
-    "ainoDesc": "Deep thinking: areas, missing numbers, equations."
+    "ainoDesc": "Deep thinking: areas, missing numbers, equations.",
+    "sana": "Ranger",
+    "otso": "Shieldbearer",
+    "sanaDesc": "Directions and angles: vectors, dot products, perpendicular lines.",
+    "otsoDesc": "Protects the party: determinants (area) and matrix products."
   },
   "skills": {
     "strike": {
@@ -117,13 +135,11 @@
     },
     "flurry": {
       "name": "Flurry",
-      "desc": "Two fast hits of 4 damage each.",
-      "oc": "Overcharge: a chain of quick sums against the clock. Every correct answer adds a hit, up to 6 hits."
+      "desc": "Two fast hits of 4 damage each."
     },
     "shadowStep": {
       "name": "Shadow Step",
-      "desc": "Teleport to an empty tile up to 5 tiles away.",
-      "oc": "Overcharge: answer a quick multiplication to become Hidden. Your next attack deals 50% more."
+      "desc": "Teleport to an empty tile up to 5 tiles away."
     },
     "probe": {
       "name": "Probe Strike",
@@ -135,13 +151,11 @@
     },
     "fireball": {
       "name": "Fireball",
-      "desc": "Burns a 3 × 3 area for 9 damage and leaves fire for 2 rounds. Hits allies too!",
-      "oc": "Overcharge: solve an area question for 50% more damage."
+      "desc": "Burns a 3 × 3 area for 9 damage and leaves fire for 2 rounds. Hits allies too!"
     },
     "mend": {
       "name": "Mend",
-      "desc": "Heal an ally (or yourself) for 10 HP.",
-      "oc": "Overcharge: solve a missing-number puzzle to heal 16 HP instead."
+      "desc": "Heal an ally (or yourself) for 10 HP."
     },
     "unbind": {
       "name": "Unbind",
@@ -150,10 +164,67 @@
     "ap": "{n} AP",
     "range": "Range {n}",
     "cooldown": "Cooldown {n}",
-    "attunement": "Attunement {n}% (fades between battles; practise or overcharge to restore)",
+    "attunement": "Attunement {n}% (fades between battles; practise or release a right Focus to restore)",
     "notLearned": "Not learned yet. Train with {who}.",
-    "overcharge": "Overcharge",
-    "overchargeDesc": "Answer a question while casting. Right: a stronger effect, and the skill stays sharp. Wrong: a normal cast, never a miss."
+    "focus": "Focus",
+    "focusDesc": "Charge the selected skill instead of casting it (+1 AP, ends your turn). At the start of your next turn you solve a puzzle: right answer = ×2.5 power and it pierces armor. Getting hit while charging lowers the bonus. A wrong answer still fires the skill normally, and right working steps give partial credit.",
+    "focusLine": "Focus puzzle: {topic}",
+    "dash": {
+      "name": "Vector Dash",
+      "desc": "Dash to an empty tile up to 5 tiles away."
+    },
+    "vflurry": {
+      "name": "Flurry",
+      "desc": "Two fast hits of 5 damage. Focus it: every quick dot product adds a hit."
+    },
+    "eprobe": {
+      "name": "Probe Strike",
+      "desc": "A testing strike: 5 damage. Against a matrix seal, guess λ and work out det(A − λI). Zero breaks the seal."
+    },
+    "beam": {
+      "name": "Matrix Beam",
+      "desc": "A beam that transforms a 3 × 3 area: 9 damage."
+    },
+    "emend": {
+      "name": "Mend",
+      "desc": "Heal an ally (or yourself) for 12 HP."
+    },
+    "eunbind": {
+      "name": "Unbind",
+      "desc": "Solve a matrix seal: find its eigenvalues (or eigenvector) step by step. A correct answer shatters the seal."
+    },
+    "shot": {
+      "name": "Shot",
+      "desc": "A quick arrow. 5–7 damage, range 6."
+    },
+    "aimed": {
+      "name": "Aimed Shot",
+      "desc": "A careful shot: 9–11 damage, range 7."
+    },
+    "volley": {
+      "name": "Volley",
+      "desc": "Rain arrows on a 3 × 3 area: 7 damage each."
+    },
+    "mark": {
+      "name": "Mark",
+      "desc": "Mark an enemy for 2 turns: it takes 50% more damage."
+    },
+    "bash": {
+      "name": "Shield Bash",
+      "desc": "A heavy blow. 6–8 damage."
+    },
+    "ward": {
+      "name": "Ward",
+      "desc": "Give an ally a shield that absorbs 10 damage."
+    },
+    "taunt": {
+      "name": "Taunt",
+      "desc": "For 2 turns, enemies must attack Otso if they can."
+    },
+    "quake": {
+      "name": "Quake",
+      "desc": "Stamp the ground: 8 damage to every enemy next to Otso."
+    }
   },
   "items": {
     "tonic": {
@@ -227,7 +298,7 @@
     "intro2": "Each technique starts with a trial. Pass it once and the move is yours. Practise it and it stays sharp.",
     "menu": "What will it be, student?",
     "menuDone": "You have learned all I teach. Keep your mind sharp.",
-    "about1": "Ninja moves cost little and strike fast. Overcharge them and I throw quick questions at you. Answer before the timer runs out!",
+    "about1": "Ninja moves cost little and strike fast. Focus one and I will throw quick questions at you when it fires. Answer before the timer runs out!",
     "about2": "Probe Strike is guess and check: pick a number, test it on the seal, adjust. Slow? Maybe. But it always works.",
     "sealHint": "Remember: against a seal, pick a number for x and calculate. Too small? Go bigger. Too big? Go smaller."
   },
@@ -237,7 +308,7 @@
     "intro2": "My trials are untimed. Take your time, use hints, and learn to see the shape of a problem.",
     "menu": "Which lesson shall we study?",
     "menuDone": "You've mastered my lessons. The rest is practice.",
-    "about1": "Mage spells are strong but cost more AP. Overcharge one and you solve a problem, with no timer, for a bigger effect.",
+    "about1": "Mage spells are strong but cost more AP. Focus a spell and you solve a problem, with no timer, when it fires. Right answers make it far stronger.",
     "about2": "Unbind reads a seal like a balance scale. Whatever you do to one side, do to the other, until x stands alone.",
     "sealHint": "When you face the golem, cast Unbind and solve its equation. One correct answer breaks the seal."
   },
@@ -253,11 +324,11 @@
     "learnedTitle": "Learned: {skill}!",
     "flurry": {
       "intro": "Flurry! Strike, strike, strike. To learn it, add and subtract quickly in your head. Four correct answers.",
-      "outro": "In battle, turn on Overcharge and every quick correct answer adds one more hit to the combo."
+      "outro": "In battle, Focus a Flurry: when it fires, every quick correct answer adds one more hit to the combo."
     },
     "shadowStep": {
       "intro": "Shadow Step. Times tables, student. A ninja knows them without counting. Four correct.",
-      "outro": "Overcharge it with a quick multiplication and you vanish into the shadows: your next attack hits 50% harder."
+      "outro": "Shadow Step costs only 1 AP. Use it to slip behind enemies or reach high ground."
     },
     "probe": {
       "intro": "Probe Strike. First, the order of operations: multiply before you add, unless brackets say otherwise.",
@@ -267,11 +338,11 @@
     },
     "fireball": {
       "intro": "Fireball covers an area: a rectangle of burning ground. Let's learn to measure areas. Rows times columns. Three correct.",
-      "outro": "Fireball burns a 3 × 3 area (9 tiles) and leaves flames for 2 rounds. Careful, it burns friends too! Overcharge it with an area question for 50% more damage."
+      "outro": "Fireball burns a 3 × 3 area (9 tiles) and leaves flames for 2 rounds. Careful, it burns friends too! Focus it and solve an area question for a much bigger blast."
     },
     "mend": {
       "intro": "Mend heals by filling in what is missing. So: missing-number puzzles. What goes in the box? Four correct.",
-      "outro": "Overcharge Mend with a missing-number puzzle and it heals 16 instead of 10."
+      "outro": "Focus Mend and solve a missing-number puzzle when it fires, and it heals far more."
     },
     "unbind": {
       "intro": "Unbind is the deepest lesson: the balance scale. A bag hides an unknown number of weights. Keep the scale level and find out how many.",
@@ -280,6 +351,57 @@
       "stage3": "Bags on both sides! You can take a bag off each side too, because a bag weighs the same everywhere.",
       "symbols": "Wonderful. Now the same thing without the scale, just symbols. x is the bag, and the numbers are weights.",
       "outro": "With Unbind, one correct answer shatters a seal. Picture the scale and it will help you think."
+    },
+    "dash": {
+      "intro": "Vector Dash. A dash is a vector: so many steps right, so many up. Add two dashes and you add their parts. Three correct.",
+      "outro": "Now you can dash anywhere within 5 tiles for 1 AP."
+    },
+    "vflurry": {
+      "intro": "Flurry, the Eigenvale way: dot products, fast. Multiply matching parts and add. Three correct.",
+      "outro": "Focus a Flurry and every quick dot product adds another hit."
+    },
+    "eprobe": {
+      "intro": "Probe Strike against matrix seals. First, determinants: a·d − b·c. Two correct.",
+      "guess": "Now guess and check. This practice seal hides an eigenvalue λ. Pick a λ and work out det(A − λI). When it is zero, you found one.",
+      "outro": "Against a matrix seal, Probe Strike tests one λ each time. Hint: the eigenvalues add up to the trace and multiply to the determinant."
+    },
+    "beam": {
+      "intro": "Matrix Beam. A matrix moves every point: each row of A dotted with v gives one part of Av. Three correct.",
+      "outro": "Matrix Beam hits a 3 × 3 area. Focus it and solve a matrix-vector product for a much stronger beam."
+    },
+    "emend": {
+      "intro": "Mend scales life back up. Scaling a vector multiplies every part by the same number. Three correct.",
+      "outro": "Focus Mend and scale a vector when it fires to heal far more."
+    },
+    "eunbind": {
+      "intro": "Unbind is the deepest lesson. Some vectors are only stretched by a matrix, never turned. Their stretch factors are the eigenvalues. First, a determinant.",
+      "values": "Now eigenvalues. Use the trace and the determinant: λ² − (trace)λ + det = 0. Two correct.",
+      "vectors": "Last, an eigenvector: subtract λ from the diagonal, then find a v that the new matrix sends to zero.",
+      "outro": "With Unbind, one correct answer shatters a matrix seal. The working steps help you, and they count."
+    },
+    "aimed": {
+      "intro": "Aimed Shot. An archer reads directions with the dot product: multiply matching parts, then add. Three correct.",
+      "outro": "Focus an Aimed Shot and solve a dot product when it fires: ×2.5 damage, straight through armor."
+    },
+    "volley": {
+      "intro": "Volley. Each arrow’s flight is a vector, and you aim by adding vectors. Three correct.",
+      "outro": "Volley rains on a 3 × 3 area. Focus it and add vectors for a deadlier rain."
+    },
+    "mark": {
+      "intro": "Mark. Two directions are perpendicular exactly when their dot product is 0. Find the dot products. Three correct.",
+      "outro": "A marked enemy takes 50% more damage for 2 turns."
+    },
+    "ward": {
+      "intro": "Ward. A matrix scales area by its determinant: a·d − b·c. A shield is an area you can hide behind. Three correct.",
+      "outro": "Ward gives an ally a 10-point shield. Focus it and compute a determinant for a much thicker shield."
+    },
+    "taunt": {
+      "intro": "Taunt. Make yourself big: scale a vector up. Two correct.",
+      "outro": "Taunt forces enemies to attack Otso for 2 turns. Use it when a friend is hurt or focusing."
+    },
+    "quake": {
+      "intro": "Quake. Multiplying matrices: each entry is a row of the first times a column of the second. Two correct.",
+      "outro": "Quake hits every enemy next to Otso. Focus it and multiply matrices for a ground-splitting quake."
     }
   },
   "practice": {
@@ -390,9 +512,10 @@
     "l1": "Battles are turn-based on a grid. Each turn a character gains 4 Action Points (AP), and can save up to 6.",
     "l2": "Click a blue tile to move (1 AP buys 3 tiles). Click an enemy next to you to attack. WASD pans the camera and the mouse wheel zooms.",
     "l3": "Use number keys 1–4 or the buttons for skills. Each shows its AP cost. Some need a few turns to cool down.",
-    "l4": "Skills you've learned work without any math. Turn on ⚡ Overcharge (O) to answer a question for a stronger effect.",
+    "l4": "Learned skills work without any math. For more power, select a skill and turn on ✦ Focus (F): you charge it now and solve a puzzle at the start of your next turn.",
     "l5": "Press Space or End turn when you're done. Right-click or Esc cancels a skill.",
-    "l6": "Height matters. Attacks from higher ground deal more damage, and ranged skills reach 1 tile further. Climbing up costs extra movement, and you can only climb one level at a time."
+    "l6": "Height matters. Attacks from higher ground deal more damage, and ranged skills reach 1 tile further. Climbing up costs extra movement, and you can only climb one level at a time.",
+    "l7": "In a hurry? Auto (Q) plays a hero’s turn with learned skills. But armored enemies shrug off learned attacks; only Focus pierces armor."
   },
   "combat": {
     "begin": "Battle!",
@@ -408,7 +531,6 @@
     "shatterFloat": "Seal shattered!",
     "shatter": "The seal on {name} shatters!",
     "outOfRange": "Out of range. Move closer.",
-    "ocTitle": "Overcharge: {skill}",
     "uses": "{name} uses {skill}.",
     "combo": "Combo ×{n}!",
     "stepFloat": "Whoosh!",
@@ -420,7 +542,11 @@
     "attacks": {
       "bite": "Bite",
       "slam": "Slam",
-      "throw": "Rock Throw"
+      "throw": "Rock Throw",
+      "zap": "Zap",
+      "leech": "Leech",
+      "stretch": "Stretch",
+      "pulse": "Pulse"
     },
     "apCost": "{n} AP",
     "round": "Round {n}",
@@ -436,10 +562,32 @@
     "retry": "Try again",
     "winTitle": "Victory!",
     "winForest": "The slimes dissolve into scattered digits. The forest path is clear.",
-    "attuneNote": "Tip: skills you didn't overcharge lose a little attunement after each battle. Practise with your trainers to make them sharp again.",
+    "attuneNote": "Tip: skills you didn’t release with a right Focus answer lose a little attunement after each battle. Practise with your trainers to make them sharp again.",
     "winGolem": "The last seal cracks and the golem crumbles into sand. Water bursts from the spring!",
     "goldGained": "+{n} gold",
-    "highGround": "High ground!"
+    "highGround": "High ground!",
+    "auto": "Auto",
+    "autoDesc": "Play this hero’s turn automatically with learned skills only: no math, no Focus. Quick, but it can’t pierce armor or break seals.",
+    "autoLog": "{name} fights on instinct (Auto).",
+    "focusFloat": "Focusing…",
+    "focusStart": "{name} starts focusing {skill}.",
+    "focusRelease": "{name} releases a focused {skill}!",
+    "focusTitle": "Focus: {skill}",
+    "focusTag": "Focused attack",
+    "focusDisrupted": "Focus disrupted (smaller bonus)",
+    "focusStatus": "Focusing: {skill}",
+    "fizzle": "Fizzle",
+    "fizzleLog": "No target in reach. The focused {skill} fizzles.",
+    "growFloat": "Grows!",
+    "armorFloat": "Armor!",
+    "shieldFloat": "◈ −{n}",
+    "shieldGain": "◈ +{n}",
+    "shieldStatus": "Shield {n}",
+    "reflect": "{name} reflects the blow back at {target}.",
+    "tauntFloat": "Come at me!",
+    "markFloat": "Marked",
+    "pushFloat": "Pushed!",
+    "blinkFloat": "Blink"
   },
   "probe": {
     "intro": "The seal reads: {eq}. Pick a whole number for x to test.",
@@ -540,7 +688,7 @@
     "p1": "The Riddle Golem crumbles, and clear water rushes down to Numerola.",
     "p2": "Kai learned that guess and check always works, and Aino learned that algebra is the shortcut.",
     "solved": "Questions answered correctly: {n} / {total} ({pct}%)",
-    "skills": "Skills learned: {n} / 8",
+    "skills": "Skills learned: {n} / {total}",
     "farm": "Helmi's field: {result}",
     "farmResult": {
       "exact": "planted perfectly",
@@ -567,6 +715,334 @@
     "visualBalance": "There is a picture of a balance scale showing {eq}, where x is a bag and numbers are weights.",
     "balanceTask": "Balance-scale puzzle: take the same things off both sides until one bag stands alone, then say how many weights are in a bag.",
     "farmContext": "Helmi's field is an 8 m × 6 m rectangle with a 3 m × 2 m corner missing. She needs 3 seeds per square metre.",
-    "probeTask": "Guess and check: the player picks a whole number for x, calculates both sides, and sees whether they match."
+    "probeTask": "Guess and check: the player picks a whole number for x, calculates both sides, and sees whether they match.",
+    "eprobeTask": "Guess and check for an eigenvalue: the player picks λ and works out det(A − λI); zero means λ is an eigenvalue."
+  },
+  "campaigns": {
+    "numerola": {
+      "name": "Numerola",
+      "tier": "Primary school · ages 7–12",
+      "desc": "Sums, times tables, areas, missing numbers and your first equations. Break the Riddle Golem’s seals."
+    },
+    "eigenvale": {
+      "name": "Eigenvale",
+      "tier": "Linear algebra · upper secondary to university",
+      "desc": "Vectors, dot products, matrix multiplication, determinants, eigenvalues and eigenvectors. Unwarp the land."
+    }
+  },
+  "renEv": {
+    "intro1": "Kai! So you followed the warp to Eigenvale too. Good. Here, speed means vectors.",
+    "intro2": "Same rules as at home: pass a trial once and the move is yours. Practise it and it stays sharp.",
+    "menu": "Ready, student?",
+    "menuDone": "You have learned all I teach here.",
+    "about1": "A vector is just a list of steps: so many right, so many up. Add vectors by adding their parts.",
+    "about2": "Probe Strike works on matrix seals too: guess λ, compute det(A − λI). Zero means you hit an eigenvalue.",
+    "sealHint": "Against a matrix seal: guess a λ and compute det(A − λI). The eigenvalues add up to the trace, so guess near half of it."
+  },
+  "kerttu": {
+    "intro1": "Aino, Lumi’s apprentice! Lumi taught you the balance scale. I teach you what a matrix does to space.",
+    "intro2": "My lessons have steps. Write each step down; the working is part of the answer.",
+    "menu": "Which lesson today?",
+    "menuDone": "You know my matrices now. Go unwarp the land.",
+    "about1": "A matrix moves every point of the plane. Look where it sends the two arrows of the unit square: those are its columns.",
+    "about2": "An eigenvector is a direction the matrix only stretches. The stretch factor is its eigenvalue λ: A v = λ v.",
+    "sealHint": "The Eigenwarden’s seals are matrices. Cast Unbind and find the eigenvalue, or later the eigenvector, step by step."
+  },
+  "ilona": {
+    "intro1": "Sana, take the bow. Directions are everything for a ranger, and directions are vectors.",
+    "intro2": "Your trials use the dot product. It tells how much two arrows point the same way.",
+    "menu": "What shall we practise, Sana?",
+    "menuDone": "You shoot like a cartographer now.",
+    "about1": "u · v = u₁v₁ + u₂v₂. Big and positive: same direction. Zero: perpendicular. Negative: opposite.",
+    "about2": "Adding vectors is like walking one arrow, then the next: tip to tail.",
+    "sealHint": "Keep your distance and mark the strongest foe first."
+  },
+  "vera": {
+    "intro1": "Otso. A shieldbearer holds a line, and a matrix can squash or stretch a line. Learn which.",
+    "intro2": "Determinants first: how much a matrix scales area. Then matrix products.",
+    "menu": "Ready to drill?",
+    "menuDone": "You are ready, shieldbearer.",
+    "about1": "det A = a·d − b·c. If it is 0, the matrix flattens space onto a line and can’t be undone.",
+    "about2": "Multiplying matrices: entry (i, j) is row i of the first times column j of the second.",
+    "sealHint": "Taunt when someone is focusing. Shield them while they think."
+  },
+  "notebook": {
+    "title": "Notebook",
+    "open": "Notebook",
+    "mine": "My notes",
+    "formulas": "Formulas",
+    "placeholder": "Write your steps and ideas here…",
+    "mineHelp": "Your own page. Jot down working before you commit to an answer. It stays for the whole campaign, and Owl the tutor can read it.",
+    "noFormulas": "Learn a skill to add its formula here.",
+    "tutorNotes": "Player’s own notes",
+    "f": {
+      "add_sub": "Adding and subtracting",
+      "mul": "Times tables",
+      "area": "Area of a rectangle",
+      "missing": "Missing numbers",
+      "order_ops": "Order of operations",
+      "eq2": "Two-step equations",
+      "vec_add": "Adding vectors",
+      "vec_scale": "Scaling a vector",
+      "dot": "Dot product",
+      "perp": "Perpendicular",
+      "mat_vec": "Matrix × vector",
+      "mat_mul": "Matrix × matrix",
+      "det2": "Determinant (2 × 2)",
+      "eigen_val": "Eigenvalues (2 × 2)",
+      "eigen_vec": "Eigenvectors"
+    },
+    "d": {
+      "add_sub": "Order doesn’t matter when you {1|add}: {1|a} + {2|b} is {2|b} + {1|a}.",
+      "mul": "{1|a} × {2|b} means {1|a} groups of {2|b}.",
+      "area": "The {3|area} is the {1|width} times the {2|height}: rows times columns.",
+      "missing": "Undo the {1|added number}: take it away from the {2|total}.",
+      "order_ops": "Brackets first, then × and ÷, then + and −.",
+      "eq2": "Take the {2|plain number} off both sides, then divide by the {1|number of x’s}.",
+      "vec_add": "Add {1|u} and {2|v} part by part. Picture it tip to tail.",
+      "vec_scale": "Multiply every part of {2|v} by the {1|scalar} c.",
+      "dot": "Multiply matching parts of {1|u} and {2|v}, then add. Positive means they point roughly the same way.",
+      "perp": "{1|u} and {2|v} are at a right angle exactly when u · v = 0.",
+      "mat_vec": "Each row of {1|A} dotted with {2|v} gives one part of the result.",
+      "mat_mul": "Entry {3|cᵢⱼ} = {1|row i of A} · {2|column j of B}.",
+      "det2": "{1|Main diagonal} minus {2|other diagonal}. It is how much A scales area.",
+      "eigen_val": "Solve for {3|λ} using the {4|trace} (a + d) and the {5|determinant}.",
+      "eigen_vec": "Subtract {3|λ} on the diagonal of {1|A}, then find a {2|v} that it sends to zero."
+    }
+  },
+  "steps": {
+    "step": "Step {n}",
+    "answer": "Answer",
+    "fromSteps": "(your steps are the answer)",
+    "work": "Working",
+    "check": "Check",
+    "plotCaption": "Arrows use the same colours as the formula. The shaded shape is where the matrix sends the unit square.",
+    "hover": "Hover or tap a coloured term to see what it means.",
+    "fillSteps": "Fill in every step first.",
+    "fillAnswer": "Write your answer first (steps help, but are optional).",
+    "stepsScore": "Steps right: {n} / {total}.",
+    "theAnswer": "The answer was {a}."
+  },
+  "la": {
+    "vec_add": {
+      "title": "Adding vectors",
+      "text": "To add {1|u} and {2|v}, add their matching parts. On the grid: walk along {1|u}, then along {2|v}; you end at {3|the sum w}.",
+      "g1": "The first vector. Each part says how far to go along one axis.",
+      "g2": "The second vector, drawn starting from the tip of u.",
+      "g3": "The sum: where you end up after both walks.",
+      "hint": "Add the first parts together, then the second parts.",
+      "ex": "Add part by part: w = {w}."
+    },
+    "vec_scale": {
+      "title": "Scaling a vector",
+      "text": "Multiplying {2|v} by the {1|scalar} stretches it (or flips it if negative). Every part gets multiplied: that’s {3|the result}.",
+      "g1": "A scalar: a plain number that stretches or shrinks.",
+      "g2": "The vector being stretched.",
+      "g3": "The stretched vector. Same line, different length.",
+      "hint": "Multiply each part by {c}.",
+      "ex": "{c} times each part: {w}."
+    },
+    "dot": {
+      "title": "Dot product",
+      "text": "The {3|dot product} multiplies matching parts of {1|u} and {2|v} and adds them up. It measures how much the two arrows point the same way.",
+      "g1": "The first vector u.",
+      "g2": "The second vector v.",
+      "g3": "One number: positive if u and v point roughly the same way, zero if perpendicular, negative if opposite.",
+      "hint": "Multiply the first parts, multiply the second parts, then add.",
+      "ex": "u · v = {parts} = {d}."
+    },
+    "perp": {
+      "title": "Perpendicular?",
+      "text": "{1|u} and {2|v} are perpendicular (at a right angle) exactly when their {3|dot product} is 0. Work it out.",
+      "g3": "Zero means a right angle between the arrows.",
+      "yes": "It is 0, so u and v are perpendicular.",
+      "no": "It is not 0, so u and v are not perpendicular."
+    },
+    "mat_vec": {
+      "title": "Matrix × vector",
+      "text": "The {1|matrix A} moves the {2|vector v} to a new place, {3|Av}. Each part of {3|Av} is one row of {1|A} dotted with {2|v}.",
+      "g1": "The matrix: a rule that moves every point. Its columns show where the two unit arrows go.",
+      "g2": "The vector being moved.",
+      "g3": "Where v ends up.",
+      "hint": "Row 1 of A times v (multiply matching parts and add) gives the first part.",
+      "ex": "Each row dotted with v: Av = {w}."
+    },
+    "mat_mul": {
+      "title": "Matrix × matrix",
+      "text": "Multiplying {1|A} by {2|B} means doing B, then A. Each entry of {3|C} is a row of {1|A} dotted with a column of {2|B}.",
+      "g1": "The left matrix: use its rows.",
+      "g2": "The right matrix: use its columns.",
+      "g3": "The product. Entry cᵢⱼ uses row i of A and column j of B.",
+      "hint": "c₁₁ = (row 1 of A) · (column 1 of B). Then the other three the same way.",
+      "ex": "C = {c}."
+    },
+    "det2": {
+      "title": "Determinant",
+      "text": "The {3|determinant} says how much the matrix scales area: the unit square becomes the shaded shape. It is the {1|main diagonal} minus the {2|other diagonal}.",
+      "g1": "Main diagonal: top-left times bottom-right.",
+      "g2": "Other diagonal: top-right times bottom-left.",
+      "g3": "The area scale. Negative means the shape is flipped; zero means it is squashed flat and can’t be undone.",
+      "hint": "Multiply the main diagonal, multiply the other diagonal, subtract.",
+      "ex": "{a}·{d} − {b}·{c} = {ad} − {bc} = {D}."
+    },
+    "eigen_val": {
+      "title": "Eigenvalues",
+      "text": "Some vectors {2|v} are only stretched by {1|A}, never turned: {1|A}{2|v} = {3|λ}{2|v}. The stretch factors {3|λ} solve λ² − {4|trace}·λ + {5|det} = 0.",
+      "g1": "The matrix that warps space.",
+      "g2": "An eigenvector: a direction that A keeps on its own line.",
+      "g3": "An eigenvalue: how much A stretches that direction.",
+      "g4": "The trace: the sum of the diagonal, a + d. The eigenvalues add up to it.",
+      "g5": "The determinant, ad − bc. The eigenvalues multiply to it.",
+      "hint": "Find two numbers that add up to the trace and multiply to the determinant.",
+      "ex1": "Trace = {t}, determinant = {D}.",
+      "ex2": "λ² − {t}λ + {D} = 0 has the roots λ = {l1} and λ = {l2} (they add to {t} and multiply to {D})."
+    },
+    "eigen_vec": {
+      "title": "Eigenvector",
+      "text": "For the eigenvalue {3|λ = {l}}, subtract it from the diagonal of {1|A} (that’s λ times the {4|identity I}). Then find a {2|direction v} that this new matrix sends to {6|zero}.",
+      "g1": "The matrix.",
+      "g2": "The eigenvector: any non-zero multiple counts.",
+      "g3": "The eigenvalue we are using.",
+      "g4": "The identity matrix: 1s on the diagonal. λI has λ on the diagonal.",
+      "g6": "The zero vector. (A − λI) squashes the eigenvector to nothing.",
+      "hint": "In A − λI, the first row says: (first entry)·v₁ + (second entry)·v₂ = 0. Pick v to make that true.",
+      "ex1": "A − λI = {m}.",
+      "ex2": "One eigenvector is v = {v} (any multiple works)."
+    }
+  },
+  "eseal": {
+    "labelValue": "{m}  λ?",
+    "labelVector": "{m}  v for λ={l}?",
+    "probeValue": "The seal is the matrix A = {m}. Guess an eigenvalue λ (a whole number).",
+    "wholeLambda": "Pick a whole number between −20 and 20.",
+    "probeTitle": "Test your guess",
+    "probeText": "If {3|λ = {l}} is an eigenvalue, then {1|A} − λ{4|I} squashes space flat, so its determinant is 0.",
+    "gGuess": "Your guess for the eigenvalue.",
+    "probeHint": "Subtract λ from a and from d, multiply them, then subtract b·c.",
+    "probeEx": "({a} − {l})({d} − {l}) − {b}·{c} = {D}.",
+    "logHit": "λ = {l}: det(A − λI) = 0. It is an eigenvalue!",
+    "logMiss": "λ = {l}: det(A − λI) = {D}, not 0.",
+    "missTip": "Try another λ. The two eigenvalues add up to {tr} (the trace) and multiply to {det} (the determinant).",
+    "probeVector": "The seal is A = {m}. Its eigenvalue is λ = {l}. Guess an eigenvector v = (v₁, v₂) with whole numbers.",
+    "probeVecTitle": "Test your vector",
+    "probeVecText": "If v is an eigenvector, then {1|A}{2|v} is just {3|{l}}·{2|v}: same direction, stretched.",
+    "logVecSlip": "v = {v}: the multiplication slipped.",
+    "logVecHit": "v = {v}: Av = λv. It is an eigenvector!",
+    "logVecMiss": "v = {v}: Av = {av}, but λv = {lv}.",
+    "vecTip": "Try another direction. Look at the first row of A − λI: it must give 0.",
+    "unbindStory": "The seal is a matrix. Work through the steps; the colours link each part of the formula to its meaning."
+  },
+  "ev": {
+    "intro": {
+      "p1": "Beyond the mountains lies Eigenvale, a land of straight roads and perfect angles.",
+      "p2": "But the Eigenwarden has woken in the high spire. Its matrices warp the land: roads stretch, fields shear, and the maps are all wrong.",
+      "p3": "Kai and Aino followed the warp here. They meet Sana the ranger and Otso the shieldbearer. Cartographer Ilona is waiting in the town of Origin."
+    },
+    "obj": {
+      "talkIlona": "Talk to Ilona, the cartographer, in Origin.",
+      "plains": "Go east and clear the Vector Plains.",
+      "mines": "Go south and clear the Matrix Mines.",
+      "train": "Learn Probe Strike (Ren) or Unbind (Archmage Kerttu) to break matrix seals.",
+      "door": "Open the Determinant Door below the Eigen Spire (east).",
+      "warden": "Climb the spire and break the Eigenwarden’s seals.",
+      "done": "Eigenvale is straight again!",
+      "survey0": "Ilona needs help surveying the warp.",
+      "survey1": "Finish Ilona’s survey."
+    },
+    "quests": {
+      "main": {
+        "title": "The Warped Map",
+        "desc": "The Eigenwarden’s matrices are warping Eigenvale.",
+        "s1": "Meet Ilona in Origin",
+        "s2": "Clear the Vector Plains",
+        "s3": "Clear the Matrix Mines",
+        "s4": "Open the Determinant Door",
+        "s5": "Defeat the Eigenwarden",
+        "started": "New quest: The Warped Map"
+      },
+      "survey": {
+        "title": "The Survey",
+        "desc": "Work out where the warp sends Ilona’s landmarks.",
+        "s1": "Finish the survey"
+      }
+    },
+    "ilona": {
+      "intro1": "Travellers! You’re just in time. Look at my map: every road bends the wrong way.",
+      "intro2": "The Eigenwarden in the spire is doing it. Its matrices move every point of the land, stretching some directions and turning others.",
+      "intro3": "The spire is sealed behind the Determinant Door, and the Warden is wrapped in matrix seals. Only someone who can find eigenvalues gets through.",
+      "kai": "Matrices? Sounds like Numerola’s equations, but bigger.",
+      "sana": "I’ll come. I know the plains, and the wisps out there.",
+      "otso": "And I’ll keep you all in one piece.",
+      "intro4": "Train first: Ren, Archmage Kerttu, Captain Vera, and I’ll teach Sana myself. Then clear the plains and the mines.",
+      "again": "How is the unwarping going?",
+      "thanks": "My map is straight again. Thank you!",
+      "optTrain": "Train Sana (archery).",
+      "optWarden": "Tell us about the Eigenwarden.",
+      "optSurvey": "Help with the survey.",
+      "optHint": "What should we do next?",
+      "warden1": "Its seals are matrices. Each hides an eigenvalue: a direction it only stretches. Find the stretch factor and the seal breaks.",
+      "warden2": "Its second seal asks for the eigenvector itself, the direction. Its last seal is harder still.",
+      "survey1": "The warp moves each landmark by a matrix. If I know where a landmark was, A times its position tells me where it is now.",
+      "survey2": "Can you work out two of them for me?",
+      "surveyTitle": "Survey point {n}",
+      "surveyStory": "A landmark at position v has been warped by the matrix A. Where is it now?",
+      "surveyRetry": "Hmm, those don’t match my readings. Let’s try again later.",
+      "surveyDone": "{n} landmarks found! Take these supplies.",
+      "surveyReward": "+{g} gold, +{n} tonics"
+    },
+    "ren": {
+      "busy": "Kai! Speak with Ilona first, she knows what is going on."
+    },
+    "kerttu": {
+      "busy": "Lumi’s apprentice? Find Ilona first, then come back to me."
+    },
+    "vera": {
+      "busy": "Report to Ilona first, soldiers."
+    },
+    "door": {
+      "lockedAreas": "A great door of stone, with three matrices carved into it. It won’t budge. (Clear the Vector Plains and the Matrix Mines first.)",
+      "lockedSkill": "The matrices glow, but you can’t read them yet. (Learn Probe Strike or Unbind first.)",
+      "intro1": "Three locks, three matrices. A voice echoes: “Only a matrix that can be undone may open me.”",
+      "intro2": "A matrix can be undone exactly when its determinant is not 0. Compute all three.",
+      "lockTitle": "Lock {n}",
+      "lockStory": "Compute this lock’s determinant.",
+      "which": "Which lock’s matrix can be undone?",
+      "lockLabel": "Lock {n}: {m}",
+      "wrong": "The lock grinds and stays shut. Its determinant is 0: it squashes space flat, so it can’t be undone.",
+      "opened": "The lock turns, and the Determinant Door swings open. Stairs lead up into the spire.",
+      "aino": "Determinant not zero: nothing gets squashed flat. Remember that, the Warden’s seals are next."
+    },
+    "battle": {
+      "plains1": "Wisps! They zip around and blink away. And those slimes keep growing, so take them down fast.",
+      "mines1": "Crystal Golems. Armor thick as a wall, and they bite back. Learned attacks barely scratch them.",
+      "minesTitle": "Armor and reflection",
+      "minesTip1": "Crystal Golems have 4 armor: every learned hit loses 4 damage, and they reflect 2 damage back. Focused attacks pierce armor and are not reflected.",
+      "minesTip2": "Use Otso’s Taunt and Ward to protect whoever is focusing. Shear Bats heal by biting, so take them out early.",
+      "warden1": "YOU WALK STRAIGHT LINES IN MY WARPED LAND?",
+      "warden2": "EVERY DIRECTION BENDS TO ME… EXCEPT THE ONES I ONLY STRETCH.",
+      "wardenAino": "The seal is a matrix! Find its eigenvalue and it breaks.",
+      "sealRule": "While sealed, the Eigenwarden takes no damage. Break the seal to make it vulnerable (and lose a turn). At 70 and 35 HP a new seal forms. It also has 3 armor, so Focus your big attacks.",
+      "tipProbe": "Kai, Probe Strike: guess λ, compute det(A − λI). For the vector seal, guess v and compute Av.",
+      "tipUnbind": "Aino, Unbind: trace and determinant first, then λ. For the vector seal: A − λI, then v.",
+      "tipPush": "Its Stretch attack shoves heroes away. Keep Otso in front."
+    },
+    "tutorial": {
+      "l1": "Four heroes now: Kai, Aino, Sana and Otso. Each has a learned basic attack.",
+      "l2": "Auto (Q) plays a hero’s turn with learned skills. Easy fights go quickly this way.",
+      "l3": "✦ Focus (F): select a skill, turn on Focus, pick a target. It charges now and fires at the start of your next turn after a puzzle. Right = ×2.5 and pierces armor.",
+      "l4": "The working counts: in step puzzles every right step adds power even if the final answer slips.",
+      "l5": "Open the Notebook inside any puzzle to write steps or look up formulas."
+    },
+    "win": {
+      "plains": "The wisps fade and the slimes stop growing. The plains’ roads are straight again.",
+      "mines": "The crystals crack and the bats scatter. In the rubble you find a Focus Tea.",
+      "warden": "The last seal breaks. The Eigenwarden’s matrix becomes the identity, and the land snaps back into straight lines."
+    },
+    "ending": {
+      "title": "Eigenvale is straight again!",
+      "p1": "The Eigenwarden kneels, its matrix calm. Roads run true and Ilona’s map finally matches the land.",
+      "p2": "You learned that a matrix moves space, a determinant measures area, and eigenvectors are the directions that only stretch.",
+      "p3": "Next step for the curious: diagonalisation, Markov chains and PageRank. They all use the same idea."
+    }
   }
 }

@@ -3,7 +3,8 @@ import { TILE } from '../art/tiles';
 import { t } from '../i18n';
 import { isHeld, mousePos, takeClicks, takePressed } from '../input';
 import type { Renderer } from '../render';
-import { ENCOUNTERS, GATE_TILES, inRect, MAX_STEP, NPCS, type EncounterDef, type NpcDef, type WorldMap } from './map';
+import type { Campaign, Interactable } from '../campaign';
+import { inRect, MAX_STEP, type EncounterDef, type NpcDef, type WorldMap } from './map';
 
 /**
  * A character walking freely in the world. (rx, ry) is the real position in
@@ -39,7 +40,7 @@ function sync(a: Actor): void {
   a.py = (a.ry - 0.5) * TILE;
 }
 
-export type Target = { kind: 'npc'; npc: NpcDef } | { kind: 'gate' };
+export type Target = { kind: 'npc'; npc: NpcDef } | { kind: 'object'; obj: Interactable };
 
 export interface ExploreHooks {
   interact: (t: Target) => void;
@@ -54,7 +55,7 @@ export interface ExploreHooks {
 const SPEED = 4.2;
 /** Collision radius of a character, in tiles. */
 const RADIUS = 0.26;
-/** How far behind the leader the follower walks, in tiles. */
+/** How far apart the party walks, in tiles. */
 const FOLLOW_GAP = 0.95;
 /** How close you must stand to talk to someone (tile-centre distance). */
 const TALK_RANGE = 1.45;
@@ -77,7 +78,7 @@ const STEPS: Array<[number, number]> = [
  */
 export class Explore {
   leader: Actor;
-  follower: Actor;
+  followers: Actor[] = [];
   /** waypoints (tile centres) of a click-to-move route */
   path: Array<{ x: number; y: number }> = [];
   facing: [number, number] = [0, 1];
@@ -93,31 +94,44 @@ export class Explore {
     readonly world: WorldMap,
     readonly r: Renderer,
     readonly hooks: ExploreHooks,
-    start: { x: number; y: number },
+    readonly campaign: Campaign,
   ) {
-    this.leader = makeActor('kai', start.x, start.y);
-    this.follower = makeActor('aino', start.x - 1, start.y);
-    this.resetTrail();
+    const s = campaign.start;
+    this.leader = makeActor(campaign.party[0], s.x, s.y);
+    this.placeParty(campaign.party.map((_, i) => ({ x: s.x - i, y: s.y })));
   }
 
-  placeParty(x: number, y: number, fx: number, fy: number): void {
-    this.leader = makeActor('kai', x, y, this.world.height(x, y));
-    this.follower = makeActor('aino', fx, fy, this.world.height(fx, fy));
+  /** Everyone, leader first. */
+  party(): Actor[] {
+    return [this.leader, ...this.followers];
+  }
+
+  /** Put the party down; missing positions line up behind the leader. */
+  placeParty(pos: Array<{ x: number; y: number }>): void {
+    const ids = this.campaign.party;
+    const at = (i: number) => pos[i] ?? { x: pos[0].x, y: pos[0].y };
+    this.leader = makeActor(ids[0], at(0).x, at(0).y, this.world.height(at(0).x, at(0).y));
+    this.followers = ids.slice(1).map((id, i) => makeActor(id, at(i + 1).x, at(i + 1).y, this.world.height(at(i + 1).x, at(i + 1).y)));
     this.path = [];
     this.dest = null;
     this.resetTrail();
   }
 
   private resetTrail(): void {
-    this.trail = [
-      { x: this.follower.rx, y: this.follower.ry },
-      { x: this.leader.rx, y: this.leader.ry },
-    ];
+    this.trail = [...[...this.followers].reverse().map((f) => ({ x: f.rx, y: f.ry })), { x: this.leader.rx, y: this.leader.ry }];
+  }
+
+  private objAt(x: number, y: number): Interactable | undefined {
+    return this.campaign.interactables.find((o) => o.active(this.world) && o.tiles.some((g) => g.x === x && g.y === y));
+  }
+
+  private targetPos(tg: Target): { x: number; y: number } {
+    return tg.kind === 'npc' ? tg.npc : tg.obj.tiles[0];
   }
 
   blocked(x: number, y: number): boolean {
     if (!this.world.walkable(x, y)) return true;
-    if (NPCS.some((n) => n.x === x && n.y === y)) return true;
+    if (this.campaign.npcs.some((n) => n.x === x && n.y === y)) return true;
     for (const e of this.hooks.enemySprites()) {
       const size = e.sprite === 'golem' ? 2 : 1;
       if (x >= e.x && x < e.x + size && y >= e.y && y < e.y + size) return true;
@@ -207,14 +221,16 @@ export class Explore {
   target(): Target | null {
     const { rx, ry } = this.leader;
     let best: { t: Target; d: number } | null = null;
-    for (const n of NPCS) {
+    for (const n of this.campaign.npcs) {
       const d = Math.hypot(n.x + 0.5 - rx, n.y + 0.5 - ry);
       if (d <= TALK_RANGE && (!best || d < best.d)) best = { t: { kind: 'npc', npc: n }, d };
     }
-    for (const g of GATE_TILES) {
-      if (this.world.get(g.x, g.y) !== 'G') continue;
-      const d = Math.hypot(g.x + 0.5 - rx, g.y + 0.5 - ry);
-      if (d <= TALK_RANGE && (!best || d < best.d)) best = { t: { kind: 'gate' }, d };
+    for (const o of this.campaign.interactables) {
+      if (!o.active(this.world)) continue;
+      for (const g of o.tiles) {
+        const d = Math.hypot(g.x + 0.5 - rx, g.y + 0.5 - ry);
+        if (d <= TALK_RANGE && (!best || d < best.d)) best = { t: { kind: 'object', obj: o }, d };
+      }
     }
     return best?.t ?? null;
   }
@@ -222,14 +238,14 @@ export class Explore {
   /** What is under the mouse: a person (by their body, not just their tile), the gate, or a tile. */
   private pick(clientX: number, clientY: number): { tile: { x: number; y: number }; target: Target | null } {
     const p = this.r.toLogical(clientX, clientY);
-    const people = [...NPCS].sort((a, b) => b.x + b.y - (a.x + a.y));
+    const people = [...this.campaign.npcs].sort((a, b) => b.x + b.y - (a.x + a.y));
     for (const n of people) {
       const c = tileCenter(n.x, n.y, this.world.height(n.x, n.y));
       if (p.x >= c.x - 8 && p.x <= c.x + 8 && p.y >= c.y - 16 && p.y <= c.y + 3) return { tile: { x: n.x, y: n.y }, target: { kind: 'npc', npc: n } };
     }
     const tile = this.r.screenToTile(clientX, clientY, this.world);
-    const gate = GATE_TILES.some((g) => g.x === tile.x && g.y === tile.y) && this.world.get(tile.x, tile.y) === 'G';
-    return { tile, target: gate ? { kind: 'gate' } : null };
+    const obj = this.objAt(tile.x, tile.y);
+    return { tile, target: obj ? { kind: 'object', obj } : null };
   }
 
   /** Path to stand next to a target, or null if unreachable. */
@@ -276,7 +292,10 @@ export class Explore {
       const k = `${tile.x},${tile.y},${this.leader.x},${this.leader.y},${target ? 'T' : ''}`;
       if (k !== this.hoverKey) {
         this.hoverKey = k;
-        if (target) this.hoverPath = (target.kind === 'npc' ? this.pathNextTo(target.npc.x, target.npc.y) : this.pathNextTo(GATE_TILES[0].x, GATE_TILES[0].y)) ?? [];
+        if (target) {
+          const pos = this.targetPos(target);
+          this.hoverPath = this.pathNextTo(pos.x, pos.y) ?? [];
+        }
         else this.hoverPath = this.blocked(tile.x, tile.y) ? [] : this.findPath(tile.x, tile.y);
       }
     } else {
@@ -305,7 +324,7 @@ export class Explore {
       if (c.button !== 0) continue;
       const { tile, target } = this.pick(c.x, c.y);
       if (target) {
-        const pos = target.kind === 'npc' ? target.npc : GATE_TILES[0];
+        const pos = this.targetPos(target);
         const path = this.pathNextTo(pos.x, pos.y);
         if (path) {
           this.path = path;
@@ -359,11 +378,11 @@ export class Explore {
     // follower walks along the leader's trail
     const last = this.trail[this.trail.length - 1];
     if (Math.hypot(a.rx - last.x, a.ry - last.y) > 0.08) this.trail.push({ x: a.rx, y: a.ry });
-    if (this.trail.length > 200) this.trail.splice(0, this.trail.length - 200);
-    this.updateFollower(dt);
+    if (this.trail.length > 400) this.trail.splice(0, this.trail.length - 400);
+    this.followers.forEach((f, i) => this.updateFollower(f, (i + 1) * FOLLOW_GAP, dt, i === this.followers.length - 1));
 
-    // smooth height for both
-    for (const c of [a, this.follower]) {
+    // smooth heights
+    for (const c of this.party()) {
       const zt = this.world.height(c.x, c.y);
       c.z += (zt - c.z) * Math.min(1, dt * 14);
     }
@@ -386,10 +405,10 @@ export class Explore {
     return true;
   }
 
-  private updateFollower(dt: number): void {
-    const f = this.follower;
-    // walk back along the trail to find the point FOLLOW_GAP tiles behind the leader
-    let need = FOLLOW_GAP;
+  /** A follower walks the leader's trail, `gap` tiles behind. */
+  private updateFollower(f: Actor, gap: number, dt: number, last: boolean): void {
+    // walk back along the trail to find the point `gap` tiles behind the leader
+    let need = gap;
     let goal = this.trail[0];
     for (let i = this.trail.length - 1; i > 0; i--) {
       const p = this.trail[i];
@@ -418,12 +437,12 @@ export class Explore {
     f.walked = before + step;
     f.moving = step > 0.001;
     sync(f);
-    // trim trail points the follower has passed
-    while (this.trail.length > 2 && Math.hypot(this.trail[0].x - f.rx, this.trail[0].y - f.ry) < 0.1) this.trail.shift();
+    // trim trail points the last follower has passed
+    while (last && this.trail.length > 2 && Math.hypot(this.trail[0].x - f.rx, this.trail[0].y - f.ry) < 0.1) this.trail.shift();
   }
 
   private checkEncounter(): void {
-    for (const e of ENCOUNTERS) {
+    for (const e of this.campaign.encounters) {
       if (this.hooks.encounterActive(e) && inRect(e.trigger, this.leader.x, this.leader.y)) {
         this.path = [];
         this.dest = null;
@@ -444,7 +463,7 @@ export class Explore {
 
     // hover feedback and destination marker
     if (this.hoverTarget) {
-      const pos = this.hoverTarget.kind === 'npc' ? this.hoverTarget.npc : GATE_TILES[0];
+      const pos = this.targetPos(this.hoverTarget);
       r.addOverlay(pos.x, pos.y, 'rgba(255,205,117,0.25)', 'rgba(255,205,117,0.9)');
       if (this.hoverTarget.kind === 'npc') {
         const n = this.hoverTarget.npc;
@@ -470,7 +489,7 @@ export class Explore {
     }
     if (this.dest) r.addOverlay(this.dest.x, this.dest.y, `rgba(115,239,247,${(pulse * 0.6).toFixed(2)})`, 'rgba(115,239,247,0.9)');
 
-    for (const n of NPCS) {
+    for (const n of this.campaign.npcs) {
       const z = this.world.height(n.x, n.y);
       r.addSprite(n.x, n.y, () => r.drawSpriteAt(n.id, n.x, n.y, z, { bob: Math.sin(bobT + n.x) > 0.6 ? -1 : 0 }));
     }
@@ -481,7 +500,7 @@ export class Explore {
         r.drawSpriteAt(e.sprite, e.x, e.y, z, { size, bob: Math.sin(bobT * 0.7 + e.x) > 0 ? -1 : 0 }),
       );
     }
-    for (const a of [this.follower, this.leader]) {
+    for (const a of [...this.followers].reverse().concat(this.leader)) {
       const fx = a.rx - 0.5;
       const fy = a.ry - 0.5;
       // sort with the tile the feet are on, nudged forward when near its front edge

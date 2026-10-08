@@ -33,7 +33,8 @@
   "title": {
     "newGame": "Uusi peli",
     "help": "Peliohjeet",
-    "tagline": "Matematiikka-roolipelin prototyyppi · opi kerran, käytä monesti"
+    "tagline": "Matematiikkaroolipelin prototyyppi · opi kerran, käytä monesti",
+    "chooseCampaign": "Valitse kampanja"
   },
   "intro": {
     "p1": "Laakson kylässä Numerolassa kaikki pyörii lukujen varassa: sadot, kauppa ja jopa taikuus.",
@@ -49,7 +50,8 @@
     "bag": "Laukku",
     "menu": "Valikko",
     "objective": "Tavoite",
-    "side": "Sivutehtävä"
+    "side": "Sivutehtävä",
+    "notebook": "Muistivihko"
   },
   "menu": {
     "title": "Valikko",
@@ -60,12 +62,12 @@
     "settings": "Asetukset",
     "help": "Peliohjeet",
     "toTitle": "Takaisin alkuun",
-    "skillsHelp": "Opettele taito kerran opettajalta, sen jälkeen voit käyttää sitä vapaasti. Ylilataa taistelussa saadaksesi lisävoimaa."
+    "skillsHelp": "Opi taito kouluttajalta kerran ja käytä sitä vapaasti. Keskitä se taistelussa saadaksesi lisävoimaa."
   },
   "settings": {
     "language": "Kieli",
     "timersTitle": "Kysymysten ajastimet",
-    "timersHelp": "Ninjan ylilataukset ovat ajastettuja. Rauhallinen tuplaa ajan, Pois poistaa ajastimet kokonaan.",
+    "timersHelp": "Ajastetuissa keskitystehtävissä (ninjan ja samoojan taidot) on kello. Rauhallinen tuplaa ajan, Pois poistaa ajastimet kokonaan.",
     "timers": {
       "normal": "Normaali",
       "relaxed": "Rauhallinen",
@@ -84,13 +86,15 @@
     "menu": "Valikko: Esc · Tehtävät: Q · Taidot: K · Laukku: I",
     "combat1": "Taistelu: joka vuorolla hahmo saa toimintapisteitä (TP). Liikkuminen maksaa 1 TP / 3 ruutua, ja taidot näyttävät hintansa.",
     "combat2": "Klikkaa sinistä ruutua liikkuaksesi. Valitse taito näppäimillä 1–4 ja klikkaa kohdetta.",
-    "combat3": "⚡ Ylilataus (O): vastaa kysymykseen, niin taito on vahvempi. Väärä vastaus tekee silti tavallisen iskun.",
+    "combat3": "✦ Keskitys (F): lataa taito nyt ja vapauta se seuraavalla vuorolla tehtävän kanssa. Oikea vastaus tekee siitä paljon vahvemman ja se läpäisee panssarin.",
     "combat4": "Välilyönti lopettaa vuoron. Hiiren oikea painike tai Esc peruu taidon.",
     "learn1": "Opi kerran, käytä monesti: opettajat opettavat taidot lyhyellä kokeella.",
-    "learn2": "Viritys: taidot heikkenevät hieman joka taistelun jälkeen, ellet ylilataa niitä. Harjoittele opettajan kanssa palauttaaksesi ne.",
+    "learn2": "Viritys: taidot haalistuvat hieman jokaisen taistelun jälkeen, ellet vapauta niitä oikealla keskitysvastauksella. Harjoittele kouluttajien kanssa palauttaaksesi ne.",
     "learn3": "Jumissa? Paina Vihje-nappia. Jokainen väärä vastaus näyttää ratkaisun vaiheet.",
     "combat5": "Korkeus: korkeampi maasto antaa +25 % vahinkoa tasoa kohden ja +1 kantaman kaukotaidoille. Kiipeäminen maksaa lisää liikettä.",
-    "tutor": "Tekoälyopettaja: kun paikallinen opettaja on käynnissä, ajastamattomissa tehtävissä on \"Kysy Pöllöltä\" -nappi. Pöllö esittää ohjaavia kysymyksiä eikä koskaan kerro vastausta."
+    "tutor": "Tekoälyopettaja: kun paikallinen opettaja on käynnissä, ajastamattomissa tehtävissä on \"Kysy Pöllöltä\" -nappi. Pöllö esittää ohjaavia kysymyksiä eikä koskaan kerro vastausta.",
+    "combat6": "Automaatti (Q): anna sankarin pelata vuoronsa opituilla taidoilla. Hyvä helpoissa taisteluissa; vaikeat viholliset vaativat keskitystä.",
+    "notebook": "Muistivihko (N): kirjoita omia muistiinpanoja ja välivaiheita ja katso oppimasi kaavat. Se löytyy myös jokaisesta ajastamattomasta tehtävästä."
   },
   "chars": {
     "kai": "Kai",
@@ -102,13 +106,27 @@
     "helmi": "Helmi",
     "slime": "Lukulima",
     "golem": "Arvoitusgolemi",
-    "owl": "Pöllö"
+    "owl": "Pöllö",
+    "sana": "Sana",
+    "otso": "Otso",
+    "ilona": "Ilona",
+    "kerttu": "Arkkimaagi Kerttu",
+    "vera": "Kapteeni Vera",
+    "wisp": "Vektorivirvatuli",
+    "scalar": "Skalaarilima",
+    "crystal": "Kristalligolemi",
+    "bat": "Leikkauslepakko",
+    "warden": "Ominaisvartija"
   },
   "classes": {
     "kai": "Ninja",
     "aino": "Taikuri",
     "kaiDesc": "Nopea ajattelu: päässälaskut, kertotaulut, kokeile ja tarkista.",
-    "ainoDesc": "Syvä ajattelu: pinta-alat, puuttuvat luvut, yhtälöt."
+    "ainoDesc": "Syvä ajattelu: pinta-alat, puuttuvat luvut, yhtälöt.",
+    "sana": "Samooja",
+    "otso": "Kilvenkantaja",
+    "sanaDesc": "Suunnat ja kulmat: vektorit, pistetulo, kohtisuorat suorat.",
+    "otsoDesc": "Suojelee ryhmää: determinantit (pinta-ala) ja matriisitulot."
   },
   "skills": {
     "strike": {
@@ -117,13 +135,11 @@
     },
     "flurry": {
       "name": "Iskusarja",
-      "desc": "Kaksi nopeaa iskua, 4 vahinkoa kumpikin.",
-      "oc": "Ylilataus: sarja nopeita laskuja kelloa vastaan. Jokainen oikea vastaus lisää yhden iskun, enintään 6 iskua."
+      "desc": "Kaksi nopeaa iskua, 4 vahinkoa kumpikin."
     },
     "shadowStep": {
       "name": "Varjoaskel",
-      "desc": "Siirry tyhjään ruutuun enintään 5 ruudun päähän.",
-      "oc": "Ylilataus: vastaa nopeaan kertolaskuun ja muutut Piiloon. Seuraava hyökkäyksesi tekee 50 % enemmän vahinkoa."
+      "desc": "Siirry tyhjään ruutuun enintään 5 ruudun päähän."
     },
     "probe": {
       "name": "Koetteluisku",
@@ -135,13 +151,11 @@
     },
     "fireball": {
       "name": "Tulipallo",
-      "desc": "Polttaa 3 × 3 -alueen, 9 vahinkoa, ja jättää tulen 2 kierrokseksi. Osuu myös omiin!",
-      "oc": "Ylilataus: ratkaise pinta-alatehtävä, niin vahinko on 50 % suurempi."
+      "desc": "Polttaa 3 × 3 -alueen, 9 vahinkoa, ja jättää tulen 2 kierrokseksi. Osuu myös omiin!"
     },
     "mend": {
       "name": "Parannus",
-      "desc": "Paranna liittolaista (tai itseäsi) 10 HP.",
-      "oc": "Ylilataus: ratkaise puuttuvan luvun tehtävä, niin parannus on 16 HP."
+      "desc": "Paranna liittolaista (tai itseäsi) 10 HP."
     },
     "unbind": {
       "name": "Sinetinpurku",
@@ -150,10 +164,67 @@
     "ap": "{n} TP",
     "range": "Kantama {n}",
     "cooldown": "Latautuu {n}",
-    "attunement": "Viritys {n} % (heikkenee taisteluiden välillä; harjoittele tai ylilataa palauttaaksesi)",
+    "attunement": "Viritys {n} % (heikkenee taisteluiden välillä; harjoittele tai vapauta oikea keskitys palauttaaksesi)",
     "notLearned": "Ei vielä opittu. Opettaja: {who}.",
-    "overcharge": "Ylilataus",
-    "overchargeDesc": "Vastaa kysymykseen taitoa käyttäessäsi. Oikein: vahvempi vaikutus, ja taito pysyy terävänä. Väärin: tavallinen isku, ei koskaan huti."
+    "focus": "Keskitys",
+    "focusDesc": "Lataa valittu taito sen sijaan, että käyttäisit sen heti (+1 TP, vuoro päättyy). Seuraavan vuorosi alussa ratkaiset tehtävän: oikea vastaus = ×2,5 voima ja se läpäisee panssarin. Osuma latauksen aikana pienentää bonusta. Väärälläkin vastauksella taito laukeaa normaalisti, ja oikeat välivaiheet antavat osapisteitä.",
+    "focusLine": "Keskitystehtävä: {topic}",
+    "dash": {
+      "name": "Vektoriryntäys",
+      "desc": "Rynnistä tyhjään ruutuun enintään 5 ruudun päähän."
+    },
+    "vflurry": {
+      "name": "Iskusarja",
+      "desc": "Kaksi nopeaa 5 vahingon iskua. Keskitä se: jokainen nopea pistetulo lisää iskun."
+    },
+    "eprobe": {
+      "name": "Koetteleva isku",
+      "desc": "Kokeileva isku: 5 vahinkoa. Matriisisinettiä vastaan arvaa λ ja laske det(A − λI). Nolla murtaa sinetin."
+    },
+    "beam": {
+      "name": "Matriisisäde",
+      "desc": "Säde, joka muuntaa 3 × 3 -alueen: 9 vahinkoa."
+    },
+    "emend": {
+      "name": "Parannus",
+      "desc": "Paranna liittolaista (tai itseäsi) 12 HP."
+    },
+    "eunbind": {
+      "name": "Purku",
+      "desc": "Ratkaise matriisisinetti: etsi sen ominaisarvot (tai ominaisvektori) vaihe vaiheelta. Oikea vastaus murskaa sinetin."
+    },
+    "shot": {
+      "name": "Laukaus",
+      "desc": "Nopea nuoli. 5–7 vahinkoa, kantama 6."
+    },
+    "aimed": {
+      "name": "Tähtäyslaukaus",
+      "desc": "Huolellinen laukaus: 9–11 vahinkoa, kantama 7."
+    },
+    "volley": {
+      "name": "Nuolisade",
+      "desc": "Sada nuolia 3 × 3 -alueelle: 7 vahinkoa kuhunkin."
+    },
+    "mark": {
+      "name": "Merkintä",
+      "desc": "Merkitse vihollinen 2 vuoroksi: se ottaa 50 % enemmän vahinkoa."
+    },
+    "bash": {
+      "name": "Kilpi-isku",
+      "desc": "Raskas isku. 6–8 vahinkoa."
+    },
+    "ward": {
+      "name": "Suoja",
+      "desc": "Anna liittolaiselle kilpi, joka imee 10 vahinkoa."
+    },
+    "taunt": {
+      "name": "Uhmaus",
+      "desc": "2 vuoron ajan vihollisten on hyökättävä Otsoa vastaan, jos ne voivat."
+    },
+    "quake": {
+      "name": "Maanjäristys",
+      "desc": "Polje maata: 8 vahinkoa jokaiselle Otson vieressä olevalle viholliselle."
+    }
   },
   "items": {
     "tonic": {
@@ -227,7 +298,7 @@
     "intro2": "Jokainen tekniikka alkaa kokeella. Läpäise se kerran, niin liike on sinun. Harjoittele, niin se pysyy terävänä.",
     "menu": "Mitä otetaan, oppilas?",
     "menuDone": "Olet oppinut kaiken, mitä opetan. Pidä mielesi terävänä.",
-    "about1": "Ninjan liikkeet ovat halpoja ja nopeita. Ylilataa ne, niin heitän sinulle nopeita kysymyksiä. Vastaa ennen kuin aika loppuu!",
+    "about1": "Ninjaliikkeet ovat halpoja ja nopeita. Keskitä yksi, niin heitän sinulle pikakysymyksiä sen lauetessa. Vastaa ennen kuin aika loppuu!",
     "about2": "Koetteluisku on kokeile ja tarkista: valitse luku, kokeile sitä sinettiin ja korjaa. Hidasta? Ehkä. Mutta se toimii aina.",
     "sealHint": "Muista: sinettiä vastaan valitse luku x:lle ja laske. Liian pieni? Kokeile isompaa. Liian iso? Kokeile pienempää."
   },
@@ -237,7 +308,7 @@
     "intro2": "Kokeissani ei ole aikarajaa. Ota aikaa, käytä vihjeitä ja opi näkemään tehtävän muoto.",
     "menu": "Minkä oppitunnin otamme?",
     "menuDone": "Olet oppinut kaikki oppituntini. Loppu on harjoittelua.",
-    "about1": "Taikurin loitsut ovat vahvoja, mutta maksavat enemmän TP:tä. Ylilataa loitsu, niin ratkaiset tehtävän ilman aikarajaa ja saat suuremman vaikutuksen.",
+    "about1": "Maagin loitsut ovat vahvoja mutta vievät enemmän TP:tä. Keskitä loitsu, niin ratkaiset tehtävän ilman ajastinta sen lauetessa. Oikeat vastaukset tekevät siitä paljon vahvemman.",
     "about2": "Sinetinpurku lukee sinetin kuin vaa'an. Mitä teet toiselle puolelle, tee myös toiselle, kunnes x on yksin.",
     "sealHint": "Kun kohtaat golemin, käytä Sinetinpurkua ja ratkaise sen yhtälö. Yksi oikea vastaus murtaa sinetin."
   },
@@ -253,11 +324,11 @@
     "learnedTitle": "Opittu: {skill}!",
     "flurry": {
       "intro": "Iskusarja! Isku, isku, isku. Oppiaksesi sen laske yhteen- ja vähennyslaskuja nopeasti päässä. Neljä oikeaa vastausta.",
-      "outro": "Taistelussa laita Ylilataus päälle, niin jokainen nopea oikea vastaus lisää yhden iskun sarjaan."
+      "outro": "Keskitä taistelussa Iskusarja: sen lauetessa jokainen nopea oikea vastaus lisää yhden iskun sarjaan."
     },
     "shadowStep": {
       "intro": "Varjoaskel. Kertotaulut, oppilas. Ninja osaa ne laskematta. Neljä oikein.",
-      "outro": "Ylilataa se nopealla kertolaskulla, niin katoat varjoihin: seuraava hyökkäyksesi on 50 % vahvempi."
+      "outro": "Varjoaskel maksaa vain 1 TP. Käytä sitä livahtaaksesi vihollisten taakse tai korkealle maalle."
     },
     "probe": {
       "intro": "Koetteluisku. Ensin laskujärjestys: kertolasku ennen yhteenlaskua, elleivät sulut sano muuta.",
@@ -267,11 +338,11 @@
     },
     "fireball": {
       "intro": "Tulipallo peittää alueen: suorakulmion palavaa maata. Opetellaan mittaamaan pinta-aloja. Rivit kertaa sarakkeet. Kolme oikein.",
-      "outro": "Tulipallo polttaa 3 × 3 -alueen (9 ruutua) ja jättää liekit 2 kierrokseksi. Varo, se polttaa myös ystäviä! Ylilataa se pinta-alatehtävällä, niin vahinko on 50 % suurempi."
+      "outro": "Tulipallo polttaa 3 × 3 -alueen (9 ruutua) ja jättää liekit 2 kierrokseksi. Varo, se polttaa myös ystäviä! Keskitä se ja ratkaise pinta-alatehtävä, niin räjähdys on paljon suurempi."
     },
     "mend": {
       "intro": "Parannus täyttää sen, mikä puuttuu. Siis: puuttuvan luvun tehtäviä. Mikä luku tulee laatikkoon? Neljä oikein.",
-      "outro": "Ylilataa Parannus puuttuvan luvun tehtävällä, niin se parantaa 16 eikä 10."
+      "outro": "Keskitä Parannus ja ratkaise puuttuvan luvun tehtävä sen lauetessa, niin se parantaa paljon enemmän."
     },
     "unbind": {
       "intro": "Sinetinpurku on syvin oppitunti: vaaka. Pussissa on tuntematon määrä punnuksia. Pidä vaaka tasapainossa ja selvitä, montako niitä on.",
@@ -280,6 +351,57 @@
       "stage3": "Pusseja molemmilla puolilla! Voit ottaa myös pussin kummaltakin puolelta, koska pussi painaa joka puolella saman verran.",
       "symbols": "Hienoa. Nyt sama asia ilman vaakaa, pelkillä merkeillä. x on pussi, ja luvut ovat punnuksia.",
       "outro": "Sinetinpurulla yksi oikea vastaus murtaa sinetin. Kuvittele vaaka mieleesi, niin se auttaa ajattelemaan."
+    },
+    "dash": {
+      "intro": "Vektoriryntäys. Ryntäys on vektori: niin monta askelta oikealle, niin monta ylös. Kun lasket kaksi ryntäystä yhteen, lasket niiden osat yhteen. Kolme oikein.",
+      "outro": "Nyt voit rynnistää minne tahansa 5 ruudun säteellä 1 TP:llä."
+    },
+    "vflurry": {
+      "intro": "Iskusarja Ominaislaakson tapaan: pistetuloja, nopeasti. Kerro vastinosat ja laske yhteen. Kolme oikein.",
+      "outro": "Keskitä Iskusarja, niin jokainen nopea pistetulo lisää uuden iskun."
+    },
+    "eprobe": {
+      "intro": "Koetteleva isku matriisisinettejä vastaan. Ensin determinantit: a·d − b·c. Kaksi oikein.",
+      "guess": "Nyt arvaa ja tarkista. Tämä harjoitussinetti kätkee ominaisarvon λ. Valitse λ ja laske det(A − λI). Kun se on nolla, löysit yhden.",
+      "outro": "Matriisisinettiä vastaan Koetteleva isku testaa yhden λ:n kerrallaan. Vinkki: ominaisarvojen summa on jälki ja tulo on determinantti."
+    },
+    "beam": {
+      "intro": "Matriisisäde. Matriisi siirtää jokaista pistettä: A:n jokaisen rivin pistetulo v:n kanssa antaa yhden Av:n osan. Kolme oikein.",
+      "outro": "Matriisisäde osuu 3 × 3 -alueelle. Keskitä se ja ratkaise matriisin ja vektorin tulo, niin säde on paljon vahvempi."
+    },
+    "emend": {
+      "intro": "Parannus skaalaa elämän takaisin. Vektorin skaalaus kertoo jokaisen osan samalla luvulla. Kolme oikein.",
+      "outro": "Keskitä Parannus ja skaalaa vektori sen lauetessa, niin se parantaa paljon enemmän."
+    },
+    "eunbind": {
+      "intro": "Purku on syvin oppitunti. Matriisi vain venyttää joitakin vektoreita, ei koskaan käännä niitä. Niiden venytyskertoimet ovat ominaisarvot. Ensin determinantti.",
+      "values": "Nyt ominaisarvot. Käytä jälkeä ja determinanttia: λ² − (jälki)λ + det = 0. Kaksi oikein.",
+      "vectors": "Lopuksi ominaisvektori: vähennä λ lävistäjältä ja etsi sitten v, jonka uusi matriisi vie nollaan.",
+      "outro": "Purulla yksi oikea vastaus murskaa matriisisinetin. Välivaiheet auttavat sinua, ja ne lasketaan mukaan."
+    },
+    "aimed": {
+      "intro": "Tähtäyslaukaus. Jousiampuja lukee suuntia pistetulolla: kerro vastinosat ja laske yhteen. Kolme oikein.",
+      "outro": "Keskitä Tähtäyslaukaus ja ratkaise pistetulo sen lauetessa: ×2,5 vahinko suoraan panssarin läpi."
+    },
+    "volley": {
+      "intro": "Nuolisade. Jokaisen nuolen lento on vektori, ja tähtäät laskemalla vektoreita yhteen. Kolme oikein.",
+      "outro": "Nuolisade osuu 3 × 3 -alueelle. Keskitä se ja laske vektoreita yhteen, niin sade on tuhoisampi."
+    },
+    "mark": {
+      "intro": "Merkintä. Kaksi suuntaa ovat kohtisuorassa täsmälleen silloin, kun niiden pistetulo on 0. Laske pistetulot. Kolme oikein.",
+      "outro": "Merkitty vihollinen ottaa 50 % enemmän vahinkoa 2 vuoron ajan."
+    },
+    "ward": {
+      "intro": "Suoja. Matriisi skaalaa pinta-alaa determinantillaan: a·d − b·c. Kilpi on pinta-ala, jonka taakse voi piiloutua. Kolme oikein.",
+      "outro": "Suoja antaa liittolaiselle 10 pisteen kilven. Keskitä se ja laske determinantti, niin kilpi on paljon paksumpi."
+    },
+    "taunt": {
+      "intro": "Uhmaus. Tee itsestäsi suuri: skaalaa vektori isommaksi. Kaksi oikein.",
+      "outro": "Uhmaus pakottaa viholliset hyökkäämään Otsoa vastaan 2 vuoron ajan. Käytä sitä, kun ystävä on loukkaantunut tai keskittyy."
+    },
+    "quake": {
+      "intro": "Maanjäristys. Matriisien kertolasku: jokainen alkio on ensimmäisen rivi kertaa toisen sarake. Kaksi oikein.",
+      "outro": "Maanjäristys osuu jokaiseen Otson vieressä olevaan viholliseen. Keskitä se ja kerro matriisit, niin maa halkeaa."
     }
   },
   "practice": {
@@ -390,9 +512,10 @@
     "l1": "Taistelut ovat vuoropohjaisia ruudukolla. Joka vuorolla hahmo saa 4 toimintapistettä (TP), ja voi säästää niitä enintään 6.",
     "l2": "Klikkaa sinistä ruutua liikkuaksesi (1 TP = 3 ruutua). Klikkaa vieressä olevaa vihollista hyökätäksesi. WASD siirtää kameraa ja hiiren rulla zoomaa.",
     "l3": "Käytä taitoja numeronäppäimillä 1–4 tai napeilla. Jokainen näyttää TP-hintansa. Osa taidoista latautuu muutaman vuoron.",
-    "l4": "Opitut taidot toimivat ilman matematiikkaa. Laita ⚡ Ylilataus (O) päälle ja vastaa kysymykseen, niin vaikutus on vahvempi.",
+    "l4": "Opitut taidot toimivat ilman laskemista. Lisävoimaa saat, kun valitset taidon ja kytket ✦ Keskityksen (F): lataat sen nyt ja ratkaiset tehtävän seuraavan vuorosi alussa.",
     "l5": "Paina välilyöntiä tai Lopeta vuoro, kun olet valmis. Hiiren oikea painike tai Esc peruu taidon.",
-    "l6": "Korkeus ratkaisee. Hyökkäykset korkeammalta tekevät enemmän vahinkoa, ja kaukotaidot ulottuvat ruudun pidemmälle. Ylös kiipeäminen maksaa lisää liikettä, ja voit kiivetä vain yhden tason kerrallaan."
+    "l6": "Korkeus ratkaisee. Hyökkäykset korkeammalta tekevät enemmän vahinkoa, ja kaukotaidot ulottuvat ruudun pidemmälle. Ylös kiipeäminen maksaa lisää liikettä, ja voit kiivetä vain yhden tason kerrallaan.",
+    "l7": "Kiire? Automaatti (Q) pelaa sankarin vuoron opituilla taidoilla. Panssaroidut viholliset eivät kuitenkaan juuri välitä opituista iskuista; vain keskitys läpäisee panssarin."
   },
   "combat": {
     "begin": "Taistelu!",
@@ -408,7 +531,6 @@
     "shatterFloat": "Sinetti murtui!",
     "shatter": "Sinetti murtuu ({name})!",
     "outOfRange": "Liian kaukana. Mene lähemmäs.",
-    "ocTitle": "Ylilataus: {skill}",
     "uses": "{name} käyttää taitoa {skill}.",
     "combo": "Sarja ×{n}!",
     "stepFloat": "Suhh!",
@@ -420,7 +542,11 @@
     "attacks": {
       "bite": "Purema",
       "slam": "Murskaus",
-      "throw": "Kiviheitto"
+      "throw": "Kiviheitto",
+      "zap": "Säkenöinti",
+      "leech": "Imu",
+      "stretch": "Venytys",
+      "pulse": "Pulssi"
     },
     "apCost": "{n} TP",
     "round": "Kierros {n}",
@@ -436,10 +562,32 @@
     "retry": "Yritä uudelleen",
     "winTitle": "Voitto!",
     "winForest": "Limat hajoavat sinne tänne sinkoileviksi numeroiksi. Metsäpolku on vapaa.",
-    "attuneNote": "Vinkki: taidot, joita et ylilatannut, menettävät hieman viritystä joka taistelun jälkeen. Harjoittele opettajien kanssa, niin ne terävöityvät taas.",
+    "attuneNote": "Vinkki: taidot, joita et vapauttanut oikealla keskitysvastauksella, menettävät hieman viritystä jokaisen taistelun jälkeen. Harjoittele kouluttajien kanssa terävöittääksesi ne.",
     "winGolem": "Viimeinen sinetti halkeaa, ja golemi murenee hiekaksi. Vesi purskahtaa lähteestä!",
     "goldGained": "+{n} kultaa",
-    "highGround": "Korkea maasto!"
+    "highGround": "Korkea maasto!",
+    "auto": "Automaatti",
+    "autoDesc": "Pelaa tämän sankarin vuoro automaattisesti opituilla taidoilla: ei laskuja, ei keskitystä. Nopeaa, mutta ei läpäise panssaria eikä murra sinettejä.",
+    "autoLog": "{name} taistelee vaistonvaraisesti (automaatti).",
+    "focusFloat": "Keskittyy…",
+    "focusStart": "{name} alkaa keskittää taitoa {skill}.",
+    "focusRelease": "{name} vapauttaa keskitetyn taidon {skill}!",
+    "focusTitle": "Keskitys: {skill}",
+    "focusTag": "Keskitetty hyökkäys",
+    "focusDisrupted": "Keskitys häiriintyi (pienempi bonus)",
+    "focusStatus": "Keskittää: {skill}",
+    "fizzle": "Sammui",
+    "fizzleLog": "Ei kohdetta ulottuvilla. Keskitetty {skill} sammuu.",
+    "growFloat": "Kasvaa!",
+    "armorFloat": "Panssari!",
+    "shieldFloat": "◈ −{n}",
+    "shieldGain": "◈ +{n}",
+    "shieldStatus": "Kilpi {n}",
+    "reflect": "{name} heijastaa iskun takaisin: {target}.",
+    "tauntFloat": "Tule tänne!",
+    "markFloat": "Merkitty",
+    "pushFloat": "Työnnetty!",
+    "blinkFloat": "Välähdys"
   },
   "probe": {
     "intro": "Sinetissä lukee: {eq}. Valitse x:lle kokonaisluku, jota kokeilet.",
@@ -540,7 +688,7 @@
     "p1": "Arvoitusgolemi murenee, ja kirkas vesi syöksyy alas Numerolaan.",
     "p2": "Kai oppi, että kokeile ja tarkista toimii aina, ja Aino oppi, että algebra on oikotie.",
     "solved": "Oikein vastatut kysymykset: {n} / {total} ({pct} %)",
-    "skills": "Opitut taidot: {n} / 8",
+    "skills": "Opittuja taitoja: {n} / {total}",
     "farm": "Helmin pelto: {result}",
     "farmResult": {
       "exact": "kylvetty täydellisesti",
@@ -567,6 +715,334 @@
     "visualBalance": "Kuvassa on vaaka, joka näyttää {eq}. x on pussi ja luvut ovat punnuksia.",
     "balanceTask": "Vaakatehtävä: ota molemmilta puolilta samat asiat pois, kunnes yksi pussi on yksin, ja kerro sitten montako punnusta pussissa on.",
     "farmContext": "Helmin pelto on 8 m × 6 m -suorakulmio, josta puuttuu 3 m × 2 m -kulma. Hän tarvitsee 3 siementä neliömetrille.",
-    "probeTask": "Kokeile ja tarkista: pelaaja valitsee x:lle kokonaisluvun, laskee molemmat puolet ja katsoo, täsmäävätkö ne."
+    "probeTask": "Kokeile ja tarkista: pelaaja valitsee x:lle kokonaisluvun, laskee molemmat puolet ja katsoo, täsmäävätkö ne.",
+    "eprobeTask": "Ominaisarvon arvaus ja tarkistus: pelaaja valitsee λ:n ja laskee det(A − λI); nolla tarkoittaa, että λ on ominaisarvo."
+  },
+  "campaigns": {
+    "numerola": {
+      "name": "Numerola",
+      "tier": "Alakoulu · 7–12-vuotiaat",
+      "desc": "Yhteen- ja vähennyslaskut, kertotaulut, pinta-alat, puuttuvat luvut ja ensimmäiset yhtälöt. Murra Arvoitusgolemin sinetit."
+    },
+    "eigenvale": {
+      "name": "Ominaislaakso",
+      "tier": "Lineaarialgebra · lukio–yliopisto",
+      "desc": "Vektorit, pistetulo, matriisitulo, determinantit, ominaisarvot ja ominaisvektorit. Oikaise vääristynyt maa."
+    }
+  },
+  "renEv": {
+    "intro1": "Kai! Seurasit siis vääristymää Ominaislaaksoon sinäkin. Hyvä. Täällä nopeus tarkoittaa vektoreita.",
+    "intro2": "Samat säännöt kuin kotona: läpäise koe kerran ja liike on sinun. Harjoittele, niin se pysyy terävänä.",
+    "menu": "Valmis, oppilas?",
+    "menuDone": "Olet oppinut kaiken, mitä täällä opetan.",
+    "about1": "Vektori on vain lista askelia: niin monta oikealle, niin monta ylös. Vektorit lasketaan yhteen osa kerrallaan.",
+    "about2": "Koetteleva isku toimii myös matriisisinetteihin: arvaa λ, laske det(A − λI). Nolla tarkoittaa, että osuit ominaisarvoon.",
+    "sealHint": "Matriisisinettiä vastaan: arvaa λ ja laske det(A − λI). Ominaisarvojen summa on jälki, joten arvaa sen puolikkaan läheltä."
+  },
+  "kerttu": {
+    "intro1": "Aino, Lumin oppipoika! Lumi opetti sinulle vaa’an. Minä opetan, mitä matriisi tekee avaruudelle.",
+    "intro2": "Oppitunneissani on vaiheita. Kirjoita jokainen vaihe ylös; välivaiheet ovat osa vastausta.",
+    "menu": "Mikä oppitunti tänään?",
+    "menuDone": "Tunnet nyt matriisini. Mene oikaisemaan maa.",
+    "about1": "Matriisi siirtää tason jokaista pistettä. Katso, minne se vie yksikköneliön kaksi nuolta: ne ovat sen sarakkeet.",
+    "about2": "Ominaisvektori on suunta, jota matriisi vain venyttää. Venytyskerroin on sen ominaisarvo λ: A v = λ v.",
+    "sealHint": "Ominaisvartijan sinetit ovat matriiseja. Käytä Purkua ja etsi ominaisarvo, myöhemmin ominaisvektori, vaihe vaiheelta."
+  },
+  "ilona": {
+    "intro1": "Sana, ota jousi. Suunnat ovat samoojalle kaikki kaikessa, ja suunnat ovat vektoreita.",
+    "intro2": "Kokeesi käyttävät pistetuloa. Se kertoo, kuinka paljon kaksi nuolta osoittaa samaan suuntaan.",
+    "menu": "Mitä harjoitellaan, Sana?",
+    "menuDone": "Ammut nyt kuin kartanpiirtäjä.",
+    "about1": "u · v = u₁v₁ + u₂v₂. Suuri ja positiivinen: sama suunta. Nolla: kohtisuorassa. Negatiivinen: vastakkaiset.",
+    "about2": "Vektorien yhteenlasku on kuin kävelisi yhden nuolen ja sitten seuraavan: kärki kantaan.",
+    "sealHint": "Pidä etäisyyttä ja merkitse vahvin vihollinen ensin."
+  },
+  "vera": {
+    "intro1": "Otso. Kilvenkantaja pitää linjan, ja matriisi voi litistää tai venyttää linjaa. Opi kumpi.",
+    "intro2": "Ensin determinantit: kuinka paljon matriisi skaalaa pinta-alaa. Sitten matriisitulot.",
+    "menu": "Valmis harjoitukseen?",
+    "menuDone": "Olet valmis, kilvenkantaja.",
+    "about1": "det A = a·d − b·c. Jos se on 0, matriisi litistää tason suoraksi eikä sitä voi kumota.",
+    "about2": "Matriisien kertolasku: alkio (i, j) on ensimmäisen rivi i kertaa toisen sarake j.",
+    "sealHint": "Uhmaa, kun joku keskittyy. Suojaa häntä, kun hän miettii."
+  },
+  "notebook": {
+    "title": "Muistivihko",
+    "open": "Muistivihko",
+    "mine": "Omat muistiinpanot",
+    "formulas": "Kaavat",
+    "placeholder": "Kirjoita välivaiheesi ja ideasi tähän…",
+    "mineHelp": "Oma sivusi. Kirjoita välivaiheet ylös ennen kuin lukitset vastauksen. Se säilyy koko kampanjan ajan, ja Pöllö-tutor voi lukea sen.",
+    "noFormulas": "Opi taito, niin sen kaava ilmestyy tähän.",
+    "tutorNotes": "Pelaajan omat muistiinpanot",
+    "f": {
+      "add_sub": "Yhteen- ja vähennyslasku",
+      "mul": "Kertotaulut",
+      "area": "Suorakulmion pinta-ala",
+      "missing": "Puuttuvat luvut",
+      "order_ops": "Laskujärjestys",
+      "eq2": "Kaksivaiheiset yhtälöt",
+      "vec_add": "Vektorien yhteenlasku",
+      "vec_scale": "Vektorin skaalaus",
+      "dot": "Pistetulo",
+      "perp": "Kohtisuoruus",
+      "mat_vec": "Matriisi × vektori",
+      "mat_mul": "Matriisi × matriisi",
+      "det2": "Determinantti (2 × 2)",
+      "eigen_val": "Ominaisarvot (2 × 2)",
+      "eigen_vec": "Ominaisvektorit"
+    },
+    "d": {
+      "add_sub": "Järjestyksellä ei ole väliä, kun {1|lasket yhteen}: {1|a} + {2|b} on {2|b} + {1|a}.",
+      "mul": "{1|a} × {2|b} tarkoittaa {1|a} ryhmää, joissa kussakin {2|b}.",
+      "area": "{3|Pinta-ala} on {1|leveys} kertaa {2|korkeus}: rivit kertaa sarakkeet.",
+      "missing": "Kumoa {1|lisätty luku}: vähennä se {2|summasta}.",
+      "order_ops": "Ensin sulut, sitten × ja :, sitten + ja −.",
+      "eq2": "Vähennä {2|pelkkä luku} molemmilta puolilta ja jaa sitten {1|x:ien määrällä}.",
+      "vec_add": "Laske {1|u} ja {2|v} yhteen osa kerrallaan. Kuvittele ne kärki kantaan.",
+      "vec_scale": "Kerro {2|v}:n jokainen osa {1|skalaarilla} c.",
+      "dot": "Kerro {1|u}:n ja {2|v}:n vastinosat ja laske yhteen. Positiivinen tarkoittaa, että ne osoittavat suunnilleen samaan suuntaan.",
+      "perp": "{1|u} ja {2|v} ovat suorassa kulmassa täsmälleen silloin, kun u · v = 0.",
+      "mat_vec": "{1|A}:n jokaisen rivin pistetulo {2|v}:n kanssa antaa yhden tuloksen osan.",
+      "mat_mul": "Alkio {3|cᵢⱼ} = {1|A:n rivi i} · {2|B:n sarake j}.",
+      "det2": "{1|Päälävistäjä} miinus {2|toinen lävistäjä}. Se kertoo, kuinka paljon A skaalaa pinta-alaa.",
+      "eigen_val": "Ratkaise {3|λ} käyttämällä {4|jälkeä} (a + d) ja {5|determinanttia}.",
+      "eigen_vec": "Vähennä {3|λ} {1|A}:n lävistäjältä ja etsi sitten {2|v}, jonka se vie nollaan."
+    }
+  },
+  "steps": {
+    "step": "Vaihe {n}",
+    "answer": "Vastaus",
+    "fromSteps": "(välivaiheesi ovat vastaus)",
+    "work": "Välivaiheet",
+    "check": "Tarkista",
+    "plotCaption": "Nuolet ovat samanvärisiä kuin kaavassa. Varjostettu kuvio on paikka, johon matriisi vie yksikköneliön.",
+    "hover": "Vie hiiri värillisen termin päälle tai napauta sitä nähdäksesi sen merkityksen.",
+    "fillSteps": "Täytä ensin jokainen vaihe.",
+    "fillAnswer": "Kirjoita ensin vastauksesi (välivaiheet auttavat, mutta ovat vapaaehtoisia).",
+    "stepsScore": "Oikeita välivaiheita: {n} / {total}.",
+    "theAnswer": "Vastaus oli {a}."
+  },
+  "la": {
+    "vec_add": {
+      "title": "Vektorien yhteenlasku",
+      "text": "Kun lasket {1|u}:n ja {2|v}:n yhteen, laske niiden vastinosat yhteen. Ruudukolla: kulje {1|u}:ta pitkin, sitten {2|v}:tä pitkin; päädyt {3|summaan w}.",
+      "g1": "Ensimmäinen vektori. Jokainen osa kertoo, kuinka pitkälle mennään yhden akselin suuntaan.",
+      "g2": "Toinen vektori, piirrettynä u:n kärjestä alkaen.",
+      "g3": "Summa: paikka, johon päädyt molempien kävelyjen jälkeen.",
+      "hint": "Laske ensimmäiset osat yhteen, sitten toiset osat.",
+      "ex": "Laske osa kerrallaan: w = {w}."
+    },
+    "vec_scale": {
+      "title": "Vektorin skaalaus",
+      "text": "{2|v}:n kertominen {1|skalaarilla} venyttää sitä (tai kääntää sen, jos skalaari on negatiivinen). Jokainen osa kerrotaan: se on {3|tulos}.",
+      "g1": "Skalaari: tavallinen luku, joka venyttää tai kutistaa.",
+      "g2": "Venytettävä vektori.",
+      "g3": "Venytetty vektori. Sama suora, eri pituus.",
+      "hint": "Kerro jokainen osa luvulla {c}.",
+      "ex": "{c} kertaa jokainen osa: {w}."
+    },
+    "dot": {
+      "title": "Pistetulo",
+      "text": "{3|Pistetulo} kertoo {1|u}:n ja {2|v}:n vastinosat ja laskee ne yhteen. Se mittaa, kuinka paljon nuolet osoittavat samaan suuntaan.",
+      "g1": "Ensimmäinen vektori u.",
+      "g2": "Toinen vektori v.",
+      "g3": "Yksi luku: positiivinen, jos u ja v osoittavat suunnilleen samaan suuntaan, nolla jos ne ovat kohtisuorassa, negatiivinen jos vastakkaiset.",
+      "hint": "Kerro ensimmäiset osat, kerro toiset osat ja laske yhteen.",
+      "ex": "u · v = {parts} = {d}."
+    },
+    "perp": {
+      "title": "Kohtisuorassa?",
+      "text": "{1|u} ja {2|v} ovat kohtisuorassa (suorassa kulmassa) täsmälleen silloin, kun niiden {3|pistetulo} on 0. Laske se.",
+      "g3": "Nolla tarkoittaa suoraa kulmaa nuolten välillä.",
+      "yes": "Se on 0, joten u ja v ovat kohtisuorassa.",
+      "no": "Se ei ole 0, joten u ja v eivät ole kohtisuorassa."
+    },
+    "mat_vec": {
+      "title": "Matriisi × vektori",
+      "text": "{1|Matriisi A} siirtää {2|vektorin v} uuteen paikkaan {3|Av}. Jokainen {3|Av}:n osa on {1|A}:n yhden rivin pistetulo {2|v}:n kanssa.",
+      "g1": "Matriisi: sääntö, joka siirtää jokaista pistettä. Sen sarakkeet näyttävät, minne kaksi yksikkönuolta menevät.",
+      "g2": "Siirrettävä vektori.",
+      "g3": "Paikka, johon v päätyy.",
+      "hint": "A:n rivi 1 kertaa v (kerro vastinosat ja laske yhteen) antaa ensimmäisen osan.",
+      "ex": "Jokaisen rivin pistetulo v:n kanssa: Av = {w}."
+    },
+    "mat_mul": {
+      "title": "Matriisi × matriisi",
+      "text": "{1|A}:n kertominen {2|B}:llä tarkoittaa: ensin B, sitten A. Jokainen {3|C}:n alkio on {1|A}:n rivin pistetulo {2|B}:n sarakkeen kanssa.",
+      "g1": "Vasen matriisi: käytä sen rivejä.",
+      "g2": "Oikea matriisi: käytä sen sarakkeita.",
+      "g3": "Tulo. Alkio cᵢⱼ käyttää A:n riviä i ja B:n saraketta j.",
+      "hint": "c₁₁ = (A:n rivi 1) · (B:n sarake 1). Sitten muut kolme samalla tavalla.",
+      "ex": "C = {c}."
+    },
+    "det2": {
+      "title": "Determinantti",
+      "text": "{3|Determinantti} kertoo, kuinka paljon matriisi skaalaa pinta-alaa: yksikköneliöstä tulee varjostettu kuvio. Se on {1|päälävistäjä} miinus {2|toinen lävistäjä}.",
+      "g1": "Päälävistäjä: vasen yläkulma kertaa oikea alakulma.",
+      "g2": "Toinen lävistäjä: oikea yläkulma kertaa vasen alakulma.",
+      "g3": "Pinta-alan skaala. Negatiivinen tarkoittaa, että kuvio on peilattu; nolla, että se on litistetty eikä sitä voi kumota.",
+      "hint": "Kerro päälävistäjä, kerro toinen lävistäjä ja vähennä.",
+      "ex": "{a}·{d} − {b}·{c} = {ad} − {bc} = {D}."
+    },
+    "eigen_val": {
+      "title": "Ominaisarvot",
+      "text": "{1|A} vain venyttää joitakin vektoreita {2|v}, ei koskaan käännä niitä: {1|A}{2|v} = {3|λ}{2|v}. Venytyskertoimet {3|λ} ratkaisevat yhtälön λ² − {4|jälki}·λ + {5|det} = 0.",
+      "g1": "Matriisi, joka vääristää avaruutta.",
+      "g2": "Ominaisvektori: suunta, jonka A pitää omalla suorallaan.",
+      "g3": "Ominaisarvo: kuinka paljon A venyttää sitä suuntaa.",
+      "g4": "Jälki: lävistäjän summa a + d. Ominaisarvojen summa on jälki.",
+      "g5": "Determinantti ad − bc. Ominaisarvojen tulo on determinantti.",
+      "hint": "Etsi kaksi lukua, joiden summa on jälki ja tulo determinantti.",
+      "ex1": "Jälki = {t}, determinantti = {D}.",
+      "ex2": "Yhtälön λ² − {t}λ + {D} = 0 juuret ovat λ = {l1} ja λ = {l2} (summa {t}, tulo {D})."
+    },
+    "eigen_vec": {
+      "title": "Ominaisvektori",
+      "text": "Ominaisarvolle {3|λ = {l}}: vähennä se {1|A}:n lävistäjältä (eli λ kertaa {4|yksikkömatriisi I}). Etsi sitten {2|suunta v}, jonka uusi matriisi vie {6|nollaan}.",
+      "g1": "Matriisi.",
+      "g2": "Ominaisvektori: mikä tahansa nollasta poikkeava monikerta kelpaa.",
+      "g3": "Käyttämämme ominaisarvo.",
+      "g4": "Yksikkömatriisi: ykköset lävistäjällä. λI:n lävistäjällä on λ.",
+      "g6": "Nollavektori. (A − λI) litistää ominaisvektorin olemattomiin.",
+      "hint": "A − λI:n ensimmäinen rivi sanoo: (ensimmäinen alkio)·v₁ + (toinen alkio)·v₂ = 0. Valitse v niin, että tämä pätee.",
+      "ex1": "A − λI = {m}.",
+      "ex2": "Yksi ominaisvektori on v = {v} (mikä tahansa monikerta kelpaa)."
+    }
+  },
+  "eseal": {
+    "labelValue": "{m}  λ?",
+    "labelVector": "{m}  v, kun λ={l}?",
+    "probeValue": "Sinetti on matriisi A = {m}. Arvaa ominaisarvo λ (kokonaisluku).",
+    "wholeLambda": "Valitse kokonaisluku väliltä −20…20.",
+    "probeTitle": "Testaa arvauksesi",
+    "probeText": "Jos {3|λ = {l}} on ominaisarvo, {1|A} − λ{4|I} litistää tason, joten sen determinantti on 0.",
+    "gGuess": "Arvauksesi ominaisarvoksi.",
+    "probeHint": "Vähennä λ luvuista a ja d, kerro ne ja vähennä sitten b·c.",
+    "probeEx": "({a} − {l})({d} − {l}) − {b}·{c} = {D}.",
+    "logHit": "λ = {l}: det(A − λI) = 0. Se on ominaisarvo!",
+    "logMiss": "λ = {l}: det(A − λI) = {D}, ei 0.",
+    "missTip": "Kokeile toista λ:aa. Ominaisarvojen summa on {tr} (jälki) ja tulo {det} (determinantti).",
+    "probeVector": "Sinetti on A = {m}. Sen ominaisarvo on λ = {l}. Arvaa ominaisvektori v = (v₁, v₂) kokonaisluvuilla.",
+    "probeVecTitle": "Testaa vektorisi",
+    "probeVecText": "Jos v on ominaisvektori, {1|A}{2|v} on vain {3|{l}}·{2|v}: sama suunta, venytettynä.",
+    "logVecSlip": "v = {v}: kertolasku lipsahti.",
+    "logVecHit": "v = {v}: Av = λv. Se on ominaisvektori!",
+    "logVecMiss": "v = {v}: Av = {av}, mutta λv = {lv}.",
+    "vecTip": "Kokeile toista suuntaa. Katso A − λI:n ensimmäistä riviä: sen on annettava 0.",
+    "unbindStory": "Sinetti on matriisi. Käy vaiheet läpi; värit yhdistävät kaavan jokaisen osan sen merkitykseen."
+  },
+  "ev": {
+    "intro": {
+      "p1": "Vuorten takana on Ominaislaakso, suorien teiden ja täydellisten kulmien maa.",
+      "p2": "Mutta Ominaisvartija on herännyt korkeassa tornissa. Sen matriisit vääristävät maata: tiet venyvät, pellot vinoutuvat ja kartat ovat kaikki väärin.",
+      "p3": "Kai ja Aino seurasivat vääristymää tänne. He tapaavat samooja Sanan ja kilvenkantaja Otson. Kartanpiirtäjä Ilona odottaa Origon kaupungissa."
+    },
+    "obj": {
+      "talkIlona": "Puhu kartanpiirtäjä Ilonan kanssa Origossa.",
+      "plains": "Mene itään ja raivaa Vektoritasangot.",
+      "mines": "Mene etelään ja raivaa Matriisikaivokset.",
+      "train": "Opi Koetteleva isku (Ren) tai Purku (arkkimaagi Kerttu) murtaaksesi matriisisinettejä.",
+      "door": "Avaa Determinanttiovi Ominaistornin juurella (idässä).",
+      "warden": "Kiipeä torniin ja murra Ominaisvartijan sinetit.",
+      "done": "Ominaislaakso on taas suora!",
+      "survey0": "Ilona tarvitsee apua vääristymän kartoittamisessa.",
+      "survey1": "Viimeistele Ilonan kartoitus."
+    },
+    "quests": {
+      "main": {
+        "title": "Vääristynyt kartta",
+        "desc": "Ominaisvartijan matriisit vääristävät Ominaislaaksoa.",
+        "s1": "Tapaa Ilona Origossa",
+        "s2": "Raivaa Vektoritasangot",
+        "s3": "Raivaa Matriisikaivokset",
+        "s4": "Avaa Determinanttiovi",
+        "s5": "Kukista Ominaisvartija",
+        "started": "Uusi tehtävä: Vääristynyt kartta"
+      },
+      "survey": {
+        "title": "Kartoitus",
+        "desc": "Selvitä, minne vääristymä siirtää Ilonan maamerkit.",
+        "s1": "Viimeistele kartoitus"
+      }
+    },
+    "ilona": {
+      "intro1": "Matkalaisia! Tulitte juuri ajoissa. Katsokaa karttaani: jokainen tie kaartuu väärään suuntaan.",
+      "intro2": "Tornin Ominaisvartija tekee sen. Sen matriisit siirtävät maan jokaista pistettä, venyttävät joitakin suuntia ja kääntävät toisia.",
+      "intro3": "Torni on suljettu Determinanttioven taakse, ja Vartija on kääriytynyt matriisisinetteihin. Vain ominaisarvoja osaava pääsee läpi.",
+      "kai": "Matriiseja? Kuulostaa Numerolan yhtälöiltä, mutta isommilta.",
+      "sana": "Minä tulen. Tunnen tasangot ja siellä liikkuvat virvatulet.",
+      "otso": "Ja minä pidän teidät kaikki ehjinä.",
+      "intro4": "Harjoitelkaa ensin: Ren, arkkimaagi Kerttu, kapteeni Vera, ja minä opetan Sanaa itse. Raivatkaa sitten tasangot ja kaivokset.",
+      "again": "Miten oikaiseminen sujuu?",
+      "thanks": "Karttani on taas suora. Kiitos!",
+      "optTrain": "Kouluta Sanaa (jousiammunta).",
+      "optWarden": "Kerro Ominaisvartijasta.",
+      "optSurvey": "Auta kartoituksessa.",
+      "optHint": "Mitä meidän pitäisi tehdä seuraavaksi?",
+      "warden1": "Sen sinetit ovat matriiseja. Jokainen kätkee ominaisarvon: suunnan, jota se vain venyttää. Löydä venytyskerroin, niin sinetti murtuu.",
+      "warden2": "Sen toinen sinetti kysyy itse ominaisvektoria, suuntaa. Viimeinen sinetti on vielä vaikeampi.",
+      "survey1": "Vääristymä siirtää jokaista maamerkkiä matriisilla. Jos tiedän, missä maamerkki oli, A kertaa sen paikka kertoo, missä se on nyt.",
+      "survey2": "Voitko laskea kaksi niistä minulle?",
+      "surveyTitle": "Kartoituspiste {n}",
+      "surveyStory": "Paikassa v ollut maamerkki on vääristynyt matriisin A mukaan. Missä se on nyt?",
+      "surveyRetry": "Hmm, nuo eivät täsmää mittauksiini. Yritetään myöhemmin uudelleen.",
+      "surveyDone": "{n} maamerkkiä löydetty! Ota nämä tarvikkeet.",
+      "surveyReward": "+{g} kultaa, +{n} juomaa"
+    },
+    "ren": {
+      "busy": "Kai! Puhu ensin Ilonan kanssa, hän tietää, mitä on tekeillä."
+    },
+    "kerttu": {
+      "busy": "Lumin oppipoika? Etsi ensin Ilona ja tule sitten takaisin."
+    },
+    "vera": {
+      "busy": "Ilmoittautukaa ensin Ilonalle, sotilaat."
+    },
+    "door": {
+      "lockedAreas": "Suuri kiviovi, johon on kaiverrettu kolme matriisia. Se ei liikahda. (Raivaa ensin Vektoritasangot ja Matriisikaivokset.)",
+      "lockedSkill": "Matriisit hehkuvat, mutta et osaa vielä lukea niitä. (Opi ensin Koetteleva isku tai Purku.)",
+      "intro1": "Kolme lukkoa, kolme matriisia. Ääni kaikuu: ”Vain kumottavissa oleva matriisi voi avata minut.”",
+      "intro2": "Matriisi voidaan kumota täsmälleen silloin, kun sen determinantti ei ole 0. Laske kaikki kolme.",
+      "lockTitle": "Lukko {n}",
+      "lockStory": "Laske tämän lukon determinantti.",
+      "which": "Minkä lukon matriisi voidaan kumota?",
+      "lockLabel": "Lukko {n}: {m}",
+      "wrong": "Lukko rouskuu ja pysyy kiinni. Sen determinantti on 0: se litistää tason, joten sitä ei voi kumota.",
+      "opened": "Lukko kääntyy, ja Determinanttiovi aukeaa. Portaat johtavat ylös torniin.",
+      "aino": "Determinantti ei ole nolla: mitään ei litistetä. Muistakaa se, Vartijan sinetit ovat seuraavana."
+    },
+    "battle": {
+      "plains1": "Virvatulia! Ne viuhuvat ympäriinsä ja välähtävät pois. Ja nuo limat kasvavat koko ajan, joten kaatakaa ne nopeasti.",
+      "mines1": "Kristalligolemeja. Panssari paksu kuin muuri, ja ne iskevät takaisin. Opitut hyökkäykset tuskin naarmuttavat niitä.",
+      "minesTitle": "Panssari ja heijastus",
+      "minesTip1": "Kristalligolemeilla on 4 panssaria: jokainen opittu isku menettää 4 vahinkoa, ja ne heijastavat 2 vahinkoa takaisin. Keskitetyt hyökkäykset läpäisevät panssarin eivätkä heijastu.",
+      "minesTip2": "Suojaa keskittyvää sankaria Otson Uhmauksella ja Suojalla. Leikkauslepakot parantavat itseään puremalla, joten kaatakaa ne ajoissa.",
+      "warden1": "KULJETTEKO SUORIA LINJOJA VÄÄRISTETYSSÄ MAASSANI?",
+      "warden2": "JOKAINEN SUUNTA TAIPUU MINULLE… PAITSI NE, JOITA VAIN VENYTÄN.",
+      "wardenAino": "Sinetti on matriisi! Löydä sen ominaisarvo, niin se murtuu.",
+      "sealRule": "Sinetöitynä Ominaisvartija ei ota vahinkoa. Murra sinetti tehdäksesi siitä haavoittuvan (ja se menettää vuoron). 70 ja 35 HP:n kohdalla muodostuu uusi sinetti. Sillä on myös 3 panssaria, joten keskitä isot hyökkäyksesi.",
+      "tipProbe": "Kai, Koetteleva isku: arvaa λ, laske det(A − λI). Vektorisinettiin arvaa v ja laske Av.",
+      "tipUnbind": "Aino, Purku: ensin jälki ja determinantti, sitten λ. Vektorisinettiin: A − λI, sitten v.",
+      "tipPush": "Sen Venytys-hyökkäys työntää sankareita pois. Pidä Otso edessä."
+    },
+    "tutorial": {
+      "l1": "Nyt sankareita on neljä: Kai, Aino, Sana ja Otso. Jokaisella on opittu perushyökkäys.",
+      "l2": "Automaatti (Q) pelaa sankarin vuoron opituilla taidoilla. Helpot taistelut sujuvat näin nopeasti.",
+      "l3": "✦ Keskitys (F): valitse taito, kytke keskitys päälle ja valitse kohde. Se latautuu nyt ja laukeaa seuraavan vuorosi alussa tehtävän jälkeen. Oikein = ×2,5 ja läpäisee panssarin.",
+      "l4": "Välivaiheet lasketaan: vaihetehtävissä jokainen oikea vaihe lisää voimaa, vaikka lopullinen vastaus lipsahtaisi.",
+      "l5": "Avaa muistivihko missä tahansa tehtävässä kirjoittaaksesi välivaiheita tai katsoaksesi kaavoja."
+    },
+    "win": {
+      "plains": "Virvatulet hiipuvat ja limat lakkaavat kasvamasta. Tasankojen tiet ovat taas suoria.",
+      "mines": "Kristallit halkeavat ja lepakot hajaantuvat. Raunioista löydät Keskitysteetä.",
+      "warden": "Viimeinen sinetti murtuu. Ominaisvartijan matriisista tulee yksikkömatriisi, ja maa napsahtaa takaisin suoriin linjoihin."
+    },
+    "ending": {
+      "title": "Ominaislaakso on taas suora!",
+      "p1": "Ominaisvartija polvistuu, sen matriisi tyyntyy. Tiet kulkevat suoraan, ja Ilonan kartta vihdoin vastaa maata.",
+      "p2": "Opit, että matriisi siirtää avaruutta, determinantti mittaa pinta-alaa ja ominaisvektorit ovat suuntia, joita vain venytetään.",
+      "p3": "Seuraava askel uteliaille: diagonalisointi, Markovin ketjut ja PageRank. Ne kaikki käyttävät samaa ideaa."
+    }
   }
 }

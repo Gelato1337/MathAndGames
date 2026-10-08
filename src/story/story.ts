@@ -1,4 +1,5 @@
-import { SEEDS_PER_BAG, TRAINER_SKILLS, type TrainerId } from '../data';
+import type { CampaignCtx } from '../campaign';
+import { SEEDS_PER_BAG, TRAINER_NPC, TRAINER_SKILLS, type TrainerId } from '../data';
 import { t } from '../i18n';
 import { attunement, game } from '../state';
 import { choose, say, sayAll, type Choice } from '../ui/dialog';
@@ -10,10 +11,7 @@ import { openShop } from '../ui/shop';
 import type { NpcDef } from '../world/map';
 import { practice, runTrial } from './trials';
 
-export interface StoryCtx {
-  refresh: () => void;
-  openGate: () => void;
-}
+export type StoryCtx = CampaignCtx;
 
 export function hasSealBreaker(): boolean {
   return game.learned.has('probe') || game.learned.has('unbind');
@@ -67,11 +65,13 @@ async function elder(): Promise<void> {
   }
 }
 
-async function trainer(id: TrainerId, ctx: StoryCtx): Promise<void> {
+/** Talk to a trainer: take the next trial, practise faded skills, or chat. Shared by all campaigns. */
+export async function trainer(id: TrainerId, ctx: StoryCtx): Promise<void> {
+  const who = TRAINER_NPC[id];
   const seenKey = `${id}Seen`;
   const seen = (game.flags as unknown as Record<string, boolean>)[seenKey];
   if (!seen) {
-    await sayAll(id, [`${id}.intro1`, `${id}.intro2`]);
+    await sayAll(who, [`${id}.intro1`, `${id}.intro2`]);
     (game.flags as unknown as Record<string, boolean>)[seenKey] = true;
   }
   for (;;) {
@@ -82,17 +82,17 @@ async function trainer(id: TrainerId, ctx: StoryCtx): Promise<void> {
     if (faded.length) options.push({ id: 'practice', label: t('trainer.practice', { n: faded.length }) });
     options.push({ id: 'about', label: t('trainer.about') });
     options.push({ id: 'leave', label: t('common.leave') });
-    const c = await choose(id, next ? t(`${id}.menu`) : t(`${id}.menuDone`), options);
+    const c = await choose(who, next ? t(`${id}.menu`) : t(`${id}.menuDone`), options);
     if (c === 'leave') return;
-    if (c === 'about') await sayAll(id, [`${id}.about1`, `${id}.about2`]);
+    if (c === 'about') await sayAll(who, [`${id}.about1`, `${id}.about2`]);
     if (c === 'train' && next) {
       await runTrial(next);
       ctx.refresh();
-      if (next === 'probe' || next === 'unbind') await say(id, t(`${id}.sealHint`));
+      if (['probe', 'unbind', 'eprobe', 'eunbind'].includes(next)) await say(who, t(`${id}.sealHint`));
     }
     if (c === 'practice') {
       const n = await practice(faded);
-      await say(id, t('trainer.practiced', { n, total: faded.length }));
+      await say(who, t('trainer.practiced', { n, total: faded.length }));
       ctx.refresh();
     }
   }
@@ -189,7 +189,7 @@ export async function talk(npc: NpcDef, ctx: StoryCtx): Promise<void> {
       break;
     case 'ren':
     case 'lumi':
-      await trainer(npc.id, ctx);
+      await trainer(npc.id as TrainerId, ctx);
       break;
     case 'pekka':
       await pekka(ctx);
@@ -209,16 +209,16 @@ export async function examineGate(ctx: StoryCtx): Promise<void> {
   await say(null, t('gate.intro'));
   await runePuzzle();
   game.flags.gateOpen = true;
-  ctx.openGate();
+  ctx.world().openGate();
   await say(null, t('gate.opened'));
   await say('aino', t('gate.foreshadow'));
   ctx.refresh();
 }
 
-export async function beforeBattle(id: 'forest' | 'ruins'): Promise<void> {
+export async function beforeBattle(id: string): Promise<void> {
   if (id === 'forest') {
     await say('kai', t('battle.forest1'));
-    await messageBox(t('tutorial.title'), [t('tutorial.l1'), t('tutorial.l2'), t('tutorial.l3'), t('tutorial.l4'), t('tutorial.l5'), t('tutorial.l6')]);
+    await messageBox(t('tutorial.title'), [t('tutorial.l1'), t('tutorial.l2'), t('tutorial.l3'), t('tutorial.l4'), t('tutorial.l5'), t('tutorial.l6'), t('tutorial.l7')]);
   } else {
     await say('golem', t('battle.golem1'));
     await say('golem', t('battle.golem2'));

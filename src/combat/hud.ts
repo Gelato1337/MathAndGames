@@ -1,5 +1,5 @@
 import { spriteUrl } from '../art/sprites';
-import { SKILLS, type ItemId, type SkillId } from '../data';
+import { SKILLS, TRAINER_NPC, type ItemId, type SkillId } from '../data';
 import { t } from '../i18n';
 import { attunement, game } from '../state';
 import { h, hudRoot, img } from '../ui/dom';
@@ -14,9 +14,9 @@ export function skillTooltip(id: SkillId): HTMLElement {
     h('p.muted', {
       text: [t('skills.ap', { n: def.ap }), t('skills.range', { n: def.range }), def.cooldown ? t('skills.cooldown', { n: def.cooldown }) : null].filter(Boolean).join(' · '),
     }),
-    def.overcharge ? h('p.accent', { text: t(`skills.${id}.oc`) }) : null,
+    def.focus ? h('p.accent', { text: t('skills.focusLine', { topic: t(`notebook.f.${def.focus.topic}`) }) }) : null,
     learned && !def.basic ? h('p', { text: t('skills.attunement', { n: Math.round(attunement(id) * 100) }) }) : null,
-    !learned ? h('p.bad', { text: t('skills.notLearned', { who: t(`chars.${def.trainer}`) }) }) : null,
+    !learned && def.trainer ? h('p.bad', { text: t('skills.notLearned', { who: t(`chars.${TRAINER_NPC[def.trainer]}`) }) }) : null,
   ];
   return h('div', {}, lines);
 }
@@ -73,6 +73,8 @@ export class CombatHud {
         h('div.bar', {}, [h('div', { style: `width:${(100 * u.hp) / u.maxHp}%` })]),
         pips,
         u.moveLeft > 0 ? h('div.muted', { text: t('combat.moveLeft', { n: u.moveLeft }), style: 'font-size:0.8em' }) : null,
+        u.shield > 0 ? h('div', { text: t('combat.shieldStatus', { n: u.shield }), style: 'font-size:0.8em;color:#73a8ff' }) : null,
+        u.focus ? h('div.accent', { text: t('combat.focusStatus', { skill: t(`skills.${u.focus.skill}.name`) }), style: 'font-size:0.8em' }) : null,
       ]);
 
       const skills = h('div.skills');
@@ -101,12 +103,18 @@ export class CombatHud {
         skills.append(btn);
       });
 
-      const sel = c.selected ? SKILLS[c.selected] : null;
-      const ocBtn = h(`button.oc-toggle${c.overcharge ? '.on' : ''}`, {
-        disabled: !myTurn || !sel?.overcharge,
-        onclick: () => c.toggleOvercharge(),
-        text: `⚡ ${t('skills.overcharge')} (O)`,
-        onmouseenter: () => this.showTip(h('p', { text: t('skills.overchargeDesc') })),
+      const ocBtn = h(`button.oc-toggle${c.focusMode ? '.on' : ''}`, {
+        disabled: !myTurn || !c.selected || !c.canFocus(u, c.selected),
+        onclick: () => c.toggleFocus(),
+        text: `✦ ${t('skills.focus')} (F)`,
+        onmouseenter: () => this.showTip(h('p', { text: t('skills.focusDesc') })),
+        onmouseleave: () => this.hideTip(),
+      });
+      const autoBtn = h('button', {
+        disabled: !myTurn,
+        onclick: () => void c.autoTurn(),
+        text: `⟳ ${t('combat.auto')} (Q)`,
+        onmouseenter: () => this.showTip(h('p', { text: t('combat.autoDesc') })),
         onmouseleave: () => this.hideTip(),
       });
       const items = (['tonic', 'tea'] as ItemId[]).map((id) =>
@@ -119,7 +127,7 @@ export class CombatHud {
         }),
       );
       const endBtn = h('button.primary', { disabled: !myTurn, onclick: () => c.endTurn(), text: t('combat.endTurn') });
-      const actions = h('div.actions', {}, [ocBtn, endBtn, ...items]);
+      const actions = h('div.actions', {}, [ocBtn, endBtn, autoBtn, h('div.row', { style: 'gap:0.3em' }, items)]);
       const hint = c.selected ? t('combat.hintTarget') : t('combat.hintMove');
       children.push(
         h('div.combat-bar', {}, [unitPanel, h('div.col', {}, [h('div.muted', { text: hint, style: 'font-size:0.8em' }), skills]), actions]),

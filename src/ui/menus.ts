@@ -1,21 +1,23 @@
 import { spriteUrl } from '../art/sprites';
 import { skillTooltip } from '../combat/hud';
-import { HERO_SKILLS, HEROES, ITEMS, type HeroId, type ItemId } from '../data';
+import { CAMPAIGN_ORDER, campaign } from '../campaigns/registry';
+import { HEROES, ITEMS, PARTY_SKILLS, type CampaignId, type ItemId } from '../data';
 import { getLang, LANGS, setLang, t, type Lang } from '../i18n';
 import { summary } from '../math/mastery';
 import { game, setTimers, settings, type TimerMode } from '../state';
-import { objective, sideObjective } from '../story/story';
 import { checkTutor, tutorStatus } from '../tutor/client';
-import { FIELD_SEEDS } from './farm';
+import { notebookPanel } from './notebook';
 import { h, hudRoot, img, openModal, uiRoot } from './dom';
 
 // ---------- exploration HUD ----------
 
-export function renderExploreHud(prompt: string | null, onButton: (b: 'quests' | 'skills' | 'bag' | 'menu') => void): void {
+type HudButton = 'quests' | 'skills' | 'bag' | 'notebook' | 'menu';
+
+export function renderExploreHud(prompt: string | null, onButton: (b: HudButton) => void): void {
   const party = h(
     'div.hud-party',
     {},
-    (['kai', 'aino'] as HeroId[]).map((id) =>
+    campaign().party.map((id) =>
       h('div.hud-member', {}, [
         img(spriteUrl(id, 2)),
         h('div.col', { style: 'gap:0.1em' }, [
@@ -26,10 +28,10 @@ export function renderExploreHud(prompt: string | null, onButton: (b: 'quests' |
       ]),
     ),
   );
-  const btn = (b: 'quests' | 'skills' | 'bag' | 'menu', key: string) => h('button', { text: `${t(`hud.${b}`)} (${key})`, onclick: () => onButton(b) });
-  const right = h('div.hud-top-right', {}, [h('div.hud-gold', { text: t('common.gold', { n: game.gold }) }), btn('quests', 'Q'), btn('skills', 'K'), btn('bag', 'I'), btn('menu', 'Esc')]);
-  const side = sideObjective();
-  const obj = h('div.hud-objective', {}, [h('div.accent', { text: t('hud.objective') }), h('div', { text: objective() }), side ? h('div.muted', { text: `${t('hud.side')}: ${side}`, style: 'margin-top:0.3em' }) : null]);
+  const btn = (b: HudButton, key: string) => h('button', { text: `${t(`hud.${b}`)} (${key})`, onclick: () => onButton(b) });
+  const right = h('div.hud-top-right', {}, [h('div.hud-gold', { text: t('common.gold', { n: game.gold }) }), btn('quests', 'Q'), btn('skills', 'K'), btn('notebook', 'N'), btn('bag', 'I'), btn('menu', 'Esc')]);
+  const side = campaign().sideObjective();
+  const obj = h('div.hud-objective', {}, [h('div.accent', { text: t('hud.objective') }), h('div', { text: campaign().objective() }), side ? h('div.muted', { text: `${t('hud.side')}: ${side}`, style: 'margin-top:0.3em' }) : null]);
   hudRoot().replaceChildren(party, right, obj, prompt ? h('div.hud-prompt', { text: prompt }) : h('span'));
 }
 
@@ -62,13 +64,13 @@ function screen(title: string, body: HTMLElement[], extraButtons: HTMLElement[] 
 }
 
 export function skillsScreen(): Promise<void> {
-  const cols = (['kai', 'aino'] as HeroId[]).map((hero) =>
+  const cols = campaign().party.map((hero) =>
     h('div.col', { style: 'flex:1' }, [
       h('div.row', {}, [img(spriteUrl(hero, 3)), h('div', {}, [h('h3', { text: `${t(`chars.${hero}`)} — ${t(`classes.${hero}`)}`, style: 'margin:0' }), h('div.muted', { text: t(`classes.${hero}Desc`), style: 'font-size:0.85em' })])]),
-      h('div.list', {}, HERO_SKILLS[hero].map((id) => h(`div.item${game.learned.has(id) ? '' : '.muted'}`, {}, [skillTooltip(id)]))),
+      h('div.list', {}, (PARTY_SKILLS[game.campaign][hero] ?? []).map((id) => h(`div.item${game.learned.has(id) ? '' : '.muted'}`, {}, [skillTooltip(id)]))),
     ]),
   );
-  return screen(t('menu.skills'), [h('p.muted', { text: t('menu.skillsHelp') }), h('div.row', { style: 'align-items:flex-start' }, cols)]);
+  return screen(t('menu.skills'), [h('p.muted', { text: t('menu.skillsHelp') }), h('div.skill-cols', {}, cols)]);
 }
 
 export function bagScreen(): Promise<void> {
@@ -79,28 +81,11 @@ export function bagScreen(): Promise<void> {
 }
 
 export function questsScreen(): Promise<void> {
-  const f = game.flags;
-  const step = (done: boolean, text: string) => h(`div${done ? '.good' : ''}`, { text: `${done ? '✔' : '○'} ${text}` });
-  const main = h('div.col', {}, [
-    h('h3', { text: t('quests.main.title') }),
-    h('p.muted', { text: t('quests.main.desc') }),
-    step(f.metElder, t('quests.main.s1')),
-    step(game.learned.has('probe') || game.learned.has('unbind'), t('quests.main.s2')),
-    step(f.gateOpen, t('quests.main.s3')),
-    step(f.golemDone, t('quests.main.s4')),
-  ]);
-  const farm =
-    f.farmStage > 0
-      ? h('div.col', {}, [
-          h('h3', { text: t('quests.farm.title') }),
-          h('p.muted', { text: t('quests.farm.desc') }),
-          step(f.farmStage >= 2, t('quests.farm.s1')),
-          step(f.farmStage >= 3, t('quests.farm.s2')),
-          step(f.farmStage >= 4 || game.inv.seeds * 10 >= FIELD_SEEDS, t('quests.farm.s3')),
-          step(f.farmStage >= 4, t('quests.farm.s4')),
-        ])
-      : null;
-  return screen(t('menu.quests'), [main, farm ?? h('p.muted', { text: t('quests.none') })]);
+  return screen(t('menu.quests'), campaign().quests());
+}
+
+export function notebookScreen(): Promise<void> {
+  return screen(t('notebook.title'), [notebookPanel()]);
 }
 
 function langButtons(onChange?: () => void): HTMLElement {
@@ -160,7 +145,7 @@ export function settingsScreen(onChange: () => void): Promise<void> {
 }
 
 export function helpScreen(): Promise<void> {
-  const keys = ['move', 'talk', 'menu', 'combat1', 'combat2', 'combat3', 'combat4', 'combat5', 'learn1', 'learn2', 'learn3', 'tutor'];
+  const keys = ['move', 'talk', 'menu', 'combat1', 'combat2', 'combat3', 'combat4', 'combat5', 'combat6', 'learn1', 'learn2', 'learn3', 'notebook', 'tutor'];
   return screen(t('help.title'), keys.map((k) => h('p', { text: t(`help.${k}`) })));
 }
 
@@ -182,6 +167,7 @@ export function pauseMenu(onChange: () => void, onTitle: () => void): Promise<vo
       ['menu.quests', then(questsScreen)],
       ['menu.skills', then(skillsScreen)],
       ['menu.bag', then(bagScreen)],
+      ['notebook.title', then(notebookScreen)],
       ['menu.settings', then(() => settingsScreen(onChange))],
       ['menu.help', then(helpScreen)],
       [
@@ -206,35 +192,37 @@ export function pauseMenu(onChange: () => void, onTitle: () => void): Promise<vo
 
 // ---------- title & ending ----------
 
-export function titleScreen(onNew: (dev: boolean) => void): void {
+export function titleScreen(onNew: (id: CampaignId) => void): void {
   const el = h('div.title-screen');
   const render = () => {
-    el.replaceChildren(
-      h('div.sprites', {}, [img(spriteUrl('kai', 5)), img(spriteUrl('golem', 3)), img(spriteUrl('aino', 5))]),
-      h('h1', { text: t('meta.title') }),
-      h('div.subtitle', { text: t('meta.subtitle') }),
-      h('div.menu', {}, [
-        h('button.primary', {
-          text: t('title.newGame'),
-          onclick: () => {
-            el.remove();
-            onNew(false);
-          },
-        }),
-        h('button', { text: t('title.help'), onclick: () => void helpScreen() }),
-        langButtons(render),
+    const cards = CAMPAIGN_ORDER.map((id) =>
+      h('button.campaign-card', {
+        onclick: () => {
+          el.remove();
+          onNew(id);
+        },
+      }, [
+        h('div.camp-sprites', {}, (id === 'numerola' ? ['kai', 'golem', 'aino'] : ['sana', 'warden', 'otso']).map((sp) => img(spriteUrl(sp, sp === 'golem' || sp === 'warden' ? 2 : 4)))),
+        h('div.camp-name', { text: t(`campaigns.${id}.name`) }),
+        h('div.camp-tier', { text: t(`campaigns.${id}.tier`) }),
+        h('div.camp-desc', { text: t(`campaigns.${id}.desc`) }),
       ]),
-      h('p.muted', { text: t('title.tagline'), style: 'margin-top:1.5em' }),
     );
-    requestAnimationFrame(() => el.querySelector<HTMLElement>('button.primary')?.focus());
+    el.replaceChildren(
+      h('h1', { text: t('meta.title') }),
+      h('div.subtitle', { text: t('title.chooseCampaign') }),
+      h('div.campaigns', {}, cards),
+      h('div.row', { style: 'justify-content:center' }, [h('button', { text: t('title.help'), onclick: () => void helpScreen() }), langButtons(render)]),
+      h('p.muted', { text: t('title.tagline'), style: 'margin-top:1em' }),
+    );
+    requestAnimationFrame(() => el.querySelector<HTMLElement>('button.campaign-card')?.focus());
   };
   render();
   uiRoot().append(el);
 }
 
-export function introSlides(): Promise<void> {
+export function introSlides(slides: string[]): Promise<void> {
   return new Promise((resolve) => {
-    const slides = ['intro.p1', 'intro.p2', 'intro.p3'];
     let i = 0;
     const content = h('div.col', { style: 'max-width:36em' });
     const modal = openModal(content);
@@ -252,26 +240,26 @@ export function introSlides(): Promise<void> {
           }
         },
       });
-      content.replaceChildren(h('h2', { text: t('meta.title') }), h('p', { text: t(slides[i]), style: 'font-size:1.2em' }), h('div.row', {}, [h('span.muted', { text: `${i + 1}/${slides.length}` }), h('div.spacer'), btn]));
+      content.replaceChildren(h('h2', { text: t(`campaigns.${game.campaign}.name`) }), h('p', { text: t(slides[i]), style: 'font-size:1.2em' }), h('div.row', {}, [h('span.muted', { text: `${i + 1}/${slides.length}` }), h('div.spacer'), btn]));
       requestAnimationFrame(() => btn.focus());
     };
     render();
   });
 }
 
-export function endingScreen(onTitle: () => void): void {
+/** Ending: the campaign's own lines (first one is the title), then shared stats. */
+export function endingScreen(lines: string[], onTitle: () => void): void {
   const s = summary();
   const pct = s.attempts ? Math.round((100 * s.correct) / s.attempts) : 0;
-  const approaches = [...game.approaches].map((a) => t(`farm.approach.${a}`)).join(', ') || '—';
+  const total = Object.values(PARTY_SKILLS[game.campaign]).reduce((n, l) => n + (l?.length ?? 0), 0);
+  const [title, ...rest] = lines;
   const content = h('div.col.ending', { style: 'max-width:38em' }, [
-    h('h1', { text: t('ending.title') }),
-    h('p', { text: t('ending.p1') }),
-    h('p', { text: t('ending.p2') }),
+    h('h1', { text: title }),
+    ...rest.slice(0, 2).map((l) => h('p', { text: l })),
     h('div.stats.panel', {}, [
       h('p', { text: t('ending.solved', { n: s.correct, total: s.attempts, pct }) }),
-      h('p', { text: t('ending.skills', { n: game.learned.size }) }),
-      h('p', { text: t('ending.farm', { result: game.flags.farmResult ? t(`ending.farmResult.${game.flags.farmResult}`) : t('ending.farmResult.none') }) }),
-      h('p', { text: t('ending.approaches', { list: approaches }) }),
+      h('p', { text: t('ending.skills', { n: game.learned.size, total }) }),
+      ...rest.slice(2).map((l) => h('p', { text: l })),
     ]),
     h('p.muted', { text: t('ending.thanks') }),
   ]);
