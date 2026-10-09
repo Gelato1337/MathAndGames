@@ -641,6 +641,104 @@ SPRITES.wraith = recolor(SPRITES.wisp, { i: 'w', c: 's', w: 'c' });
 SPRITES.knight = recolor(SPRITES.otso, { m: 'c', s: 'w', b: 'i', y: 'b' });
 SPRITES.icicles = recolor(SPRITES.crystals, { i: 'w', c: 'i', b: 's' });
 
+// ---------- Chancewood ----------
+
+/** Double every pixel: a 16 × 16 sprite becomes a 32 × 32 boss. */
+function upscale(rows: string[]): string[] {
+  return rows.flatMap((r) => {
+    const wide = r.replace(/./g, '$&$&');
+    return [wide, wide];
+  });
+}
+
+// Onni the lucky gambler: green coat, yellow scarf
+SPRITES.onni = recolor(SPRITES.kai, { f: 'g', r: 'y', n: 'U' });
+// Tilda the statistician and Hannu the old dice master
+SPRITES.tilda = recolor(SPRITES.helmi, { y: 'u', o: 'U', g: 'b', w: 'i' });
+SPRITES.hannu = recolor(SPRITES.pekka, { r: 'p', w: 'y', u: 'm' });
+// Madame Fortuna: a fortune-teller in purple and gold, twice as big
+SPRITES.fortuna = upscale(recolor(SPRITES.lumi, { U: 'y', t: 'p' }));
+// a bandit: a ninja in brown and red
+SPRITES.bandit = recolor(SPRITES.kai, { f: 'U', r: 'r', n: 'k' });
+// a joker: a dark wisp with a red grin
+SPRITES.joker = recolor(SPRITES.wisp, { i: 'r', c: 'p', w: 'y' });
+
+SPRITES.imp = [
+  '................',
+  '................',
+  '................',
+  '...k........k...',
+  '...kk......kk...',
+  '...krk....krk...',
+  '....krkkkkrk....',
+  '....krrrrrrk....',
+  '...krykrrkyrk...',
+  '...krrrrrrrrk...',
+  '....krwwwwrk....',
+  '.....krrrrk.....',
+  '....kr.rr.rk....',
+  '...kr..kk..rk...',
+  '....k......k....',
+  '................',
+];
+
+SPRITES.cube = [
+  '................',
+  '................',
+  '................',
+  '................',
+  '....kkkkkkkkk...',
+  '...kwwwwwwwwsk..',
+  '..kwwkwwwwkwssk.',
+  '..kwwwwwwwwwssk.',
+  '..kwwwwkwwwwssk.',
+  '..kwwwwwwwwwssk.',
+  '..kwwkwwwwkwssk.',
+  '..kwwwwwwwwwssk.',
+  '..ksssssssssssk.',
+  '...kkkkkkkkkkk..',
+  '................',
+  '................',
+];
+
+SPRITES.mimic = [
+  '................',
+  '................',
+  '................',
+  '................',
+  '...kkkkkkkkkk...',
+  '..kuuuuuuuuuuk..',
+  '..kuUuuuuuuUuk..',
+  '..kyyyyyyyyyyk..',
+  '..kwkwkwkwkwkk..',
+  '..krrrrrrrrrrk..',
+  '..kkwkwkwkwkwk..',
+  '..kyyyykkyyyyk..',
+  '..kuuuukykuuuk..',
+  '..kuUuuuuuuUuk..',
+  '...kkkkkkkkkk...',
+  '................',
+];
+
+SPRITES.mushroom = [
+  '................',
+  '................',
+  '................',
+  '................',
+  '.....kkkkkk.....',
+  '...kkrrwrrrkk...',
+  '..krrwwrrrwrrk..',
+  '..krrrrrrwwrrk..',
+  '.krwrrrrrrrrrrk.',
+  '.kkkkkkkkkkkkkk.',
+  '......kwwk......',
+  '......kwwk......',
+  '......kwwk......',
+  '.....kkkkkk.....',
+  '................',
+  '................',
+];
+
 // a scalar slime keeps growing: warm colours
 SPRITES.scalar = recolor(SPRITES.slime, { l: 'y', g: 'o', G: 'r' });
 // the Eigenwarden: a royal golem of purple stone with golden eyes

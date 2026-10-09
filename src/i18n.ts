@@ -66,6 +66,8 @@ export function t(key: string, params?: Params): string {
   return raw.replace(/\{(\w+)\}/g, (m, name: string) => {
     const v = params[name];
     if (v === undefined) return m;
+    // '@some.key' is itself a translated phrase (e.g. an event in a probability problem)
+    if (typeof v === 'string' && v.startsWith('@')) return t(v.slice(1));
     return typeof v === 'number' ? fmtNum(v) : v;
   });
 }

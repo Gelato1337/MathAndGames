@@ -42,6 +42,16 @@ function input(label: string): HTMLInputElement {
   return el;
 }
 
+/** A number typed in a step box; fractions and percentages work too ("3/8", "37.5 %"). */
+function parseCell(text: string): number | null {
+  const pct = /^\s*(.+?)\s*%\s*$/.exec(text);
+  if (pct) {
+    const v = parseAnswer(pct[1]);
+    return v === null ? null : v / 100;
+  }
+  return parseAnswer(text);
+}
+
 function field(want: Ans, label: string): Field {
   const marker = h('span.step-mark');
   const mark = (ok: boolean | null) => {
@@ -49,7 +59,7 @@ function field(want: Ans, label: string): Field {
     marker.className = `step-mark ${ok === null ? '' : ok ? 'good' : 'bad'}`;
   };
   const nums = (ins: HTMLInputElement[]) => {
-    const vals = ins.map((i) => parseAnswer(i.value));
+    const vals = ins.map((i) => parseCell(i.value));
     return vals.some((v) => v === null) ? null : (vals as number[]);
   };
   if (want.kind === 'num') {
@@ -79,7 +89,7 @@ function field(want: Ans, label: string): Field {
 }
 
 export function ansText(a: Ans): string {
-  if (a.kind === 'num') return fmtNum(a.v);
+  if (a.kind === 'num') return a.frac && a.frac[1] !== 1 ? `${a.frac[0]}/${a.frac[1]} = ${fmtNum(Math.round(a.v * 1000) / 1000)}` : fmtNum(a.v);
   if (a.kind === 'mat') return `[${a.v.map((r) => r.map(fmtNum).join(' ')).join(' ; ')}]`;
   if (a.kind === 'set') return a.v.map(fmtNum).join(', ');
   return `(${a.v.map(fmtNum).join(', ')})`;
@@ -130,7 +140,7 @@ export function askSteps(p: StepProblem, opts: StepsOpts = {}): Promise<StepsRes
     const timerBar = h('div');
     const timer = opts.seconds ? h('div.timer', {}, [timerBar]) : null;
     const side = h('div.steps-side');
-    if (p.plot) side.append(plotCanvas(p.plot), h('div.plot-caption.muted', { text: t('steps.plotCaption') }));
+    if (p.plot) side.append(plotCanvas(p.plot), h('div.plot-caption.muted', { text: p.plot.caption ? stepText(p.plot.caption) : t('steps.plotCaption') }));
 
     const main = h('div.steps-main', {}, [card, timer, work, buttons, feedback, explain]);
     const body = h('div.steps-body', {}, [main, side]);

@@ -19,7 +19,7 @@ export interface Land {
 export const LANDS: Land[] = [
   { id: 'numerola', campaign: 'numerola', x: 40, y: 76, after: [], sprites: ['kai', 'golem', 'aino'] },
   { id: 'eigenvale', campaign: 'eigenvale', x: 100, y: 50, after: ['numerola'], sprites: ['sana', 'warden', 'otso'] },
-  { id: 'chancewood', campaign: null, x: 38, y: 28, after: ['numerola'], sprites: [] },
+  { id: 'chancewood', campaign: 'chancewood', x: 38, y: 28, after: ['numerola'], sprites: ['onni', 'fortuna', 'tilda'] },
   { id: 'fluxreach', campaign: null, x: 156, y: 28, after: ['eigenvale'], sprites: [] },
   { id: 'bitforge', campaign: null, x: 110, y: 94, after: ['eigenvale'], sprites: [] },
   { id: 'forcehold', campaign: null, x: 164, y: 82, after: ['fluxreach'], sprites: [] },
@@ -49,7 +49,7 @@ function load(): Set<CampaignId> {
     const raw = localStorage.getItem(KEY);
     if (!raw) return new Set();
     const s = JSON.parse(raw) as Saved;
-    return new Set((s.cleared ?? []).filter((c) => c === 'numerola' || c === 'eigenvale'));
+    return new Set((s.cleared ?? []).filter((c) => c === 'numerola' || c === 'eigenvale' || c === 'chancewood'));
   } catch {
     return new Set();
   }

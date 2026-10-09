@@ -124,7 +124,8 @@ The **Notebook** (`N`, and inside every untimed puzzle) has a free-text page for
 - Cooldowns, area effects with friendly fire (Fireball), surfaces (fire that burns for 2 rounds).
 - **Boss seals:** a sealed boss takes no damage. Breaking a seal staggers it for a turn. A new, harder seal forms at HP thresholds (golem 50/25, Eigenwarden 70/35).
 - **Armor** subtracts from every hit except focused ones. **Shields** (Ward) absorb damage first. **Taunt** forces enemies to attack Otso; **Mark** makes a target take +50%.
-- **Enemy abilities:** blink (wisps teleport), grow (scalar slimes gain HP each round), reflect (crystal golems), drain (bats heal), push (the Eigenwarden shoves heroes back), pull (frogs drag heroes in), split (splitter slimes burst into droplets), mend (cave shades heal allies), harden (ice sentries gain armor each turn, up to 4), chill (frost wraiths take 2 AP from their target's next turn).
+- **Chance as a mechanic (Chancewood):** the enemies make the math visible. Imps dodge learned hits on a coin flip, so about half of them miss; dice cubes hit for the sum of two dice, so you feel that 7 is common and 12 is rare; lucky 6s double damage one time in six. Focus never misses, which is the reason to do the math.
+- **Enemy abilities:** dodge (coin imps), lucky (a 6 doubles the hit), shuffle (the joker swaps two heroes), dice attacks (2d6), blink (wisps teleport), grow (scalar slimes gain HP each round), reflect (crystal golems), drain (bats heal), push (the Eigenwarden shoves heroes back), pull (frogs drag heroes in), split (splitter slimes burst into droplets), mend (cave shades heal allies), harden (ice sentries gain armor each turn, up to 4), chill (frost wraiths take 2 AP from their target's next turn).
 
 ## Tuning knobs
 

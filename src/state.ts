@@ -29,6 +29,18 @@ export interface EvFlags {
   mapStage: number;
 }
 
+/** Chancewood (probability and statistics campaign) progress. */
+export interface CwFlags {
+  metTilda: boolean;
+  gladeDone: boolean;
+  hollowDone: boolean;
+  mazeDone: boolean;
+  gateOpen: boolean;
+  fortunaDone: boolean;
+  /** Tilda's mushroom log: 0 not started, 1 accepted, 2 done */
+  logStage: number;
+}
+
 export interface GameState {
   campaign: CampaignId;
   gold: number;
@@ -38,6 +50,7 @@ export interface GameState {
   attune: Partial<Record<SkillId, number>>;
   flags: Flags;
   ev: EvFlags;
+  cw: CwFlags;
   approaches: Set<string>;
   /** The player's own notebook, per campaign (free text). */
   notes: string;
@@ -52,7 +65,7 @@ function fresh(campaign: CampaignId = 'numerola'): GameState {
   return {
     campaign,
     gold: 40,
-    inv: { tonic: campaign === 'eigenvale' ? 3 : 2, tea: campaign === 'eigenvale' ? 1 : 0, seeds: 0 },
+    inv: { tonic: campaign === 'numerola' ? 2 : 3, tea: campaign === 'numerola' ? 0 : 1, seeds: 0 },
     learned: new Set<SkillId>(basics(campaign)),
     attune: {},
     flags: {
@@ -67,6 +80,7 @@ function fresh(campaign: CampaignId = 'numerola'): GameState {
       haggled: false,
     },
     ev: { metIlona: false, plainsDone: false, minesDone: false, glacierDone: false, doorOpen: false, wardenDone: false, mapStage: 0 },
+    cw: { metTilda: false, gladeDone: false, hollowDone: false, mazeDone: false, gateOpen: false, fortunaDone: false, logStage: 0 },
     approaches: new Set(),
     notes: '',
   };

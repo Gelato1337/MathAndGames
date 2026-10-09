@@ -30,6 +30,14 @@ const FORMULAS: Partial<Record<Topic, Seg[]>> = {
   det2: ['det', T('A', 0), '=', T('ad', 1), '−', T('bc', 2)],
   eigen_val: [T('λ', 3), '² −', T('tr A', 4), T('λ', 3), '+', T('det A', 5), '= 0'],
   eigen_vec: ['(', T('A', 1), '−', T('λ', 3), T('I', 4), ')', T('v', 2), '= 0'],
+  stat_mean: [T('@pr.w.mean', 3), '=', T('@pr.w.sum', 1), '÷', T('@pr.w.count', 2)],
+  stat_median: [T('@pr.w.median', 3), '=', T('@pr.w.middleValue', 1)],
+  stat_range: [T('@pr.w.range', 3), '=', T('@pr.w.largest', 1), '−', T('@pr.w.smallest', 2)],
+  prob_simple: [T('P', 3), '=', T('@pr.w.favourable', 1), '÷', T('@pr.w.total', 2)],
+  prob_not: [T('P(not A)', 4), '= 1 −', T('P(A)', 3)],
+  prob_two: [T('P(A and B)', 3), '=', T('P(A)', 1), '×', T('P(B)', 2)],
+  prob_dice: [T('P', 3), '=', T('@pr.w.ways', 1), '÷', T('36', 2)],
+  expect: [T('E', 3), '=', T('@pr.w.pWin', 1), '×', T('@pr.w.prize', 2)],
 };
 
 /** Topics the player has met in this campaign (through learned skills). */
@@ -41,8 +49,9 @@ export function knownTopics(): Topic[] {
       const d = SKILLS[id];
       if (d.trial?.kind === 'problems') out.add(d.trial.topic);
       if (d.focus) out.add(d.focus.topic);
-      if (d.trial?.kind === 'unbind') out.add(game.campaign === 'eigenvale' ? 'eigen_val' : 'eq2');
-      if (d.trial?.kind === 'probe') out.add(game.campaign === 'eigenvale' ? 'det2' : 'order_ops');
+      const c = game.campaign;
+      if (d.trial?.kind === 'unbind') for (const tp of c === 'eigenvale' ? ['eigen_val'] : c === 'chancewood' ? ['prob_simple', 'prob_not', 'prob_two'] : ['eq2']) out.add(tp as Topic);
+      if (d.trial?.kind === 'probe') out.add(c === 'eigenvale' ? 'det2' : c === 'chancewood' ? 'prob_simple' : 'order_ops');
     }
   }
   if (game.campaign === 'eigenvale' && out.has('eigen_val')) out.add('eigen_vec');

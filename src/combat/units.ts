@@ -1,4 +1,5 @@
 import { HEROES, type HeroId, type SkillId } from '../data';
+import { FORTUNA_SEALS } from '../math/chance';
 import { KNIGHT_SEALS, WARDEN_SEALS, type AnySeal } from '../math/eigenseal';
 import { GOLEM_SEALS } from '../math/seal';
 
@@ -17,7 +18,13 @@ export type EnemyKind =
   | 'sentry'
   | 'wraith'
   | 'knight'
-  | 'warden';
+  | 'warden'
+  | 'imp'
+  | 'cube'
+  | 'mimic'
+  | 'bandit'
+  | 'joker'
+  | 'fortuna';
 export type UnitKind = HeroId | EnemyKind;
 
 /**
@@ -32,8 +39,11 @@ export type UnitKind = HeroId | EnemyKind;
  * - mend: heals a hurt ally instead of attacking
  * - harden: gains 1 armor every turn (up to 6)
  * - chill: its hits slow the target (2 less AP next turn)
+ * - dodge: a coin flip dodges every learned (unfocused) hit: heads, it misses
+ * - lucky: rolls a die with every hit; a 6 doubles the damage
+ * - shuffle: swaps two heroes' places after its turn
  */
-export type Ability = 'blink' | 'grow' | 'reflect' | 'drain' | 'push' | 'pull' | 'split' | 'mend' | 'harden' | 'chill';
+export type Ability = 'blink' | 'grow' | 'reflect' | 'drain' | 'push' | 'pull' | 'split' | 'mend' | 'harden' | 'chill' | 'dodge' | 'lucky' | 'shuffle';
 
 export interface Attack {
   id: string;
@@ -44,6 +54,8 @@ export interface Attack {
   minRange: number;
   /** hits every hero within this radius of the target */
   aoe?: number;
+  /** damage is the sum of this many six-sided dice (min/max are then just for show) */
+  dice?: number;
 }
 
 export interface EnemyDef {
@@ -94,6 +106,27 @@ export const ENEMIES: Record<EnemyKind, EnemyDef> = {
     attacks: [{ id: 'lance', ap: 3, min: 6, max: 8, range: 2, minRange: 1 }],
     seals: KNIGHT_SEALS,
     thresholds: [0],
+  },
+  // Chancewood
+  imp: { hp: 13, init: 13, speed: 3, maxAp: 4, regen: 3, armor: 0, size: 1, abilities: ['dodge'], attacks: [{ id: 'poke', ap: 2, min: 3, max: 5, range: 1, minRange: 1 }] },
+  cube: { hp: 20, init: 6, speed: 2, maxAp: 3, regen: 3, armor: 1, size: 1, abilities: [], attacks: [{ id: 'roll', ap: 2, min: 2, max: 12, range: 1, minRange: 1, dice: 2 }] },
+  mimic: { hp: 26, init: 4, speed: 1, maxAp: 4, regen: 3, armor: 3, size: 1, abilities: ['lucky'], attacks: [{ id: 'chomp', ap: 2, min: 5, max: 7, range: 1, minRange: 1 }] },
+  bandit: {
+    hp: 18, init: 12, speed: 3, maxAp: 4, regen: 3, armor: 1, size: 1, abilities: ['lucky'],
+    attacks: [
+      { id: 'stab', ap: 2, min: 4, max: 6, range: 1, minRange: 1 },
+      { id: 'knife', ap: 3, min: 3, max: 5, range: 4, minRange: 2 },
+    ],
+  },
+  joker: { hp: 16, init: 10, speed: 3, maxAp: 4, regen: 3, armor: 0, size: 1, abilities: ['shuffle'], attacks: [{ id: 'card', ap: 2, min: 3, max: 5, range: 4, minRange: 1 }] },
+  fortuna: {
+    hp: 100, init: 9, speed: 2, maxAp: 5, regen: 3, armor: 2, size: 2, abilities: ['lucky'],
+    attacks: [
+      { id: 'fate', ap: 3, min: 6, max: 9, range: 4, minRange: 1 },
+      { id: 'wheel', ap: 3, min: 5, max: 7, range: 1, minRange: 1, aoe: 1 },
+    ],
+    seals: FORTUNA_SEALS,
+    thresholds: [70, 35, 0],
   },
   warden: {
     hp: 100, init: 9, speed: 2, maxAp: 5, regen: 4, armor: 3, size: 2, abilities: ['push'],

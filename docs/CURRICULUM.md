@@ -137,6 +137,7 @@ Examples: [MIT 8.04 Quantum Physics I](https://ocw.mit.edu/courses/8-04-quantum-
 - **Theme:** a forest of forking paths, dice-cursed spirits, oracle bargains.
 - **Topics in order:** data displays, mean, median and mode → spread and standard deviation → classical vs. empirical probability → counting (permutations and combinations) → tree and Venn diagrams, conditional probability → discrete distributions, expected value, binomial → normal distribution → correlation and linear regression → sampling, confidence intervals, hypothesis tests → Bayes' rule and Bayesian inference.
 - **Prerequisites:** Tier 2 fractions and percentages for the early acts; Tier 4 functions for the later acts. Curriculum anchors: FI-POPS 3–6 S5 and 7–9 S6; FI-LOPS MAA8 and MAA12; UK-NC KS4 Probability.
+- **Built (prototype):** the first act only — mean, median, range; classical probability as a fraction; the complement; two independent events; two-dice sums; expected value of a simple game (FI-POPS 3–6 S5 / 7–9 S6 level). The later topics above are left for future acts.
 - **Sources:** [MIT 18.05](https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/), [OpenStax *Introductory Statistics 2e*](https://openstax.org/details/books/introductory-statistics-2e), [Seeing Theory (Brown University)](https://seeing-theory.brown.edu/), a visual introduction.
 
 ### 3.3 Computer science and discrete math: *Bitforge*

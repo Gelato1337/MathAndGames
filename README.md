@@ -9,10 +9,11 @@ A prototype math RPG. Your party unlocks skills by solving math problems. The wo
 | Land | Level | Stages 1 → 3 | Final boss |
 |---|---|---|---|
 | **Numerola** (tutorial) | Primary school (ages 7–12) | Forest Clearing → Times-Table Marsh → Echo Caves | The Riddle Golem (equation seals) |
+| **Chancewood** | Probability and statistics, the basics | Coinflip Glade → Dice Hollow → Gambler's Maze | Madame Fortuna (chance seals) |
 | **Eigenvale** | Linear algebra (upper secondary → university) | Vector Plains → Matrix Mines → Shear Glacier | The Eigenwarden (matrix seals) |
-| Chancewood, Fluxreach, Bitforge, Forcehold | Probability, calculus, computer science, physics | coming later (in fog on the map) | |
+| Fluxreach, Bitforge, Forcehold | Calculus, computer science, physics | coming later (in fog on the map) | |
 
-Eigenvale is recommended after Numerola, but the map lets experienced players "travel anyway".
+Chancewood and Eigenvale are recommended after Numerola, but the map lets experienced players "travel anyway".
 
 Linear algebra puzzles are **step puzzles**: you fill in the working (each step is checked and earns partial credit), with colour-coded formulas (hover a coloured term to see what it means), a vector/unit-square plot, and a **Notebook** for your own notes and the formulas you have learned.
 
@@ -43,6 +44,7 @@ Dev shortcuts (only with `npm run dev`):
 - `?dev=forest` also starts you next to the first battle.
 - `?dev=boss` also opens the rune gate and puts you at the boss.
 - `?dev=marsh`, `?dev=caves`, `?dev=gate` jump to Numerola's later stages.
+- `?dev&campaign=chancewood` with `dev=glade`, `hollow`, `maze`, `gate` or `boss` jumps into Chancewood.
 - `?dev&campaign=eigenvale` does the same for Eigenvale; `dev=plains`, `dev=mines`, `dev=glacier`, `dev=door` and `dev=boss` jump to its areas.
 
 ## AI tutor (optional)
@@ -91,6 +93,24 @@ The boss requires a specific tactic. While sealed, the golem takes no damage. Yo
 - **Probe Strike** (ninja, brute force): pick a value for x, calculate both sides yourself, then adjust bigger or smaller.
 - **Unbind** (mage, algebra): solve the equation directly, shown as a balance scale.
 
+## Chancewood (probability and statistics)
+
+Party of three: Kai (ninja), Aino (mage) and **Onni** (gambler, new). Every probability is a step puzzle with a picture: a pouch of coins, the 6 × 6 table of two dice, or a bar chart of the data. Answers can be typed as fractions (`3/8`), decimals (`0.375`) or percents (`37.5 %`).
+
+| Place | What you do | Math |
+|---|---|---|
+| Tilda (story, trains Aino) | Average Storm, Mend, Unbind | Mean, median; then P(A), P(not A), P(A and B) |
+| Ren (trains Kai) | Lucky Step, Flurry, Lucky Strike | Range; quick probabilities against the clock |
+| Old Hannu (trains Onni) | Jinx, Dice Storm, Fortune's Favour | 1 − P, two-dice sums, expected value |
+| Tilda's mushroom log (side quest) | A week of counts | Mean vs. median of the same data |
+| Coinflip Glade (stage 1) | Coin Imps dodge learned hits on a coin flip (P = 1/2); Focus never misses | Seeing chance in action |
+| Dice Hollow (stage 2) | Dice Cubes hit for the sum of two dice (2–12, usually 7); a Lucky Mimic (armor 3) doubles on a 6 | Distribution of two dice |
+| Gambler's Maze (stage 3) | Odds Bandits (lucky 6s, knives) and a Joker who swaps two heroes | |
+| Wheel Gate | Three spinners: work out each chance of gold, pick the best | Comparing fractions |
+| Carnival | Boss: Madame Fortuna, three seals | P(gold) = 3/8 → P(sum 7) = 1/6 → P(at least one heads) = 3/4 |
+
+**Lucky Strike** (Kai) answers a seal fast, with no working; **Unbind** (Aino) counts the outcomes step by step.
+
 ## Eigenvale (linear algebra)
 
 Party of four: Kai (ninja), Aino (mage), **Sana** (ranger) and **Otso** (shieldbearer).
@@ -126,7 +146,8 @@ src/
   data.ts            skills, heroes, items
   state.ts           game state, attunement, settings
   math/              problem generators, answer parsing, mastery, seal equations,
-                     linalg.ts (step problems), eigenseal.ts (matrix seals)
+                     linalg.ts (step problems), eigenseal.ts (matrix seals),
+                     chance.ts (probability and statistics problems, chance seals)
   art/               pixel-art sprites (as strings) and procedural tiles
   world/             map layout, exploration movement and interaction
   combat/            grid combat, AP, AI, combat HUD

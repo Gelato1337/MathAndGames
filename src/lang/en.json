@@ -126,7 +126,16 @@
     "shade": "Cave Shade",
     "sentry": "Ice Sentry",
     "wraith": "Frost Wraith",
-    "knight": "Frost Knight"
+    "knight": "Frost Knight",
+    "onni": "Onni",
+    "tilda": "Tilda",
+    "hannu": "Old Hannu",
+    "imp": "Coin Imp",
+    "cube": "Dice Cube",
+    "mimic": "Lucky Mimic",
+    "bandit": "Odds Bandit",
+    "joker": "Joker",
+    "fortuna": "Madame Fortuna"
   },
   "classes": {
     "kai": "Ninja",
@@ -136,7 +145,9 @@
     "sana": "Ranger",
     "otso": "Shieldbearer",
     "sanaDesc": "Directions and angles: vectors, dot products, perpendicular lines.",
-    "otsoDesc": "Protects the party: determinants (area) and matrix products."
+    "otsoDesc": "Protects the party: determinants (area) and matrix products.",
+    "onni": "Gambler",
+    "onniDesc": "Plays the odds: chances, \"not\", dice and fair games."
   },
   "skills": {
     "strike": {
@@ -234,6 +245,46 @@
     "quake": {
       "name": "Quake",
       "desc": "Stamp the ground: 8 damage to every enemy next to Otso."
+    },
+    "cstep": {
+      "name": "Lucky Step",
+      "desc": "Step to an empty tile up to 5 tiles away."
+    },
+    "cflurry": {
+      "name": "Flurry",
+      "desc": "Two fast hits of 5 damage. Focus it: every quick chance you work out adds a hit."
+    },
+    "cprobe": {
+      "name": "Lucky Strike",
+      "desc": "A quick strike: 5 damage. Against a chance seal, answer its question fast, with no working: right shatters the seal."
+    },
+    "cstorm": {
+      "name": "Average Storm",
+      "desc": "A storm over a 3 × 3 area: 9 damage."
+    },
+    "cmend": {
+      "name": "Mend",
+      "desc": "Heal an ally (or yourself) for 12 HP."
+    },
+    "cunbind": {
+      "name": "Unbind",
+      "desc": "Solve a chance seal step by step: count the outcomes, then the probability. A right answer shatters it."
+    },
+    "toss": {
+      "name": "Coin Toss",
+      "desc": "Flick a heavy coin: 3–9 damage, range 4. A gamble every time."
+    },
+    "jinx": {
+      "name": "Jinx",
+      "desc": "Jinx an enemy for 2 turns: it takes 50% more damage."
+    },
+    "dice": {
+      "name": "Dice Storm",
+      "desc": "Rain dice on a 3 × 3 area: 8 damage each."
+    },
+    "fortune": {
+      "name": "Fortune's Favour",
+      "desc": "Give an ally a lucky charm that absorbs 10 damage."
     }
   },
   "items": {
@@ -421,6 +472,46 @@
     "quake": {
       "intro": "Quake. Multiplying matrices: each entry is a row of the first times a column of the second. Two correct.",
       "outro": "Quake hits every enemy next to Otso. Focus it and multiply matrices for a ground-splitting quake."
+    },
+    "cstep": {
+      "intro": "Lucky Step. Before you leap, know how far things spread: the range is the largest value minus the smallest. Three correct.",
+      "outro": "Now you can step anywhere within 5 tiles for 1 AP."
+    },
+    "cflurry": {
+      "intro": "Flurry, Chancewood style: chances, fast. Favourable outcomes divided by all outcomes. Three correct.",
+      "outro": "Focus a Flurry and every quick chance you work out adds another hit."
+    },
+    "cprobe": {
+      "intro": "Lucky Strike. Luck favours the quick: first, two pouches of coins.",
+      "seal": "Now a practice seal. No working, just the answer, before the sand runs out.",
+      "again": "Not this time. Count again: what you want, out of everything.",
+      "outro": "Against a chance seal, Lucky Strike gives you one fast question. A fraction like 3/8, a decimal or a percent all count."
+    },
+    "cstorm": {
+      "intro": "Average Storm. The mean is the fair share: add all the values, then divide by how many there are. Three correct.",
+      "outro": "Average Storm hits a 3 × 3 area. Focus it and work out a mean for a much bigger storm."
+    },
+    "cmend": {
+      "intro": "Mend. The median is the middle value once you sort the list. Three correct.",
+      "outro": "Focus Mend and find a median when it fires: it heals far more."
+    },
+    "cunbind": {
+      "intro": "Unbind is the deepest lesson. Every chance is a fraction: favourable outcomes out of all outcomes. First, one draw.",
+      "not": "Now the opposite: the chance that something does NOT happen is 1 minus the chance that it does.",
+      "two": "Last, two things at once. If they do not affect each other, multiply their chances.",
+      "outro": "With Unbind you solve a chance seal step by step, with no timer. The working counts."
+    },
+    "jinx": {
+      "intro": "Jinx. To jinx something, think of everything that is NOT what you want: 1 − P. Three correct.",
+      "outro": "A jinxed enemy takes 50% more damage for 2 turns."
+    },
+    "dice": {
+      "intro": "Dice Storm. Two dice have 6 × 6 = 36 outcomes. Count the ways to make a sum. Two correct.",
+      "outro": "Dice Storm hits a 3 × 3 area. Focus it and solve a dice question for a bigger storm."
+    },
+    "fortune": {
+      "intro": "Fortune's Favour. Is a game worth playing? The expected value: chance to win × prize. Two correct.",
+      "outro": "Fortune's Favour gives an ally a 10-point charm. Focus it and work out an expected value for a much stronger charm."
     }
   },
   "practice": {
@@ -580,7 +671,15 @@
       "gloom": "Gloom",
       "icicle": "Icicle",
       "frost": "Frostbite",
-      "lance": "Ice Lance"
+      "lance": "Ice Lance",
+      "poke": "Poke",
+      "roll": "Dice Roll",
+      "chomp": "Chomp",
+      "stab": "Stab",
+      "knife": "Thrown Knife",
+      "card": "Card Throw",
+      "fate": "Twist of Fate",
+      "wheel": "Wheel of Fortune"
     },
     "apCost": "{n} AP",
     "round": "Round {n}",
@@ -631,7 +730,13 @@
     "mendLog": "{name} mends {target}.",
     "pathOpens": "The way to {area} is open.",
     "winMarsh": "The frogs croak and hop away, and the last droplets sink into the mud. Behind the reeds, the mouth of a cave is free of rubble.",
-    "winCaves": "The beetles scuttle into the dark and the shades fade. The caves echo with silence. Far to the north, the runes on the gate begin to glow."
+    "winCaves": "The beetles scuttle into the dark and the shades fade. The caves echo with silence. Far to the north, the runes on the gate begin to glow.",
+    "dodgeFloat": "Heads: miss!",
+    "dodge": "Heads! {name} dodges the blow.",
+    "luckyFloat": "Lucky 6!",
+    "lucky": "{name} rolls a 6: double damage!",
+    "shuffleFloat": "Shuffled!",
+    "shuffle": "{name} shuffles {a} and {b}!"
   },
   "probe": {
     "intro": "The seal reads: {eq}. Pick a whole number for x to test.",
@@ -777,8 +882,8 @@
     },
     "chancewood": {
       "name": "Chancewood",
-      "tier": "Probability and statistics",
-      "desc": "A forest where every path forks by chance. Counting, probability, expected value."
+      "tier": "Probability and statistics · basics",
+      "desc": "Mean, median and range. Chances as fractions, \"not\", two events at once, dice, and fair games. Three heroes, three areas, then Madame Fortuna."
     },
     "fluxreach": {
       "name": "Fluxreach",
@@ -856,7 +961,15 @@
       "mat_mul": "Matrix × matrix",
       "det2": "Determinant (2 × 2)",
       "eigen_val": "Eigenvalues (2 × 2)",
-      "eigen_vec": "Eigenvectors"
+      "eigen_vec": "Eigenvectors",
+      "stat_mean": "Mean",
+      "stat_median": "Median",
+      "stat_range": "Range",
+      "prob_simple": "Probability",
+      "prob_not": "Not",
+      "prob_two": "Two events",
+      "prob_dice": "Two dice",
+      "expect": "Expected value"
     },
     "d": {
       "add_sub": "Order doesn’t matter when you {1|add}: {1|a} + {2|b} is {2|b} + {1|a}.",
@@ -873,7 +986,15 @@
       "mat_mul": "Entry {3|cᵢⱼ} = {1|row i of A} · {2|column j of B}.",
       "det2": "{1|Main diagonal} minus {2|other diagonal}. It is how much A scales area.",
       "eigen_val": "Solve for {3|λ} using the {4|trace} (a + d) and the {5|determinant}.",
-      "eigen_vec": "Subtract {3|λ} on the diagonal of {1|A}, then find a {2|v} that it sends to zero."
+      "eigen_vec": "Subtract {3|λ} on the diagonal of {1|A}, then find a {2|v} that it sends to zero.",
+      "stat_mean": "Add up the {1|values} and divide by {2|how many} there are.",
+      "stat_median": "Sort the list; the {1|middle value} is the median. With an even count, take the mean of the two middle values.",
+      "stat_range": "The {1|largest} value minus the {2|smallest}: how spread out the data is.",
+      "prob_simple": "{1|Favourable} outcomes divided by {2|all} outcomes. Always between 0 and 1.",
+      "prob_not": "The chance of {4|not A} is 1 minus the chance of {3|A}.",
+      "prob_two": "If {1|A} and {2|B} do not affect each other, multiply: {3|P(A and B)} = P(A) × P(B).",
+      "prob_dice": "Count the {1|ways} to make the sum in the 6 × 6 table, out of {2|36}.",
+      "expect": "The {1|chance to win} times the {2|prize}: what you win on average."
     }
   },
   "steps": {
@@ -1127,7 +1248,11 @@
     "plains": "Vector Plains",
     "mines": "Matrix Mines",
     "glacier": "Shear Glacier",
-    "spire": "Eigenwarden (Eigen Spire)"
+    "spire": "Eigenwarden (Eigen Spire)",
+    "glade": "Coinflip Glade",
+    "hollow": "Dice Hollow",
+    "maze": "Gambler's Maze",
+    "carnival": "Madame Fortuna (Carnival)"
   },
   "worldmap": {
     "title": "The Known Lands",
@@ -1149,5 +1274,285 @@
     "earlyNote": "Recommended after: {lands}. If you already know the basics of the game, you can go now.",
     "laterNote": "This land is still covered in fog. It is not part of the prototype yet.",
     "welcomeBack": "Back in {land}."
+  },
+  "renCh": {
+    "intro1": "Kai! You came to Chancewood too? Here, even a ninja must think about luck.",
+    "intro2": "Same rules as always: pass a trial once and the move is yours.",
+    "menu": "Ready to train?",
+    "menuDone": "You have learned all I teach here.",
+    "about1": "A chance is a fraction: the outcomes you want, divided by all the outcomes.",
+    "about2": "Lucky Strike is fast: no working, just the answer. Fractions, decimals and percents all work.",
+    "sealHint": "Madame Fortuna's seals ask for a chance. Count what you want, count everything, divide."
+  },
+  "tilda": {
+    "intro1": "Aino, a fellow thinker! People here trust their luck. I trust my notebook.",
+    "intro2": "Write the numbers down, sort them, add them. Data tells the truth when luck lies.",
+    "menu": "Which lesson today?",
+    "menuDone": "You know my methods now.",
+    "about1": "Mean: add everything, divide by how many. Median: sort, take the middle. Range: largest minus smallest.",
+    "about2": "P(not A) = 1 − P(A). And for two things that do not affect each other, P(A and B) = P(A) × P(B).",
+    "sealHint": "With Unbind you can count the outcomes slowly and carefully. A table of two dice helps."
+  },
+  "hannu": {
+    "intro1": "Onni, my boy! Come, sit. A real gambler never guesses: he counts.",
+    "intro2": "I teach the dice. Learn the odds and luck becomes a tool.",
+    "menu": "Shall we roll?",
+    "menuDone": "You know the odds better than me now, lad.",
+    "about1": "Two dice: 36 outcomes. Only one way to roll 2, but six ways to roll 7. That is why 7 comes up so often.",
+    "about2": "Expected value: what you win on average. A game is fair when it equals what you pay.",
+    "sealHint": "Jinx the strongest foe, and charm whoever is focusing."
+  },
+  "pr": {
+    "w": {
+      "mean": "mean",
+      "sum": "sum",
+      "count": "count",
+      "median": "median",
+      "smallest": "smallest",
+      "largest": "largest",
+      "middlePos": "middle position",
+      "middleValue": "middle value",
+      "range": "range",
+      "favourable": "favourable",
+      "total": "total",
+      "goldCoins": "gold coins",
+      "allCoins": "all coins",
+      "pGold": "P(gold)",
+      "pNotGold": "P(not gold)",
+      "pAB": "P(A and B)",
+      "ways": "ways",
+      "outcomes": "outcomes",
+      "pWin": "P(win)",
+      "prize": "prize",
+      "cost": "cost",
+      "pAtLeast": "P(at least one heads)",
+      "pNone": "P(no heads)",
+      "pTails": "P(tails)",
+      "goldSlices": "gold slices",
+      "allSlices": "all slices"
+    },
+    "ev": {
+      "heads": "a coin lands heads",
+      "six": "a die shows 6",
+      "even": "a die shows an even number",
+      "high": "a die shows 5 or 6"
+    },
+    "cap": {
+      "bars": "One bar per value, in the order given.",
+      "tokens": "Every coin in the pouch. Colours match the formula.",
+      "dice": "Every outcome of the dice. The lit squares are the favourable ones."
+    },
+    "stat_mean": {
+      "title": "Mean",
+      "text": "Data: {data}. The {3|mean} is the fair share: add up the {1|sum} of all values, then divide by the {2|count} of values.",
+      "g1": "Every value added together.",
+      "g2": "How many values there are.",
+      "g3": "The mean: what each would get if shared equally.",
+      "hint": "Add all the numbers first. Then count them and divide.",
+      "ex": "{sum} ÷ {n} = {m}."
+    },
+    "stat_median": {
+      "title": "Median",
+      "text": "Data: {data}. Sort it from {2|smallest} to largest. The {3|median} is the {1|middle value}.",
+      "g1": "The position in the middle of the sorted list: (count + 1) ÷ 2.",
+      "g2": "Start the sorted list here.",
+      "g3": "The median: half the values are below it, half above.",
+      "hint": "Write the values in order. With 5 values, the 3rd is the middle.",
+      "hintEven": "Write the values in order. With 6 values, take the mean of the 3rd and the 4th.",
+      "ex": "Sorted: {sorted}. Median = {m}."
+    },
+    "stat_range": {
+      "title": "Range",
+      "text": "Data: {data}. The {3|range} shows how spread out the data is: the {1|largest} value minus the {2|smallest}.",
+      "g1": "The biggest value.",
+      "g2": "The smallest value.",
+      "g3": "The spread from bottom to top.",
+      "hint": "Find the largest and the smallest, then subtract.",
+      "ex": "{hi} − {lo} = {r}."
+    },
+    "prob_simple": {
+      "title": "Probability",
+      "text": "A pouch holds {gold} gold coins and {other} copper coins. You pick one without looking. The {1|favourable} outcomes are the gold ones; the {2|total} is every coin. {3|P(gold)} = favourable ÷ total.",
+      "g1": "The outcomes we want.",
+      "g2": "Every possible outcome.",
+      "g3": "The probability: a number from 0 (never) to 1 (always).",
+      "hint": "Count the gold coins, count all the coins, and write a fraction.",
+      "ex": "{gold} out of {total}: P = {f}."
+    },
+    "prob_not": {
+      "title": "Not",
+      "text": "A pouch holds {gold} gold coins and {other} copper coins. What is the chance of {4|not} picking gold? It is 1 minus {3|P(gold)}.",
+      "g4": "Everything that is not gold.",
+      "hint": "First P(gold) as a fraction. Then take it away from 1.",
+      "ex": "1 − {p} = {q}."
+    },
+    "prob_two": {
+      "title": "Two events",
+      "text": "{1|A}: {a}. {2|B}: {b}. They do not affect each other, so {3|P(A and B)} = P(A) × P(B).",
+      "g1": "The first event.",
+      "g2": "The second event.",
+      "g3": "Both happen: multiply the chances.",
+      "hint": "Write each chance as a fraction, then multiply the tops and the bottoms.",
+      "ex": "{a} × {b} = {c}."
+    },
+    "prob_dice": {
+      "title": "Dice",
+      "text": "Roll two dice. What is the chance that the sum is {s}? Count the {1|ways} to make {s} in the table, out of all {2|36} outcomes.",
+      "textOne": "Roll one die. What is the chance of rolling {k} or more? Count the {1|ways}, out of {2|6} faces.",
+      "g1": "The outcomes that give what we want.",
+      "g2": "6 × 6 = 36 equally likely outcomes.",
+      "g2one": "A die has 6 equally likely faces.",
+      "g3": "The probability.",
+      "hint": "Look at the lit squares in the picture and count them.",
+      "ex": "{ways} ways out of {total}: P = {f}."
+    },
+    "expect": {
+      "title": "Expected value",
+      "text": "Roll a die. On {ways} of the 6 faces you win {prize} gold, otherwise nothing. The {3|expected value} is the {1|chance to win} times the {2|prize}.",
+      "textCost": "It costs {cost} gold to play. Roll a die: on {ways} of the 6 faces you win {prize} gold. The {3|expected value} is the {1|chance to win} times the {2|prize}, minus the {4|cost}.",
+      "g1": "The chance of winning, as a fraction.",
+      "g2": "What you win.",
+      "g3": "What you win on average, per game.",
+      "g4": "What it costs to play once.",
+      "hint": "P(win) = winning faces ÷ 6. Then multiply by the prize.",
+      "ex": "{f} × {prize} = {e} gold.",
+      "exCost": "Minus the cost of {cost}: E = {e}."
+    }
+  },
+  "cseal": {
+    "title": "Fortuna's seal",
+    "dice7": "Two dice. What is the chance that they add up to 7? Count the {1|ways} in the table, out of {2|36}.",
+    "coins": "Flip two coins. What is the chance of at least one heads? Easier the other way round: {3|no heads} means tails and tails. Then {4|at least one heads} = 1 − P(no heads).",
+    "gNone": "Both coins tails: ½ × ½.",
+    "gAtLeast": "Everything except tails and tails.",
+    "coinsHint": "P(tails) is 1/2. Multiply for two coins, then take it away from 1.",
+    "coinsEx": "P(no heads) = 1/2 × 1/2 = 1/4, so P(at least one heads) = 1 − 1/4 = 3/4.",
+    "label": {
+      "pouch": "P(gold)?",
+      "dice7": "P(sum 7)?",
+      "coins": "P(heads ≥ 1)?",
+      "practice": "P(gold)?"
+    },
+    "probeStory": "Lucky Strike: no working, just the answer. Quick!",
+    "unbindStory": "The seal asks for a chance. Count carefully, step by step.",
+    "logHit": "Right! The seal shatters.",
+    "logMiss": "Wrong: the seal holds."
+  },
+  "cw": {
+    "intro": {
+      "p1": "North of Numerola lies Chancewood, a forest where every path forks and every coin is tossed.",
+      "p2": "Madame Fortuna runs a carnival on the hill. Her wheel has been rigged, and now luck itself goes wrong: dice roll sevens all day, and coins never land the same way twice.",
+      "p3": "Kai and Aino arrive in the village of Fortune’s Rest. A lucky boy called Onni joins them. Tilda, who counts everything, is waiting."
+    },
+    "obj": {
+      "talkTilda": "Talk to Tilda, the counter of things, in Fortune’s Rest.",
+      "done": "Luck is fair again in Chancewood!",
+      "glade": "Go east and clear the Coinflip Glade (stage 1).",
+      "hollow": "Take the road south and clear the Dice Hollow (stage 2).",
+      "maze": "Follow the path south-east into the Gambler's Maze (stage 3).",
+      "train": "Learn Lucky Strike (Ren) or Unbind (Tilda) to break chance seals.",
+      "gate": "Open the Wheel Gate below the carnival (east).",
+      "fortuna": "Climb to the carnival and break Madame Fortuna's seals.",
+      "log0": "Tilda wants help with her mushroom log.",
+      "log1": "Finish Tilda's mushroom log."
+    },
+    "quests": {
+      "main": {
+        "title": "The Rigged Wheel",
+        "desc": "Madame Fortuna's rigged wheel has made luck itself unfair.",
+        "s1": "Meet Tilda in Fortune’s Rest",
+        "glade": "Stage 1: clear the Coinflip Glade",
+        "hollow": "Stage 2: clear the Dice Hollow",
+        "maze": "Stage 3: clear the Gambler's Maze",
+        "gate": "Open the Wheel Gate",
+        "fortuna": "Defeat Madame Fortuna",
+        "started": "New quest: The Rigged Wheel"
+      },
+      "log": {
+        "title": "The Mushroom Log",
+        "desc": "Help Tilda sum up a week of mushroom counts.",
+        "s1": "Find the mean and the median"
+      }
+    },
+    "tilda": {
+      "intro1": "Visitors! Good. Everyone here blames luck. I count things instead.",
+      "intro2": "Madame Fortuna rigged her great wheel, and since then chance itself is crooked. Imps flip coins at travellers, dice roll themselves, bandits cheat.",
+      "intro3": "Her carnival is sealed behind the Wheel Gate, and she hides behind seals of chance. Only someone who can work out a probability gets through.",
+      "onni": "I’ll come! I never lose at dice. Well... almost never.",
+      "kai": "\"Almost never\" sounds like a probability to me.",
+      "intro4": "Exactly. Train first: Ren is here, old Hannu teaches Onni, and I teach Aino. Then the glade, the hollow and the maze.",
+      "again": "Counting anything interesting?",
+      "thanks": "Fair chances again. My numbers thank you!",
+      "optTrain": "Teach Aino (statistics).",
+      "optFortuna": "Tell us about Madame Fortuna.",
+      "optLog": "Help with the mushroom log.",
+      "optHint": "What should we do next?",
+      "fortuna1": "Her seals are questions of chance: a pouch of coins, two dice, two coins.",
+      "fortuna2": "Answer one and the seal breaks. Each new seal is a little harder than the last.",
+      "log1": "I count the mushrooms behind my house every day. Here is a week.",
+      "log2": "What is a typical day? Work out the mean and the median for me.",
+      "logStory": "Mushrooms per day for one week: {data}.",
+      "logTitle": "Mushroom log, part {n}",
+      "logRetry": "Hmm, my notebook says otherwise. Let’s try again later.",
+      "logDone": "That matches my notebook. The mean and the median are different, see? One big day pulls the mean up.",
+      "logAino": "So the median is the \"typical day\", and the mean is the fair share.",
+      "logReward": "+{g} gold, +{n} tonics"
+    },
+    "hannu": {
+      "busy": "Speak with Tilda first, young ones."
+    },
+    "ren": {
+      "busy": "Kai! Talk to Tilda first, she knows what is going on."
+    },
+    "gate": {
+      "lockedAreas": "A gate shaped like a great spinner, with three wheels on it. It won’t turn. (Clear the Coinflip Glade, the Dice Hollow and the Gambler’s Maze first.)",
+      "lockedSkill": "The wheels glow, but you can’t read their odds yet. (Learn Lucky Strike or Unbind first.)",
+      "intro1": "Three wheels, each with some gold slices. A voice purrs: \"Spin the luckiest wheel, and I open.\"",
+      "intro2": "Work out each wheel’s chance of landing on gold, then pick the best one.",
+      "wheelTitle": "Wheel {n}",
+      "wheelText": "This wheel has {all} equal slices, and {gold} of them are gold. The chance of gold is the {1|gold slices} out of {2|all slices}.",
+      "g1": "Slices that win.",
+      "g2": "Every slice on the wheel.",
+      "cap": "Every slice on the wheel. Colours match the formula.",
+      "wheelStory": "Work out the chance of gold for this wheel.",
+      "which": "Which wheel has the best chance of gold?",
+      "wheelLabel": "Wheel {n}: {f}",
+      "wrong": "The wheel spins... and stops on copper. {f} is not the biggest chance. Compare the fractions again.",
+      "opened": "The wheel lands on gold. Click, click, click: the Wheel Gate swings open. Music drifts down from the carnival.",
+      "onni": "1/3 beats 1/4! Even I know that one."
+    },
+    "battle": {
+      "glade1": "Coin Imps! They flip a coin every time you swing. Heads, they dodge.",
+      "gladeTitle": "Stage 1: Coinflip Glade",
+      "gladeTip1": "Three heroes now: Kai, Aino and Onni. Onni throws coins from range.",
+      "gladeTip2": "Coin Imps dodge learned attacks half the time: P(dodge) = 1/2. A focused attack never misses.",
+      "gladeTip3": "Auto (Q) still works, but expect about half your learned hits to miss.",
+      "hollow1": "Dice Cubes. Their hits are a roll of two dice: anything from 2 to 12.",
+      "hollowTitle": "Stage 2: Dice Hollow",
+      "hollowTip1": "A Dice Cube hits for the sum of two dice. 7 is the most likely sum (6 ways out of 36), 2 and 12 the least (1 way each).",
+      "hollowTip2": "The Lucky Mimic has 3 armor, and on a 6 (a 1 in 6 chance) its bite does double damage. Focus to pierce its armor.",
+      "maze1": "Bandits and a joker. Careful, he shuffles us around!",
+      "mazeTitle": "Stage 3: Gambler's Maze",
+      "mazeTip1": "Odds Bandits stab up close or throw knives from range, and a 6 doubles their damage.",
+      "mazeTip2": "The Joker swaps two heroes after its turn. Take it down first, or keep your healer away from it.",
+      "fortuna1": "STEP RIGHT UP! EVERY GAME IS FAIR... FOR ME.",
+      "fortuna2": "MY SEALS ASK ONE QUESTION: DO YOU KNOW YOUR CHANCES?",
+      "fortunaOnni": "Her seals are probability questions! Work them out and they break.",
+      "sealRule": "While sealed, Madame Fortuna takes no damage. Break a seal to make her vulnerable (and lose a turn). At 70 and 35 HP a new seal forms. She has 2 armor, and her hits can roll a lucky 6.",
+      "tipProbe": "Kai, Lucky Strike: one fast question, no working. Fractions like 3/8 work.",
+      "tipUnbind": "Aino, Unbind: count the favourable outcomes and all the outcomes, step by step."
+    },
+    "win": {
+      "glade": "The imps run out of coins and vanish. The glade is quiet; a path opens south.",
+      "hollow": "The dice stop rolling and crumble into pips. In a mimic’s mouth you find a Focus Tea.",
+      "maze": "The bandits flee and the joker folds like a card. With all three areas safe, the Wheel Gate begins to turn by itself.",
+      "fortuna": "The last seal breaks. Madame Fortuna’s wheel spins true again: every slice the same size."
+    },
+    "ending": {
+      "title": "Luck is fair again!",
+      "p1": "Madame Fortuna bows and fixes her wheel. Coins land heads half the time, dice roll every number, and Onni still wins... sometimes.",
+      "p2": "You learned to sum up data with the mean, the median and the range, and to measure chance: favourable out of all, \"not\", two events at once, dice and fair games.",
+      "p3": "Next step for the curious: tree diagrams, conditional probability, and the normal distribution."
+    }
   }
 }

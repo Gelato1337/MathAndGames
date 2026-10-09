@@ -1,5 +1,6 @@
 import { SKILLS, TRAINER_NPC, type SkillId } from '../data';
 import { t } from '../i18n';
+import { PRACTICE_CHANCE } from '../math/chance';
 import { PRACTICE_EIGEN } from '../math/eigenseal';
 import { generateLA, isLinalg } from '../math/linalg';
 import { level } from '../math/mastery';
@@ -9,7 +10,7 @@ import { learn } from '../state';
 import { balancePuzzle, type BalanceStage } from '../ui/balance';
 import { say } from '../ui/dialog';
 import { ask, messageBox } from '../ui/question';
-import { probeEigen, probeSeal } from '../ui/seals';
+import { probeChance, probeEigen, probeSeal } from '../ui/seals';
 import { askSteps } from '../ui/steps';
 
 /** One question of any kind; true when answered right. */
@@ -56,6 +57,16 @@ export async function runTrial(skill: SkillId): Promise<void> {
       if (r.shattered) break;
       if (r.cancelled) await say(who, t('trial.probe.keepTrying'));
     }
+  } else if (trial.kind === 'probe' && skill === 'cprobe') {
+    // Chancewood: a few pouches first, then a practice seal against the clock
+    await problemRun(skill, 'prob_simple', 2);
+    await say(who, t('trial.cprobe.seal'));
+    const log: string[] = [];
+    for (;;) {
+      const r = await probeChance(PRACTICE_CHANCE, log, title);
+      if (r.shattered) break;
+      await say(who, t('trial.cprobe.again'));
+    }
   } else if (trial.kind === 'probe') {
     await problemRun(skill, 'order_ops', 2);
     await say(who, t('trial.probe.guess'));
@@ -65,6 +76,13 @@ export async function runTrial(skill: SkillId): Promise<void> {
       if (r.shattered) break;
       if (r.cancelled) await say(who, t('trial.probe.keepTrying'));
     }
+  } else if (skill === 'cunbind') {
+    // Chancewood: one outcome, the complement, then two events together
+    await problemRun(skill, 'prob_simple', 1);
+    await say(who, t('trial.cunbind.not'));
+    await problemRun(skill, 'prob_not', 1);
+    await say(who, t('trial.cunbind.two'));
+    await problemRun(skill, 'prob_two', 1);
   } else if (skill === 'eunbind') {
     // Eigenvale: determinant → eigenvalues → eigenvectors
     await problemRun(skill, 'det2', 1);
@@ -96,6 +114,8 @@ function practiceTopic(id: SkillId): Topic {
   if (id === 'probe') return 'order_ops';
   if (id === 'eprobe') return 'det2';
   if (id === 'eunbind') return 'eigen_val';
+  if (id === 'cprobe') return 'prob_simple';
+  if (id === 'cunbind') return 'prob_two';
   return 'eq2';
 }
 

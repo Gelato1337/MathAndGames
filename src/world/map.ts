@@ -32,7 +32,7 @@ export interface EncounterDef {
   enemies: EnemyPlacement[];
 }
 
-const BLOCKING = new Set(['T', 'R', 'H', 'w', 'D', 'F', '#', 'G', 'o', 'O', '~', 'L', 'l', 'X', 'I', 'M']);
+const BLOCKING = new Set(['T', 'R', 'H', 'w', 'D', 'F', '#', 'G', 'o', 'O', '~', 'L', 'l', 'X', 'I', 'M', 'U']);
 
 export const NPCS: NpcDef[] = [
   { id: 'elder', x: 5, y: 12 },
@@ -248,6 +248,10 @@ export function tileLook(ch: string): { top: string; left: string; right: string
       return { top: '_', left: '#', right: '#', object: 'crystals' };
     case 'I':
       return { top: 'S', left: 'i', right: 'i', object: 'icicles' };
+    case 'U':
+      return { top: '.', left: 'dirt', right: 'dirt', object: 'mushroom' };
+    case 'q':
+      return { top: 'q', left: '#', right: '#' };
     case 'M':
       return { top: 'm', left: 'dirt', right: 'dirt', object: 'rock' };
     case 'S':

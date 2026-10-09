@@ -13,7 +13,8 @@ import { h } from './dom';
 const num = (v: number | string) => (typeof v === 'number' ? fmtNum(v) : v);
 
 function term(text: string, k: number): HTMLElement {
-  return h(`span.term.t${k}`, { 'data-k': String(k), tabindex: '0', text });
+  // '@key' terms are words in the player's language
+  return h(`span.term.t${k}`, { 'data-k': String(k), tabindex: '0', text: text.startsWith('@') ? t(text.slice(1)) : text });
 }
 
 function cellEl(c: Cell, k?: number): HTMLElement {

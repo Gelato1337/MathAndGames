@@ -230,7 +230,8 @@ export class Combat {
   // ---------- turn flow ----------
 
   private async beginTurn(): Promise<void> {
-    if (this.state === 'over') return;
+    // safety net: never start a turn in a battle that is already decided
+    if (this.checkEnd()) return;
     const u = this.active;
     if (u.dead) {
       this.nextTurn();
@@ -386,6 +387,12 @@ export class Combat {
     if (target.seal) {
       this.float(target, t('combat.sealedFloat'), '#73eff7');
       this.addLog(t('combat.sealAbsorbs', { name: this.name(target) }));
+      return 0;
+    }
+    // a coin flip for every learned hit: heads, the imp dodges (Focus never misses)
+    if (from && from.team === 'hero' && target.abilities.includes('dodge') && !opts.pierce && Math.random() < 0.5) {
+      this.float(target, t('combat.dodgeFloat'), '#94b0c2');
+      this.addLog(t('combat.dodge', { name: this.name(target) }));
       return 0;
     }
     let dmg = Math.max(1, Math.round(amount));
@@ -934,7 +941,18 @@ export class Combat {
     }
     const victims = atk.aoe ? this.alive('hero').filter((h) => unitDist(h, tgt) <= atk.aoe!) : [tgt];
     for (const v of victims) {
-      const dealt = this.damage(v, rand(atk.min, atk.max), u);
+      let amount = rand(atk.min, atk.max);
+      if (atk.dice) {
+        const rolls = Array.from({ length: atk.dice }, () => rand(1, 6));
+        amount = rolls.reduce((a, b) => a + b, 0);
+        this.float(u, rolls.join(' + '), '#f4f4f4', 6);
+      }
+      if (u.abilities.includes('lucky') && rand(1, 6) === 6) {
+        amount *= 2;
+        this.float(u, t('combat.luckyFloat'), '#ffcd75', 10);
+        this.addLog(t('combat.lucky', { name: this.name(u) }));
+      }
+      const dealt = this.damage(v, amount, u);
       if (u.abilities.includes('drain') && dealt > 0) this.heal(u, Math.ceil(dealt / 2));
       if (u.abilities.includes('push') && !v.dead) this.push(u, v);
       if (u.abilities.includes('pull') && !v.dead) this.pull(u, v);
@@ -1040,6 +1058,23 @@ export class Combat {
       if (!(await this.approach(u, targets, Math.max(...attacks.map((a) => a.range)), minAp))) break;
     }
     if (u.abilities.includes('blink') && !u.dead) this.blink(u);
+    if (u.abilities.includes('shuffle') && !u.dead) this.shuffle(u);
+  }
+
+  /** A joker swaps two heroes' places. */
+  private shuffle(u: Unit): void {
+    const heroes = this.alive('hero');
+    if (heroes.length < 2) return;
+    const i = rand(0, heroes.length - 1);
+    let j = rand(0, heroes.length - 2);
+    if (j >= i) j++;
+    const [a, b] = [heroes[i], heroes[j]];
+    const [ax, ay] = [a.x, a.y];
+    this.place(a, b.x, b.y);
+    this.place(b, ax, ay);
+    this.float(a, t('combat.shuffleFloat'), '#f27db0', 4);
+    this.float(b, t('combat.shuffleFloat'), '#f27db0', 4);
+    this.addLog(t('combat.shuffle', { name: this.name(u), a: this.name(a), b: this.name(b) }));
   }
 
   /**
@@ -1118,6 +1153,8 @@ export class Combat {
     if (def.cooldown) u.cooldowns[id] = def.cooldown;
     this.addLog(t('combat.uses', { name: this.name(u), skill: t(`skills.${id}.name`) }));
     await this.perform(u, id, x, y, def.basic ? 1 : attuneMult(id), false, 0);
+    // the last enemy may have fallen to this hit
+    if (this.checkEnd()) return;
     await wait(250);
     this.hud.render();
   }

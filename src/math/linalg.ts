@@ -4,14 +4,16 @@
  * Terms carry a colour slot (1–6) so the formula, the sentence and the
  * picture all use the same colour for the same idea.
  */
-import type { Params } from '../i18n';
+import { t, type Params } from '../i18n';
+import { CHANCE_GEN } from './chance';
 import { randInt, type Rng, type Step, type Topic } from './problems';
 
 export type Mat = number[][];
 export type Vec = number[];
 
 export type Ans =
-  | { kind: 'num'; v: number }
+  /** `frac` shows the answer as a fraction (probabilities) */
+  | { kind: 'num'; v: number; frac?: [number, number] }
   | { kind: 'vec'; v: Vec }
   | { kind: 'mat'; v: Mat }
   /** unordered list of numbers (e.g. both eigenvalues) */
@@ -35,6 +37,14 @@ export interface Plot {
   /** draw the unit square and its image under this matrix */
   matrix?: Mat;
   matrixK?: number;
+  /** probability: a bag of tokens, coloured by the formula's colour slots */
+  tokens?: Array<{ k: number; n: number }>;
+  /** probability: the 6 × 6 table of two dice, with these cells highlighted (die 1, die 2) */
+  dice?: { hit: Array<[number, number]>; k: number; single?: boolean };
+  /** statistics: a bar for every value in a data set */
+  bars?: { values: number[]; k: number };
+  /** caption under the picture (default: the vector caption) */
+  caption?: Step;
 }
 
 export interface StepProblem {
@@ -106,7 +116,8 @@ export function checkAns(given: Ans, want: Ans): boolean {
   if (given.kind !== want.kind) return false;
   switch (want.kind) {
     case 'num':
-      return eq((given as typeof want).v, want.v);
+      // probabilities may be typed as rounded decimals (0.33 for 1/3)
+      return eq((given as typeof want).v, want.v) || (!!want.frac && Math.abs((given as typeof want).v - want.v) < 0.005);
     case 'vec': {
       const g = (given as typeof want).v;
       return g.length === want.v.length && g.every((x, i) => eq(x, want.v[i]));
@@ -411,6 +422,7 @@ const GEN: Partial<Record<Topic, (level: number, rng: Rng) => StepProblem>> = {
   det2: det2Problem,
   eigen_val: (l, r) => eigenValueProblem(l, r),
   eigen_vec: (l, r) => eigenVectorProblem(l, r),
+  ...CHANCE_GEN,
 };
 
 export const LA_TOPICS = Object.keys(GEN) as Topic[];
@@ -425,13 +437,16 @@ export function generateLA(topic: Topic, level: number, rng: Rng = Math.random):
   return g(level, rng);
 }
 
+/** Topics solved as step puzzles (linear algebra and probability). */
+export const isStepTopic = isLinalg;
+
 /** Plain-text version of a formula (for the tutor and for logs). */
 export function segText(segs: Seg[]): string {
   const cell = (c: Cell) => (typeof c === 'object' ? String(c.t) : String(c));
   return segs
     .map((s) => {
       if (typeof s === 'string') return s;
-      if ('t' in s) return s.t;
+      if ('t' in s) return s.t.startsWith('@') ? t(s.t.slice(1)) : s.t;
       if ('mat' in s) return `${s.name ? s.name + ' = ' : ''}[${s.mat.map((r) => r.map(cell).join(' ')).join('; ')}]`;
       return `${s.name ? s.name + ' = ' : ''}(${s.vec.map(cell).join(', ')})`;
     })

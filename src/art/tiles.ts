@@ -199,6 +199,13 @@ const builders: Record<string, (ctx: Ctx, rnd: () => number, frame: number) => v
       px(ctx, P.u, x, y - 4, 1, 1);
     }
   },
+  // Chancewood carnival: a purple and gold checkerboard
+  q: (ctx) => {
+    px(ctx, '#5d275d', 0, 0, 16, 16);
+    px(ctx, '#c79a62', 0, 0, 8, 8);
+    px(ctx, '#c79a62', 8, 8, 8, 8);
+    px(ctx, 'rgba(255,255,255,0.12)', 0, 0, 16, 1);
+  },
   // snow and ice for the glacier
   S: (ctx, rnd) => {
     px(ctx, '#dfe9f2', 0, 0, 16, 16);

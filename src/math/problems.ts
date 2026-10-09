@@ -1,6 +1,15 @@
 import type { Params } from '../i18n';
 
 export type Topic =
+  // Chancewood (probability and statistics)
+  | 'stat_mean'
+  | 'stat_median'
+  | 'stat_range'
+  | 'prob_simple'
+  | 'prob_not'
+  | 'prob_two'
+  | 'prob_dice'
+  | 'expect'
   | 'add_sub'
   | 'mul'
   | 'area'

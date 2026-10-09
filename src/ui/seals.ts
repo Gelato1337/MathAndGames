@@ -1,5 +1,7 @@
 import { fmtNum, t } from '../i18n';
-import { eigenLabel, fmtMat, isEigenSeal, type AnySeal, type EigenSeal } from '../math/eigenseal';
+import { chanceLabel, chanceSealProblem, type ChanceSeal } from '../math/chance';
+import { eigenLabel, fmtMat, isChanceSeal, isEigenSeal, type AnySeal, type EigenSeal } from '../math/eigenseal';
+import { timerSeconds } from '../state';
 import { eigenValueProblem, eigenvalues, eigenVectorProblem, matVec } from '../math/linalg';
 import { askSteps } from './steps';
 import { evalSide, fmtSeal, fmtSide, sealSteps, solveSeal, type Seal } from '../math/seal';
@@ -190,15 +192,35 @@ export async function unbindEigen(seal: EigenSeal, title = t('skills.eunbind.nam
   return r.correct;
 }
 
-/** Text shown above a sealed enemy, for either kind of seal. */
+/**
+ * Chancewood, ninja's way: no working, just a fast answer against the clock
+ * ("Lucky Strike"). A right answer shatters the seal.
+ */
+export async function probeChance(seal: ChanceSeal, log: string[], title = t('skills.cprobe.name')): Promise<ProbeResult> {
+  const p = chanceSealProblem(seal);
+  const r = await askSteps({ ...p, steps: [] }, { title, story: t('cseal.probeStory'), seconds: timerSeconds(25) });
+  log.push(t(r.correct ? 'cseal.logHit' : 'cseal.logMiss'));
+  return { shattered: r.correct, computedOk: r.correct, cancelled: false };
+}
+
+/** Chancewood, mage's way: count the outcomes step by step. */
+export async function unbindChance(seal: ChanceSeal, title = t('skills.cunbind.name')): Promise<boolean> {
+  const r = await askSteps(chanceSealProblem(seal), { title, story: t('cseal.unbindStory') });
+  return r.correct;
+}
+
+/** Text shown above a sealed enemy, for any kind of seal. */
 export function sealLabel(s: AnySeal): string {
+  if (isChanceSeal(s)) return chanceLabel(s);
   return isEigenSeal(s) ? eigenLabel(s) : fmtSeal(s);
 }
 
 export function probeAny(s: AnySeal, log: string[]): Promise<ProbeResult> {
+  if (isChanceSeal(s)) return probeChance(s, log);
   return isEigenSeal(s) ? probeEigen(s, log) : probeSeal(s, log);
 }
 
 export function unbindAny(s: AnySeal): Promise<boolean> {
+  if (isChanceSeal(s)) return unbindChance(s);
   return isEigenSeal(s) ? unbindEigen(s) : unbindSeal(s);
 }

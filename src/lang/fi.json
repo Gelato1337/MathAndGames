@@ -126,7 +126,16 @@
     "shade": "Luolavarjo",
     "sentry": "Jäävahti",
     "wraith": "Pakkaskummitus",
-    "knight": "Pakkasritari"
+    "knight": "Pakkasritari",
+    "onni": "Onni",
+    "tilda": "Tilda",
+    "hannu": "Vanha Hannu",
+    "imp": "Kolikkopiru",
+    "cube": "Noppakuutio",
+    "mimic": "Onnenmatkija",
+    "bandit": "Todennäköisyysrosvo",
+    "joker": "Jokeri",
+    "fortuna": "Madame Fortuna"
   },
   "classes": {
     "kai": "Ninja",
@@ -136,7 +145,9 @@
     "sana": "Samooja",
     "otso": "Kilvenkantaja",
     "sanaDesc": "Suunnat ja kulmat: vektorit, pistetulo, kohtisuorat suorat.",
-    "otsoDesc": "Suojelee ryhmää: determinantit (pinta-ala) ja matriisitulot."
+    "otsoDesc": "Suojelee ryhmää: determinantit (pinta-ala) ja matriisitulot.",
+    "onni": "Uhkapeluri",
+    "onniDesc": "Pelaa todennäköisyyksillä: mahdollisuudet, ”ei”, nopat ja reilut pelit."
   },
   "skills": {
     "strike": {
@@ -234,6 +245,46 @@
     "quake": {
       "name": "Maanjäristys",
       "desc": "Polje maata: 8 vahinkoa jokaiselle Otson vieressä olevalle viholliselle."
+    },
+    "cstep": {
+      "name": "Onnenaskel",
+      "desc": "Astu tyhjään ruutuun enintään 5 ruudun päähän."
+    },
+    "cflurry": {
+      "name": "Iskusarja",
+      "desc": "Kaksi nopeaa 5 vahingon iskua. Keskitä se: jokainen nopeasti laskettu todennäköisyys lisää iskun."
+    },
+    "cprobe": {
+      "name": "Onnenisku",
+      "desc": "Nopea isku: 5 vahinkoa. Todennäköisyyssinettiä vastaan vastaa sen kysymykseen nopeasti ilman välivaiheita: oikea vastaus murskaa sinetin."
+    },
+    "cstorm": {
+      "name": "Keskiarvomyrsky",
+      "desc": "Myrsky 3 × 3 -alueelle: 9 vahinkoa."
+    },
+    "cmend": {
+      "name": "Parannus",
+      "desc": "Paranna liittolaista (tai itseäsi) 12 HP."
+    },
+    "cunbind": {
+      "name": "Purku",
+      "desc": "Ratkaise todennäköisyyssinetti vaihe vaiheelta: laske tulosvaihtoehdot ja sitten todennäköisyys. Oikea vastaus murskaa sen."
+    },
+    "toss": {
+      "name": "Kolikonheitto",
+      "desc": "Sinkoa painava kolikko: 3–9 vahinkoa, kantama 4. Joka kerta uhkapeliä."
+    },
+    "jinx": {
+      "name": "Kirous",
+      "desc": "Kiroa vihollinen 2 vuoroksi: se ottaa 50 % enemmän vahinkoa."
+    },
+    "dice": {
+      "name": "Noppamyrsky",
+      "desc": "Sada noppia 3 × 3 -alueelle: 8 vahinkoa kuhunkin."
+    },
+    "fortune": {
+      "name": "Onnetar",
+      "desc": "Anna liittolaiselle onnenamuletti, joka imee 10 vahinkoa."
     }
   },
   "items": {
@@ -421,6 +472,46 @@
     "quake": {
       "intro": "Maanjäristys. Matriisien kertolasku: jokainen alkio on ensimmäisen rivi kertaa toisen sarake. Kaksi oikein.",
       "outro": "Maanjäristys osuu jokaiseen Otson vieressä olevaan viholliseen. Keskitä se ja kerro matriisit, niin maa halkeaa."
+    },
+    "cstep": {
+      "intro": "Onnenaskel. Ennen kuin loikkaat, tiedä kuinka laajalle asiat levittäytyvät: vaihteluväli on suurin arvo miinus pienin. Kolme oikein.",
+      "outro": "Nyt voit astua minne tahansa 5 ruudun säteellä 1 TP:llä."
+    },
+    "cflurry": {
+      "intro": "Iskusarja Sattumametsän tapaan: todennäköisyyksiä, nopeasti. Suotuisat tulokset jaettuna kaikilla tuloksilla. Kolme oikein.",
+      "outro": "Keskitä Iskusarja, niin jokainen nopeasti laskettu todennäköisyys lisää uuden iskun."
+    },
+    "cprobe": {
+      "intro": "Onnenisku. Onni suosii nopeita: ensin kaksi kolikkokukkaroa.",
+      "seal": "Nyt harjoitussinetti. Ei välivaiheita, vain vastaus ennen kuin hiekka valuu loppuun.",
+      "again": "Ei tällä kertaa. Laske uudelleen: mitä haluat, kaikista vaihtoehdoista.",
+      "outro": "Todennäköisyyssinettiä vastaan Onnenisku antaa yhden nopean kysymyksen. Murtoluku kuten 3/8, desimaaliluku tai prosentti kelpaavat kaikki."
+    },
+    "cstorm": {
+      "intro": "Keskiarvomyrsky. Keskiarvo on reilu osuus: laske kaikki arvot yhteen ja jaa niiden määrällä. Kolme oikein.",
+      "outro": "Keskiarvomyrsky osuu 3 × 3 -alueelle. Keskitä se ja laske keskiarvo, niin myrsky on paljon suurempi."
+    },
+    "cmend": {
+      "intro": "Parannus. Mediaani on keskimmäinen arvo, kun lista on järjestetty. Kolme oikein.",
+      "outro": "Keskitä Parannus ja etsi mediaani sen lauetessa: se parantaa paljon enemmän."
+    },
+    "cunbind": {
+      "intro": "Purku on syvin oppitunti. Jokainen todennäköisyys on murtoluku: suotuisat tulokset kaikista tuloksista. Ensin yksi nosto.",
+      "not": "Nyt vastakohta: todennäköisyys, että jotain EI tapahdu, on 1 miinus todennäköisyys, että se tapahtuu.",
+      "two": "Lopuksi kaksi asiaa yhtä aikaa. Jos ne eivät vaikuta toisiinsa, kerro niiden todennäköisyydet.",
+      "outro": "Purulla ratkaiset todennäköisyyssinetin vaihe vaiheelta ilman ajastinta. Välivaiheet lasketaan."
+    },
+    "jinx": {
+      "intro": "Kirous. Kiroaminen on ajattelemista kaikkea sitä, mitä EI halua: 1 − P. Kolme oikein.",
+      "outro": "Kirottu vihollinen ottaa 50 % enemmän vahinkoa 2 vuoron ajan."
+    },
+    "dice": {
+      "intro": "Noppamyrsky. Kahdella nopalla on 6 × 6 = 36 tulosta. Laske, monellako tavalla summa syntyy. Kaksi oikein.",
+      "outro": "Noppamyrsky osuu 3 × 3 -alueelle. Keskitä se ja ratkaise noppatehtävä, niin myrsky on suurempi."
+    },
+    "fortune": {
+      "intro": "Onnetar. Kannattaako peliä pelata? Odotusarvo: voiton todennäköisyys × palkinto. Kaksi oikein.",
+      "outro": "Onnetar antaa liittolaiselle 10 pisteen amuletin. Keskitä se ja laske odotusarvo, niin amuletti on paljon vahvempi."
     }
   },
   "practice": {
@@ -580,7 +671,15 @@
       "gloom": "Synkkyys",
       "icicle": "Jääpuikko",
       "frost": "Paleltuma",
-      "lance": "Jääkeihäs"
+      "lance": "Jääkeihäs",
+      "poke": "Tökkäys",
+      "roll": "Nopanheitto",
+      "chomp": "Haukkaus",
+      "stab": "Pisto",
+      "knife": "Heittoveitsi",
+      "card": "Korttiheitto",
+      "fate": "Kohtalon käänne",
+      "wheel": "Onnenpyörä"
     },
     "apCost": "{n} TP",
     "round": "Kierros {n}",
@@ -631,7 +730,13 @@
     "mendLog": "{name} parantaa: {target}.",
     "pathOpens": "Tie kohteeseen {area} on auki.",
     "winMarsh": "Sammakot kurnuttavat ja loikkivat pois, ja viimeiset pisarat uppoavat mutaan. Kaislikon takana luolan suu on vapaa kivistä.",
-    "winCaves": "Kuoriaiset kipittävät pimeään ja varjot haihtuvat. Luolissa kaikuu hiljaisuus. Kaukana pohjoisessa portin riimut alkavat hehkua."
+    "winCaves": "Kuoriaiset kipittävät pimeään ja varjot haihtuvat. Luolissa kaikuu hiljaisuus. Kaukana pohjoisessa portin riimut alkavat hehkua.",
+    "dodgeFloat": "Kruuna: ohi!",
+    "dodge": "Kruuna! {name} väistää iskun.",
+    "luckyFloat": "Onnen 6!",
+    "lucky": "{name} heittää kutosen: tuplavahinko!",
+    "shuffleFloat": "Sekoitettu!",
+    "shuffle": "{name} sekoittaa: {a} ja {b} vaihtavat paikkaa!"
   },
   "probe": {
     "intro": "Sinetissä lukee: {eq}. Valitse x:lle kokonaisluku, jota kokeilet.",
@@ -777,8 +882,8 @@
     },
     "chancewood": {
       "name": "Sattumametsä",
-      "tier": "Todennäköisyys ja tilastot",
-      "desc": "Metsä, jossa jokainen polku haarautuu sattumalta. Laskeminen, todennäköisyys, odotusarvo."
+      "tier": "Todennäköisyys ja tilastot · perusteet",
+      "desc": "Keskiarvo, mediaani ja vaihteluväli. Todennäköisyys murtolukuna, ”ei”, kaksi tapahtumaa yhtä aikaa, nopat ja reilut pelit. Kolme sankaria, kolme aluetta ja sitten Madame Fortuna."
     },
     "fluxreach": {
       "name": "Virtaranta",
@@ -856,7 +961,15 @@
       "mat_mul": "Matriisi × matriisi",
       "det2": "Determinantti (2 × 2)",
       "eigen_val": "Ominaisarvot (2 × 2)",
-      "eigen_vec": "Ominaisvektorit"
+      "eigen_vec": "Ominaisvektorit",
+      "stat_mean": "Keskiarvo",
+      "stat_median": "Mediaani",
+      "stat_range": "Vaihteluväli",
+      "prob_simple": "Todennäköisyys",
+      "prob_not": "Ei",
+      "prob_two": "Kaksi tapahtumaa",
+      "prob_dice": "Kaksi noppaa",
+      "expect": "Odotusarvo"
     },
     "d": {
       "add_sub": "Järjestyksellä ei ole väliä, kun {1|lasket yhteen}: {1|a} + {2|b} on {2|b} + {1|a}.",
@@ -873,7 +986,15 @@
       "mat_mul": "Alkio {3|cᵢⱼ} = {1|A:n rivi i} · {2|B:n sarake j}.",
       "det2": "{1|Päälävistäjä} miinus {2|toinen lävistäjä}. Se kertoo, kuinka paljon A skaalaa pinta-alaa.",
       "eigen_val": "Ratkaise {3|λ} käyttämällä {4|jälkeä} (a + d) ja {5|determinanttia}.",
-      "eigen_vec": "Vähennä {3|λ} {1|A}:n lävistäjältä ja etsi sitten {2|v}, jonka se vie nollaan."
+      "eigen_vec": "Vähennä {3|λ} {1|A}:n lävistäjältä ja etsi sitten {2|v}, jonka se vie nollaan.",
+      "stat_mean": "Laske {1|arvot} yhteen ja jaa niiden {2|määrällä}.",
+      "stat_median": "Järjestä lista; {1|keskimmäinen arvo} on mediaani. Parillisella määrällä ota kahden keskimmäisen keskiarvo.",
+      "stat_range": "{1|Suurin} arvo miinus {2|pienin}: kuinka hajallaan data on.",
+      "prob_simple": "{1|Suotuisat} tulokset jaettuna {2|kaikilla} tuloksilla. Aina välillä 0–1.",
+      "prob_not": "Todennäköisyys, että {4|ei A}, on 1 miinus todennäköisyys, että {3|A}.",
+      "prob_two": "Jos {1|A} ja {2|B} eivät vaikuta toisiinsa, kerro: {3|P(A ja B)} = P(A) × P(B).",
+      "prob_dice": "Laske 6 × 6 -taulukosta {1|tavat}, joilla summa syntyy, {2|36} tuloksesta.",
+      "expect": "{1|Voiton todennäköisyys} kertaa {2|palkinto}: mitä voitat keskimäärin."
     }
   },
   "steps": {
@@ -1127,7 +1248,11 @@
     "plains": "Vektoritasangot",
     "mines": "Matriisikaivokset",
     "glacier": "Leikkausjäätikkö",
-    "spire": "Ominaisvartija (Ominaistorni)"
+    "spire": "Ominaisvartija (Ominaistorni)",
+    "glade": "Kolikkoaukio",
+    "hollow": "Noppanotko",
+    "maze": "Pelurin labyrintti",
+    "carnival": "Madame Fortuna (karnevaali)"
   },
   "worldmap": {
     "title": "Tunnetut maat",
@@ -1149,5 +1274,285 @@
     "earlyNote": "Suositellaan tämän jälkeen: {lands}. Jos osaat jo pelin perusteet, voit lähteä nyt.",
     "laterNote": "Tämä maa on vielä sumun peitossa. Se ei ole vielä osa prototyyppiä.",
     "welcomeBack": "Takaisin: {land}."
+  },
+  "renCh": {
+    "intro1": "Kai! Tulit sinäkin Sattumametsään? Täällä ninjankin on mietittävä onnea.",
+    "intro2": "Samat säännöt kuin aina: läpäise koe kerran ja liike on sinun.",
+    "menu": "Valmis harjoitukseen?",
+    "menuDone": "Olet oppinut kaiken, mitä täällä opetan.",
+    "about1": "Todennäköisyys on murtoluku: haluamasi tulokset jaettuna kaikilla tuloksilla.",
+    "about2": "Onnenisku on nopea: ei välivaiheita, vain vastaus. Murtoluvut, desimaalit ja prosentit kelpaavat.",
+    "sealHint": "Madame Fortunan sinetit kysyvät todennäköisyyttä. Laske mitä haluat, laske kaikki, jaa."
+  },
+  "tilda": {
+    "intro1": "Aino, toinen ajattelija! Täällä luotetaan onneen. Minä luotan muistivihkooni.",
+    "intro2": "Kirjoita luvut ylös, järjestä ne, laske ne yhteen. Data kertoo totuuden, kun onni valehtelee.",
+    "menu": "Mikä oppitunti tänään?",
+    "menuDone": "Tunnet nyt menetelmäni.",
+    "about1": "Keskiarvo: laske kaikki yhteen ja jaa määrällä. Mediaani: järjestä ja ota keskimmäinen. Vaihteluväli: suurin miinus pienin.",
+    "about2": "P(ei A) = 1 − P(A). Ja kahdelle asialle, jotka eivät vaikuta toisiinsa, P(A ja B) = P(A) × P(B).",
+    "sealHint": "Purulla voit laskea tulokset hitaasti ja huolellisesti. Kahden nopan taulukko auttaa."
+  },
+  "hannu": {
+    "intro1": "Onni, poikani! Tule, istu. Oikea peluri ei koskaan arvaa: hän laskee.",
+    "intro2": "Minä opetan nopat. Opi todennäköisyydet, niin onnesta tulee työkalu.",
+    "menu": "Heitetäänkö?",
+    "menuDone": "Tunnet todennäköisyydet nyt paremmin kuin minä, poika.",
+    "about1": "Kaksi noppaa: 36 tulosta. Summan 2 saa vain yhdellä tavalla, mutta summan 7 kuudella. Siksi seiska tulee niin usein.",
+    "about2": "Odotusarvo: mitä voitat keskimäärin. Peli on reilu, kun se on yhtä suuri kuin maksat.",
+    "sealHint": "Kiroa vahvin vihollinen ja anna amuletti sille, joka keskittyy."
+  },
+  "pr": {
+    "w": {
+      "mean": "keskiarvo",
+      "sum": "summa",
+      "count": "määrä",
+      "median": "mediaani",
+      "smallest": "pienin",
+      "largest": "suurin",
+      "middlePos": "keskikohta",
+      "middleValue": "keskimmäinen arvo",
+      "range": "vaihteluväli",
+      "favourable": "suotuisat",
+      "total": "kaikki",
+      "goldCoins": "kultakolikot",
+      "allCoins": "kaikki kolikot",
+      "pGold": "P(kulta)",
+      "pNotGold": "P(ei kultaa)",
+      "pAB": "P(A ja B)",
+      "ways": "tavat",
+      "outcomes": "tulokset",
+      "pWin": "P(voitto)",
+      "prize": "palkinto",
+      "cost": "hinta",
+      "pAtLeast": "P(vähintään yksi kruuna)",
+      "pNone": "P(ei kruunua)",
+      "pTails": "P(klaava)",
+      "goldSlices": "kultasektorit",
+      "allSlices": "kaikki sektorit"
+    },
+    "ev": {
+      "heads": "kolikko on kruuna",
+      "six": "noppa näyttää 6",
+      "even": "noppa näyttää parillisen luvun",
+      "high": "noppa näyttää 5 tai 6"
+    },
+    "cap": {
+      "bars": "Yksi pylväs jokaiselle arvolle annetussa järjestyksessä.",
+      "tokens": "Jokainen kukkaron kolikko. Värit vastaavat kaavaa.",
+      "dice": "Noppien kaikki tulokset. Valaistut ruudut ovat suotuisia."
+    },
+    "stat_mean": {
+      "title": "Keskiarvo",
+      "text": "Data: {data}. {3|Keskiarvo} on reilu osuus: laske kaikkien arvojen {1|summa} ja jaa arvojen {2|määrällä}.",
+      "g1": "Kaikki arvot yhteenlaskettuna.",
+      "g2": "Kuinka monta arvoa on.",
+      "g3": "Keskiarvo: mitä kukin saisi, jos jaettaisiin tasan.",
+      "hint": "Laske ensin kaikki luvut yhteen. Sitten laske niiden määrä ja jaa.",
+      "ex": "{sum} : {n} = {m}."
+    },
+    "stat_median": {
+      "title": "Mediaani",
+      "text": "Data: {data}. Järjestä se {2|pienimmästä} suurimpaan. {3|Mediaani} on {1|keskimmäinen arvo}.",
+      "g1": "Järjestetyn listan keskikohta: (määrä + 1) : 2.",
+      "g2": "Järjestetty lista alkaa tästä.",
+      "g3": "Mediaani: puolet arvoista on sen alapuolella, puolet yläpuolella.",
+      "hint": "Kirjoita arvot järjestykseen. Viidestä arvosta 3. on keskimmäinen.",
+      "hintEven": "Kirjoita arvot järjestykseen. Kuudesta arvosta ota 3. ja 4. keskiarvo.",
+      "ex": "Järjestettynä: {sorted}. Mediaani = {m}."
+    },
+    "stat_range": {
+      "title": "Vaihteluväli",
+      "text": "Data: {data}. {3|Vaihteluväli} kertoo, kuinka hajallaan data on: {1|suurin} arvo miinus {2|pienin}.",
+      "g1": "Suurin arvo.",
+      "g2": "Pienin arvo.",
+      "g3": "Hajonta alhaalta ylös.",
+      "hint": "Etsi suurin ja pienin ja vähennä.",
+      "ex": "{hi} − {lo} = {r}."
+    },
+    "prob_simple": {
+      "title": "Todennäköisyys",
+      "text": "Kukkarossa on {gold} kultakolikkoa ja {other} kuparikolikkoa. Nostat yhden katsomatta. {1|Suotuisat} tulokset ovat kultaiset; {2|kaikki} ovat jokainen kolikko. {3|P(kulta)} = suotuisat : kaikki.",
+      "g1": "Tulokset, joita haluamme.",
+      "g2": "Jokainen mahdollinen tulos.",
+      "g3": "Todennäköisyys: luku väliltä 0 (ei koskaan) – 1 (aina).",
+      "hint": "Laske kultakolikot, laske kaikki kolikot ja kirjoita murtoluku.",
+      "ex": "{gold}/{total}: P = {f}."
+    },
+    "prob_not": {
+      "title": "Ei",
+      "text": "Kukkarossa on {gold} kultakolikkoa ja {other} kuparikolikkoa. Mikä on todennäköisyys, että {4|ei} nosta kultaa? Se on 1 miinus {3|P(kulta)}.",
+      "g4": "Kaikki, mikä ei ole kultaa.",
+      "hint": "Ensin P(kulta) murtolukuna. Sitten vähennä se luvusta 1.",
+      "ex": "1 − {p} = {q}."
+    },
+    "prob_two": {
+      "title": "Kaksi tapahtumaa",
+      "text": "{1|A}: {a}. {2|B}: {b}. Ne eivät vaikuta toisiinsa, joten {3|P(A ja B)} = P(A) × P(B).",
+      "g1": "Ensimmäinen tapahtuma.",
+      "g2": "Toinen tapahtuma.",
+      "g3": "Molemmat tapahtuvat: kerro todennäköisyydet.",
+      "hint": "Kirjoita kumpikin todennäköisyys murtolukuna ja kerro osoittajat ja nimittäjät.",
+      "ex": "{a} × {b} = {c}."
+    },
+    "prob_dice": {
+      "title": "Nopat",
+      "text": "Heitä kahta noppaa. Mikä on todennäköisyys, että summa on {s}? Laske taulukosta {1|tavat}, joilla {s} syntyy, kaikista {2|36} tuloksesta.",
+      "textOne": "Heitä yhtä noppaa. Mikä on todennäköisyys saada {k} tai enemmän? Laske {1|tavat} {2|6} tahkosta.",
+      "g1": "Tulokset, jotka antavat halutun.",
+      "g2": "6 × 6 = 36 yhtä todennäköistä tulosta.",
+      "g2one": "Nopassa on 6 yhtä todennäköistä tahkoa.",
+      "g3": "Todennäköisyys.",
+      "hint": "Katso kuvan valaistuja ruutuja ja laske ne.",
+      "ex": "{ways} tapaa {total} tuloksesta: P = {f}."
+    },
+    "expect": {
+      "title": "Odotusarvo",
+      "text": "Heitä noppaa. Kuudesta tahkosta {ways} voittaa {prize} kultaa, muuten ei mitään. {3|Odotusarvo} on {1|voiton todennäköisyys} kertaa {2|palkinto}.",
+      "textCost": "Pelaaminen maksaa {cost} kultaa. Heitä noppaa: kuudesta tahkosta {ways} voittaa {prize} kultaa. {3|Odotusarvo} on {1|voiton todennäköisyys} kertaa {2|palkinto} miinus {4|hinta}.",
+      "g1": "Voiton todennäköisyys murtolukuna.",
+      "g2": "Mitä voitat.",
+      "g3": "Mitä voitat keskimäärin peliä kohden.",
+      "g4": "Mitä yksi peli maksaa.",
+      "hint": "P(voitto) = voittavat tahkot : 6. Sitten kerro palkinnolla.",
+      "ex": "{f} × {prize} = {e} kultaa.",
+      "exCost": "Miinus hinta {cost}: E = {e}."
+    }
+  },
+  "cseal": {
+    "title": "Fortunan sinetti",
+    "dice7": "Kaksi noppaa. Mikä on todennäköisyys, että summa on 7? Laske taulukosta {1|tavat} {2|36} tuloksesta.",
+    "coins": "Heitä kahta kolikkoa. Mikä on todennäköisyys saada vähintään yksi kruuna? Helpompaa toisin päin: {3|ei kruunua} tarkoittaa klaava ja klaava. Sitten {4|vähintään yksi kruuna} = 1 − P(ei kruunua).",
+    "gNone": "Molemmat kolikot klaavoja: ½ × ½.",
+    "gAtLeast": "Kaikki paitsi klaava ja klaava.",
+    "coinsHint": "P(klaava) on 1/2. Kerro kahdelle kolikolle ja vähennä luvusta 1.",
+    "coinsEx": "P(ei kruunua) = 1/2 × 1/2 = 1/4, joten P(vähintään yksi kruuna) = 1 − 1/4 = 3/4.",
+    "label": {
+      "pouch": "P(kulta)?",
+      "dice7": "P(summa 7)?",
+      "coins": "P(kruuna ≥ 1)?",
+      "practice": "P(kulta)?"
+    },
+    "probeStory": "Onnenisku: ei välivaiheita, vain vastaus. Nopeasti!",
+    "unbindStory": "Sinetti kysyy todennäköisyyttä. Laske huolellisesti vaihe vaiheelta.",
+    "logHit": "Oikein! Sinetti murskautuu.",
+    "logMiss": "Väärin: sinetti pitää."
+  },
+  "cw": {
+    "intro": {
+      "p1": "Numerolan pohjoispuolella on Sattumametsä, jossa jokainen polku haarautuu ja jokainen kolikko heitetään.",
+      "p2": "Madame Fortuna pitää karnevaalia kukkulalla. Hänen pyöränsä on peukaloitu, ja nyt itse onni menee pieleen: nopat heittävät seiskoja koko päivän, eivätkä kolikot koskaan putoa samalla tavalla kahdesti.",
+      "p3": "Kai ja Aino saapuvat Onnenlepoon. Onni-niminen onnekas poika liittyy heihin. Kaikkea laskeva Tilda odottaa."
+    },
+    "obj": {
+      "talkTilda": "Puhu kaiken laskijan Tildan kanssa Onnenlevossa.",
+      "done": "Onni on taas reilua Sattumametsässä!",
+      "glade": "Mene itään ja raivaa Kolikkoaukio (vaihe 1).",
+      "hollow": "Kulje tietä etelään ja raivaa Noppanotko (vaihe 2).",
+      "maze": "Seuraa polkua kaakkoon Pelurin labyrinttiin (vaihe 3).",
+      "train": "Opi Onnenisku (Ren) tai Purku (Tilda) murtaaksesi todennäköisyyssinettejä.",
+      "gate": "Avaa Pyöräportti karnevaalin alapuolella (idässä).",
+      "fortuna": "Kiipeä karnevaaliin ja murra Madame Fortunan sinetit.",
+      "log0": "Tilda haluaa apua sienikirjanpitoonsa.",
+      "log1": "Viimeistele Tildan sienikirjanpito."
+    },
+    "quests": {
+      "main": {
+        "title": "Peukaloitu pyörä",
+        "desc": "Madame Fortunan peukaloitu pyörä on tehnyt itse onnesta epäreilun.",
+        "s1": "Tapaa Tilda Onnenlevossa",
+        "glade": "Vaihe 1: raivaa Kolikkoaukio",
+        "hollow": "Vaihe 2: raivaa Noppanotko",
+        "maze": "Vaihe 3: raivaa Pelurin labyrintti",
+        "gate": "Avaa Pyöräportti",
+        "fortuna": "Kukista Madame Fortuna",
+        "started": "Uusi tehtävä: Peukaloitu pyörä"
+      },
+      "log": {
+        "title": "Sienikirjanpito",
+        "desc": "Auta Tildaa tiivistämään viikon sienimäärät.",
+        "s1": "Laske keskiarvo ja mediaani"
+      }
+    },
+    "tilda": {
+      "intro1": "Vieraita! Hyvä. Täällä kaikki syyttävät onnea. Minä lasken asioita.",
+      "intro2": "Madame Fortuna peukaloi suuren pyöränsä, ja siitä asti itse sattuma on ollut vino. Pirut heittävät kolikkoa matkalaisille, nopat heittävät itseään, rosvot huijaavat.",
+      "intro3": "Hänen karnevaalinsa on suljettu Pyöräportin taakse, ja hän piiloutuu sattuman sinettien taakse. Vain todennäköisyyden osaava pääsee läpi.",
+      "onni": "Minä tulen! En koskaan häviä nopissa. No... melkein koskaan.",
+      "kai": "”Melkein koskaan” kuulostaa minusta todennäköisyydeltä.",
+      "intro4": "Juuri niin. Harjoitelkaa ensin: Ren on täällä, vanha Hannu opettaa Onnia ja minä Ainoa. Sitten aukio, notko ja labyrintti.",
+      "again": "Laskitteko mitään kiinnostavaa?",
+      "thanks": "Taas reilut mahdollisuudet. Lukuni kiittävät!",
+      "optTrain": "Opeta Ainoa (tilastot).",
+      "optFortuna": "Kerro Madame Fortunasta.",
+      "optLog": "Auta sienikirjanpidossa.",
+      "optHint": "Mitä meidän pitäisi tehdä seuraavaksi?",
+      "fortuna1": "Hänen sinettinsä ovat sattuman kysymyksiä: kolikkokukkaro, kaksi noppaa, kaksi kolikkoa.",
+      "fortuna2": "Vastaa yhteen, niin sinetti murtuu. Jokainen uusi sinetti on hieman edellistä vaikeampi.",
+      "log1": "Lasken talon takana kasvavat sienet joka päivä. Tässä on viikko.",
+      "log2": "Millainen on tavallinen päivä? Laske minulle keskiarvo ja mediaani.",
+      "logStory": "Sieniä päivässä yhden viikon ajan: {data}.",
+      "logTitle": "Sienikirjanpito, osa {n}",
+      "logRetry": "Hmm, muistivihkoni sanoo toisin. Yritetään myöhemmin uudelleen.",
+      "logDone": "Tuo täsmää muistivihkooni. Keskiarvo ja mediaani ovat eri luvut, näettekö? Yksi iso päivä vetää keskiarvoa ylöspäin.",
+      "logAino": "Eli mediaani on ”tavallinen päivä” ja keskiarvo reilu osuus.",
+      "logReward": "+{g} kultaa, +{n} juomaa"
+    },
+    "hannu": {
+      "busy": "Puhukaa ensin Tildan kanssa, nuoret."
+    },
+    "ren": {
+      "busy": "Kai! Puhu ensin Tildan kanssa, hän tietää, mitä on tekeillä."
+    },
+    "gate": {
+      "lockedAreas": "Suuren onnenpyörän muotoinen portti, jossa on kolme pyörää. Se ei käänny. (Raivaa ensin Kolikkoaukio, Noppanotko ja Pelurin labyrintti.)",
+      "lockedSkill": "Pyörät hehkuvat, mutta et osaa vielä lukea niiden todennäköisyyksiä. (Opi ensin Onnenisku tai Purku.)",
+      "intro1": "Kolme pyörää, joissa kussakin on kultaisia sektoreita. Ääni kehrää: ”Pyöräytä onnekkainta pyörää, niin aukenen.”",
+      "intro2": "Laske kunkin pyörän todennäköisyys pysähtyä kultaan ja valitse paras.",
+      "wheelTitle": "Pyörä {n}",
+      "wheelText": "Tässä pyörässä on {all} yhtä suurta sektoria, ja niistä {gold} on kultaisia. Kullan todennäköisyys on {1|kultasektorit} {2|kaikista sektoreista}.",
+      "g1": "Voittavat sektorit.",
+      "g2": "Pyörän jokainen sektori.",
+      "cap": "Pyörän jokainen sektori. Värit vastaavat kaavaa.",
+      "wheelStory": "Laske tämän pyörän todennäköisyys pysähtyä kultaan.",
+      "which": "Millä pyörällä on paras mahdollisuus kultaan?",
+      "wheelLabel": "Pyörä {n}: {f}",
+      "wrong": "Pyörä pyörii... ja pysähtyy kupariin. {f} ei ole suurin todennäköisyys. Vertaa murtolukuja uudelleen.",
+      "opened": "Pyörä pysähtyy kultaan. Naks, naks, naks: Pyöräportti aukeaa. Musiikkia kantautuu karnevaalista.",
+      "onni": "1/3 voittaa 1/4:n! Sen minäkin tiedän."
+    },
+    "battle": {
+      "glade1": "Kolikkopiruja! Ne heittävät kolikkoa joka kerta, kun lyöt. Kruuna, ja ne väistävät.",
+      "gladeTitle": "Vaihe 1: Kolikkoaukio",
+      "gladeTip1": "Nyt sankareita on kolme: Kai, Aino ja Onni. Onni heittää kolikoita kaukaa.",
+      "gladeTip2": "Kolikkopirut väistävät opitut hyökkäykset puolet ajasta: P(väistö) = 1/2. Keskitetty hyökkäys ei koskaan mene ohi.",
+      "gladeTip3": "Automaatti (Q) toimii yhä, mutta odota noin puolten opituista iskuista menevän ohi.",
+      "hollow1": "Noppakuutioita. Niiden iskut ovat kahden nopan heitto: mitä tahansa 2:sta 12:een.",
+      "hollowTitle": "Vaihe 2: Noppanotko",
+      "hollowTip1": "Noppakuutio iskee kahden nopan summalla. 7 on todennäköisin summa (6 tapaa 36:sta), 2 ja 12 epätodennäköisimmät (1 tapa kumpikin).",
+      "hollowTip2": "Onnenmatkijalla on 3 panssaria, ja kutosella (todennäköisyys 1/6) sen purenta tekee tuplavahingon. Keskitä läpäistäksesi panssarin.",
+      "maze1": "Rosvoja ja jokeri. Varovasti, hän sekoittaa meidät!",
+      "mazeTitle": "Vaihe 3: Pelurin labyrintti",
+      "mazeTip1": "Todennäköisyysrosvot pistävät läheltä tai heittävät veitsiä kaukaa, ja kutonen tuplaa niiden vahingon.",
+      "mazeTip2": "Jokeri vaihtaa kahden sankarin paikat vuoronsa jälkeen. Kaada se ensin tai pidä parantaja kaukana siitä.",
+      "fortuna1": "ASTUKAA LÄHEMMÄS! JOKAINEN PELI ON REILU... MINULLE.",
+      "fortuna2": "SINETTINI KYSYVÄT YHDEN KYSYMYKSEN: TUNNETTEKO MAHDOLLISUUTENNE?",
+      "fortunaOnni": "Hänen sinettinsä ovat todennäköisyyskysymyksiä! Ratkaiskaa ne, niin ne murtuvat.",
+      "sealRule": "Sinetöitynä Madame Fortuna ei ota vahinkoa. Murra sinetti tehdäksesi hänestä haavoittuvan (ja hän menettää vuoron). 70 ja 35 HP:n kohdalla muodostuu uusi sinetti. Hänellä on 2 panssaria, ja hänen iskunsa voivat heittää onnen kutosen.",
+      "tipProbe": "Kai, Onnenisku: yksi nopea kysymys ilman välivaiheita. Murtoluvut kuten 3/8 kelpaavat.",
+      "tipUnbind": "Aino, Purku: laske suotuisat tulokset ja kaikki tulokset vaihe vaiheelta."
+    },
+    "win": {
+      "glade": "Piruilta loppuvat kolikot ja ne katoavat. Aukio on hiljainen; polku aukeaa etelään.",
+      "hollow": "Nopat lakkaavat pyörimästä ja murenevat silmäluvuiksi. Matkijan suusta löydät Keskitysteetä.",
+      "maze": "Rosvot pakenevat ja jokeri taittuu kuin kortti. Kun kaikki kolme aluetta ovat turvassa, Pyöräportti alkaa kääntyä itsestään.",
+      "fortuna": "Viimeinen sinetti murtuu. Madame Fortunan pyörä pyörii taas oikein: jokainen sektori on samankokoinen."
+    },
+    "ending": {
+      "title": "Onni on taas reilua!",
+      "p1": "Madame Fortuna kumartaa ja korjaa pyöränsä. Kolikot putoavat kruunalle puolet ajasta, nopat heittävät jokaista lukua, ja Onni voittaa yhä... joskus.",
+      "p2": "Opit tiivistämään dataa keskiarvolla, mediaanilla ja vaihteluvälillä sekä mittaamaan sattumaa: suotuisat kaikista, ”ei”, kaksi tapahtumaa yhtä aikaa, nopat ja reilut pelit.",
+      "p3": "Seuraava askel uteliaille: puudiagrammit, ehdollinen todennäköisyys ja normaalijakauma."
+    }
   }
 }

@@ -6,7 +6,8 @@ import { ENEMIES } from '../src/combat/units';
 import { CAMPAIGNS } from '../src/campaigns/registry';
 import { game, newGame } from '../src/state';
 import { LANDS, ROADS } from '../src/journey';
-import { checkAns, det2, eigenMatrix, eigenvalues, generateLA, LA_TOPICS, matVec, sub, type Ans } from '../src/math/linalg';
+import { checkAns, det2, eigenMatrix, eigenvalues, generateLA, LA_TOPICS, matVec, sub, type Ans, type StepProblem } from '../src/math/linalg';
+import { chanceSealProblem, FORTUNA_SEALS, PRACTICE_CHANCE } from '../src/math/chance';
 import { WARDEN_SEALS, eigenSolution, PRACTICE_EIGEN } from '../src/math/eigenseal';
 import en from '../src/lang/en.json';
 import fi from '../src/lang/fi.json';
@@ -87,7 +88,7 @@ describe('language files', () => {
     }
     for (const l of LANDS) for (const k of ['name', 'tier', 'desc']) keys.push(`campaigns.${l.id}.${k}`);
     for (const st of ['cleared', 'here', 'open', 'early', 'later']) keys.push(`worldmap.status.${st}`);
-    for (const topic of LA_TOPICS) keys.push(`la.${topic}.title`, `la.${topic}.text`, `notebook.f.${topic}`, `notebook.d.${topic}`);
+    for (const topic of LA_TOPICS) keys.push(`notebook.f.${topic}`, `notebook.d.${topic}`);
     for (const tr of Object.keys(TRAINER_SKILLS)) {
       for (const s of ['intro1', 'intro2', 'menu', 'menuDone', 'about1', 'about2', 'sealHint']) keys.push(`${tr}.${s}`);
     }
@@ -280,6 +281,20 @@ describe('skills', () => {
   });
 });
 
+/** Every lang key a step problem uses: its texts, '@' words in formulas and '@' params. */
+function problemKeys(p: StepProblem): string[] {
+  const out: string[] = [];
+  const step = (st: { key: string; params?: Record<string, string | number> }) => {
+    out.push(st.key);
+    for (const v of Object.values(st.params ?? {})) if (typeof v === 'string' && v.startsWith('@')) out.push(v.slice(1));
+  };
+  [p.title, p.text, p.hint, ...p.explain, ...Object.values(p.gloss)].forEach(step);
+  if (p.plot?.caption) step(p.plot.caption);
+  const segs = [...p.eq, ...p.ask, ...p.steps.flatMap((s) => s.label)];
+  for (const s of segs) if (typeof s === 'object' && 't' in s && s.t.startsWith('@')) out.push(s.t.slice(1));
+  return out;
+}
+
 describe('linear algebra problems', () => {
   it('checkAns accepts any multiple of an eigenvector, and sets in any order', () => {
     expect(checkAns({ kind: 'dir', v: [2, -2] }, { kind: 'dir', v: [1, -1] })).toBe(true);
@@ -310,6 +325,7 @@ describe('linear algebra problems', () => {
           for (const n of [p.answer, ...p.steps.map((s) => s.ans)].flatMap((a: Ans) => (a.kind === 'num' ? [a.v] : a.kind === 'mat' ? a.v.flat() : a.v)))
             expect(Number.isFinite(n), topic).toBe(true);
           expect(checkAns(p.answer, p.answer)).toBe(true);
+          for (const k of problemKeys(p)) expect(k in EN, `${topic}: ${k}`).toBe(true);
           if (p.stepsAreAnswer) {
             const nums = p.steps.map((s) => (s.ans.kind === 'num' ? s.ans.v : NaN));
             const want = p.answer.kind === 'mat' ? p.answer.v.flat() : (p.answer.v as number[]);
@@ -326,6 +342,43 @@ describe('linear algebra problems', () => {
       const v = p.answer.v as number[];
       expect(v.some((x) => x !== 0)).toBe(true);
     }
+  });
+});
+
+describe('probability and statistics problems', () => {
+  it('give probabilities between 0 and 1 as reduced fractions, and whole-number statistics', () => {
+    const rng = seeded(5);
+    for (const topic of ['prob_simple', 'prob_not', 'prob_two', 'prob_dice'] as const)
+      for (let lv = 1; lv <= 3; lv++)
+        for (let i = 0; i < 40; i++) {
+          const a = generateLA(topic, lv, rng).answer;
+          expect(a.kind).toBe('num');
+          if (a.kind !== 'num') continue;
+          expect(a.v).toBeGreaterThan(0);
+          expect(a.v).toBeLessThan(1);
+          expect(a.frac![0] / a.frac![1]).toBeCloseTo(a.v, 12);
+        }
+    for (let i = 0; i < 60; i++) {
+      const m = generateLA('stat_mean', 1 + (i % 3), rng).answer as { v: number };
+      expect(Number.isInteger(m.v)).toBe(true);
+      const e = generateLA('expect', 1 + (i % 3), rng).answer as { v: number };
+      expect(Number.isInteger(e.v)).toBe(true);
+    }
+  });
+  it('accept a rounded decimal for a fraction, but not a wrong one', () => {
+    const third: Ans = { kind: 'num', v: 1 / 3, frac: [1, 3] };
+    expect(checkAns({ kind: 'num', v: 0.33 }, third)).toBe(true);
+    expect(checkAns({ kind: 'num', v: 0.3 }, third)).toBe(false);
+    expect(checkAns({ kind: 'num', v: 3 }, { kind: 'num', v: 3 })).toBe(true);
+  });
+  it("Madame Fortuna's seals have the right answers", () => {
+    const answers = FORTUNA_SEALS.map((s) => (chanceSealProblem(s).answer as { v: number }).v);
+    expect(answers[0]).toBeCloseTo(3 / 8);
+    expect(answers[1]).toBeCloseTo(1 / 6);
+    expect(answers[2]).toBeCloseTo(3 / 4);
+    expect((chanceSealProblem(PRACTICE_CHANCE).answer as { v: number }).v).toBeCloseTo(1 / 4);
+    for (const s of [...FORTUNA_SEALS, PRACTICE_CHANCE]) for (const k of problemKeys(chanceSealProblem(s))) expect(k in EN, k).toBe(true);
+    for (const id of ['pouch', 'dice7', 'coins', 'practice']) expect(`cseal.label.${id}` in EN).toBe(true);
   });
 });
 

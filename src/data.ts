@@ -1,7 +1,7 @@
 import type { Topic } from './math/problems';
 
-export type CampaignId = 'numerola' | 'eigenvale';
-export type HeroId = 'kai' | 'aino' | 'sana' | 'otso';
+export type CampaignId = 'numerola' | 'eigenvale' | 'chancewood';
+export type HeroId = 'kai' | 'aino' | 'sana' | 'otso' | 'onni';
 export type SkillId =
   // Numerola
   | 'strike'
@@ -26,9 +26,20 @@ export type SkillId =
   | 'bash'
   | 'ward'
   | 'taunt'
-  | 'quake';
+  | 'quake'
+  // Chancewood
+  | 'cstep'
+  | 'cflurry'
+  | 'cprobe'
+  | 'cstorm'
+  | 'cmend'
+  | 'cunbind'
+  | 'toss'
+  | 'jinx'
+  | 'dice'
+  | 'fortune';
 export type ItemId = 'tonic' | 'tea' | 'seeds';
-export type TrainerId = 'ren' | 'lumi' | 'ilona' | 'kerttu' | 'vera' | 'renEv';
+export type TrainerId = 'ren' | 'lumi' | 'ilona' | 'kerttu' | 'vera' | 'renEv' | 'renCh' | 'tilda' | 'hannu';
 
 export type TrialDef =
   | { kind: 'problems'; topic: Topic; need: number }
@@ -178,6 +189,59 @@ export const SKILLS: Record<SkillId, SkillDef> = {
     focus: { topic: 'mat_mul', timed: false },
     trainer: 'vera', trial: { kind: 'problems', topic: 'mat_mul', need: 2 },
   }),
+
+  // ---------- Chancewood ----------
+  cstep: S({
+    id: 'cstep', owner: 'kai', ap: 1, cooldown: 2, range: 5, target: 'emptyTile', area: 0,
+    effect: { kind: 'teleport' },
+    trainer: 'renCh', trial: { kind: 'problems', topic: 'stat_range', need: 3 },
+  }),
+  cflurry: S({
+    id: 'cflurry', owner: 'kai', ap: 3, cooldown: 2, range: 1, target: 'enemy', area: 0,
+    effect: { kind: 'multi', hits: 2, dmg: 5 },
+    focus: { topic: 'prob_simple', timed: true },
+    trainer: 'renCh', trial: { kind: 'problems', topic: 'prob_simple', need: 3 },
+  }),
+  cprobe: S({
+    id: 'cprobe', owner: 'kai', ap: 2, cooldown: 0, range: 1, target: 'enemy', area: 0,
+    effect: { kind: 'probe', dmg: 5 },
+    trainer: 'renCh', trial: { kind: 'probe' },
+  }),
+  cstorm: S({
+    id: 'cstorm', owner: 'aino', ap: 3, cooldown: 2, range: 6, target: 'tile', area: 1,
+    effect: { kind: 'aoe', dmg: 9 },
+    focus: { topic: 'stat_mean', timed: false },
+    trainer: 'tilda', trial: { kind: 'problems', topic: 'stat_mean', need: 3 },
+  }),
+  cmend: S({
+    id: 'cmend', owner: 'aino', ap: 2, cooldown: 2, range: 4, target: 'ally', area: 0,
+    effect: { kind: 'heal', amount: 12 },
+    focus: { topic: 'stat_median', timed: false },
+    trainer: 'tilda', trial: { kind: 'problems', topic: 'stat_median', need: 3 },
+  }),
+  cunbind: S({
+    id: 'cunbind', owner: 'aino', ap: 2, cooldown: 1, range: 6, target: 'enemy', area: 0,
+    effect: { kind: 'unbind' },
+    trainer: 'tilda', trial: { kind: 'unbind' },
+  }),
+  toss: S({ id: 'toss', owner: 'onni', ap: 2, cooldown: 0, range: 4, target: 'enemy', area: 0, basic: true, effect: { kind: 'hit', min: 3, max: 9, projectile: '#ffcd75' } }),
+  jinx: S({
+    id: 'jinx', owner: 'onni', ap: 1, cooldown: 3, range: 6, target: 'enemy', area: 0,
+    effect: { kind: 'mark', turns: 2 },
+    trainer: 'hannu', trial: { kind: 'problems', topic: 'prob_not', need: 3 },
+  }),
+  dice: S({
+    id: 'dice', owner: 'onni', ap: 3, cooldown: 3, range: 5, target: 'tile', area: 1,
+    effect: { kind: 'aoe', dmg: 8 },
+    focus: { topic: 'prob_dice', timed: false },
+    trainer: 'hannu', trial: { kind: 'problems', topic: 'prob_dice', need: 2 },
+  }),
+  fortune: S({
+    id: 'fortune', owner: 'onni', ap: 2, cooldown: 2, range: 3, target: 'ally', area: 0,
+    effect: { kind: 'shield', amount: 10 },
+    focus: { topic: 'expect', timed: false },
+    trainer: 'hannu', trial: { kind: 'problems', topic: 'expect', need: 2 },
+  }),
 };
 
 /** Which skills each hero has, per campaign (first one is the basic attack). */
@@ -192,6 +256,11 @@ export const PARTY_SKILLS: Record<CampaignId, Partial<Record<HeroId, SkillId[]>>
     sana: ['shot', 'aimed', 'volley', 'mark'],
     otso: ['bash', 'ward', 'taunt', 'quake'],
   },
+  chancewood: {
+    kai: ['strike', 'cstep', 'cflurry', 'cprobe'],
+    aino: ['bolt', 'cstorm', 'cmend', 'cunbind'],
+    onni: ['toss', 'jinx', 'dice', 'fortune'],
+  },
 };
 
 /** Skills each trainer teaches, in the order they must be learned. */
@@ -202,10 +271,13 @@ export const TRAINER_SKILLS: Record<TrainerId, SkillId[]> = {
   kerttu: ['beam', 'emend', 'eunbind'],
   ilona: ['aimed', 'volley', 'mark'],
   vera: ['ward', 'taunt', 'quake'],
+  renCh: ['cstep', 'cflurry', 'cprobe'],
+  tilda: ['cstorm', 'cmend', 'cunbind'],
+  hannu: ['jinx', 'dice', 'fortune'],
 };
 
 /** The NPC sprite/name for a trainer (Ren teaches in both campaigns). */
-export const TRAINER_NPC: Record<TrainerId, string> = { ren: 'ren', lumi: 'lumi', renEv: 'ren', kerttu: 'kerttu', ilona: 'ilona', vera: 'vera' };
+export const TRAINER_NPC: Record<TrainerId, string> = { ren: 'ren', lumi: 'lumi', renEv: 'ren', kerttu: 'kerttu', ilona: 'ilona', vera: 'vera', renCh: 'ren', tilda: 'tilda', hannu: 'hannu' };
 
 export interface HeroDef {
   id: HeroId;
@@ -220,6 +292,7 @@ export const HEROES: Record<HeroId, HeroDef> = {
   aino: { id: 'aino', hp: 26, init: 10, speed: 3 },
   sana: { id: 'sana', hp: 28, init: 12, speed: 3 },
   otso: { id: 'otso', hp: 40, init: 7, speed: 2 },
+  onni: { id: 'onni', hp: 30, init: 11, speed: 3 },
 };
 
 export interface ItemDef {
