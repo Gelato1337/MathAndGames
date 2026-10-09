@@ -1287,3 +1287,158 @@ button.campaign-card:focus-visible {
   gap: 0.8em;
   align-items: start;
 }
+
+/* ---------- title (journey) ---------- */
+.title-sprites img {
+  width: 4.5em;
+  height: 4.5em;
+}
+.title-buttons {
+  align-items: stretch;
+  min-width: 16em;
+  gap: 0.5em;
+}
+button.big {
+  font-size: 1.3em;
+  padding: 0.5em 1.2em;
+}
+
+/* ---------- world map ---------- */
+.worldmap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+  padding: 1em 1.4em;
+  background: #0d0e17;
+}
+.wm-head {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+.wm-head h1 {
+  margin: 0;
+  font-size: 2.2em;
+  color: var(--yellow);
+  text-shadow: 0.08em 0.08em 0 var(--ink);
+}
+.wm-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: 1em;
+  align-items: flex-start;
+}
+.wm-stage {
+  position: relative;
+  flex: 1;
+  aspect-ratio: 192 / 112;
+  max-height: 100%;
+  border: 0.2em solid var(--slate);
+  border-radius: 0.3em;
+  /* clip, not hidden: a focused marker must not scroll the map */
+  overflow: clip;
+}
+.wm-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+.wm-marker {
+  position: absolute;
+  z-index: 2;
+  /* centred with margins: the global button:active transform must not move it */
+  margin: -1.6em 0 0 -1.6em;
+  width: 3.2em;
+  height: 3.2em;
+  padding: 0;
+  background: transparent;
+  border: 0.18em dashed transparent;
+  border-radius: 50%;
+}
+.wm-marker:hover,
+.wm-marker:focus-visible,
+.wm-marker.selected {
+  border-color: var(--yellow);
+  background: rgba(255, 205, 117, 0.15);
+}
+.wm-label {
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.95em;
+  padding: 0.05em 0.4em;
+  background: rgba(26, 28, 44, 0.85);
+  border-radius: 0.2em;
+}
+.wm-marker.later .wm-label {
+  color: var(--light);
+  font-style: italic;
+}
+.wm-marker.cleared .wm-label {
+  color: var(--lime);
+}
+.wm-marker.here .wm-label,
+.wm-marker.open .wm-label {
+  color: var(--yellow);
+}
+.wm-party {
+  position: absolute;
+  z-index: 3;
+  width: 2.6em;
+  height: 2.6em;
+  transform: translate(-50%, -115%);
+  pointer-events: none;
+  animation: wm-bob 1s steps(2) infinite;
+}
+.wm-party.moving {
+  transition:
+    left 1.2s ease-in-out,
+    top 1.2s ease-in-out;
+}
+@keyframes wm-bob {
+  50% {
+    margin-top: -0.2em;
+  }
+}
+.wm-card {
+  width: 21em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+}
+.wm-card h2 {
+  margin: 0;
+  color: var(--yellow);
+}
+.wm-card p {
+  margin: 0.2em 0;
+}
+.wm-status {
+  color: var(--ice);
+}
+.wm-stages {
+  list-style: none;
+  margin: 0.3em 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+}
+@media (max-width: 700px) {
+  .wm-body {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .wm-card {
+    width: auto;
+  }
+}

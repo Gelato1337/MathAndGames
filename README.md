@@ -4,12 +4,15 @@ A prototype math RPG. Your party unlocks skills by solving math problems. The wo
 
 **Learn once, cast many.** You solve a short trial once to learn a skill. After that the skill works without any math, and **Auto** can play a whole turn with learned skills. For real power you **Focus** a skill: it charges for a turn and fires after you solve a puzzle of the kind you learned it with. A right answer gives ×2.5 power and pierces armor.
 
-There are two campaigns, one per math level (see [docs/CURRICULUM.md](docs/CURRICULUM.md) for the tiers behind them):
+**A journey across lands.** Each land is one campaign for one level of math, shown on an overview **world map** (see [docs/CURRICULUM.md](docs/CURRICULUM.md) for the tiers behind them). Every journey starts in Numerola, the tutorial land, where you learn the game; then you travel on to harder lands. Each land has **three increasingly hard areas, then a final boss**. Your progress in a land is kept while you travel; cleared lands are remembered in the browser.
 
-| Campaign | Level | Math | Boss |
+| Land | Level | Stages 1 → 3 | Final boss |
 |---|---|---|---|
-| **Numerola** | Primary school (ages 7–12) | Arithmetic, times tables, area, missing numbers, first equations | The Riddle Golem (equation seals) |
-| **Eigenvale** | Linear algebra (upper secondary → university) | Vectors, dot products, matrix × vector, matrix × matrix, determinants, eigenvalues, eigenvectors | The Eigenwarden (matrix seals) |
+| **Numerola** (tutorial) | Primary school (ages 7–12) | Forest Clearing → Times-Table Marsh → Echo Caves | The Riddle Golem (equation seals) |
+| **Eigenvale** | Linear algebra (upper secondary → university) | Vector Plains → Matrix Mines → Shear Glacier | The Eigenwarden (matrix seals) |
+| Chancewood, Fluxreach, Bitforge, Forcehold | Probability, calculus, computer science, physics | coming later (in fog on the map) | |
+
+Eigenvale is recommended after Numerola, but the map lets experienced players "travel anyway".
 
 Linear algebra puzzles are **step puzzles**: you fill in the working (each step is checked and earns partial credit), with colour-coded formulas (hover a coloured term to see what it means), a vector/unit-square plot, and a **Notebook** for your own notes and the formulas you have learned.
 
@@ -39,7 +42,8 @@ Dev shortcuts (only with `npm run dev`):
 - `?dev` unlocks every skill (Numerola).
 - `?dev=forest` also starts you next to the first battle.
 - `?dev=boss` also opens the rune gate and puts you at the boss.
-- `?dev&campaign=eigenvale` does the same for Eigenvale; `dev=plains`, `dev=mines`, `dev=door` and `dev=boss` jump to its areas.
+- `?dev=marsh`, `?dev=caves`, `?dev=gate` jump to Numerola's later stages.
+- `?dev&campaign=eigenvale` does the same for Eigenvale; `dev=plains`, `dev=mines`, `dev=glacier`, `dev=door` and `dev=boss` jump to its areas.
 
 ## AI tutor (optional)
 
@@ -76,7 +80,9 @@ Only the Claude Code command line has been tested end to end. The Gemini and Cod
 | Sage Lumi's library (mage) | Trials for Fireball, Mend, Unbind | Area, missing numbers, balance-scale puzzle, equations |
 | Helmi's farm (side quest) | Plan an L-shaped field, buy seeds | Area by counting, splitting, or subtracting; multiplication; rounding up to whole bags |
 | Pekka's shop | Buy tonics, tea and seed bags; haggle once | Money; percentages |
-| Forest clearing | Tutorial battle against three Number Slimes | – (optional Focus) |
+| Stage 1: Forest Clearing | Tutorial battle against three Number Slimes | – (optional Focus) |
+| Stage 2: Times-Table Marsh (forest path south) | Tongue Frogs pull heroes in; Splitter Slimes burst into two droplets | Fireball's area hits groups |
+| Stage 3: Echo Caves (east of the marsh) | Shell Beetles (armor 2) and a Cave Shade that heals its friends | Focus to pierce armor; pick targets |
 | Rune gate | Logic puzzle on the sequence 7, 10, 13, … | Patterns, nth term, the inverse question |
 | Ruins | Boss: the Riddle Golem | `x + 7 = 15` → `3x + 4 = 25` → `2x + 5 = x + 12` |
 
@@ -96,8 +102,9 @@ Party of four: Kai (ninja), Aino (mage), **Sana** (ranger) and **Otso** (shieldb
 | Archmage Kerttu | Matrix Beam, Mend, Unbind | Matrix × vector, scaling, eigenvalues and eigenvectors step by step |
 | Captain Vera | Ward, Taunt, Quake | Determinants, scaling, matrix × matrix |
 | Ilona's survey (side quest) | Where did the warp move the landmarks? | Matrix × vector |
-| Vector Plains | Vector Wisps blink around; Scalar Slimes grow each round | – (Auto works, Focus helps) |
-| Matrix Mines | Crystal Golems (armor 4, reflect damage), Shear Bats (heal by biting) | Focus needed to pierce armor |
+| Vector Plains (stage 1) | Vector Wisps blink around; Scalar Slimes grow each round | – (Auto works, Focus helps) |
+| Matrix Mines (stage 2, south) | Crystal Golems (armor 4, reflect damage), Shear Bats (heal by biting) | Focus needed to pierce armor |
+| Shear Glacier (stage 3, south-east) | Ice Sentries gain armor every turn, Frost Wraiths chill heroes (−2 AP), the Frost Knight has a one-step eigenvalue seal (a triangular matrix) | A preview of the boss |
 | Determinant Door | Three locks: compute each determinant, pick the invertible matrix | det ≠ 0 ⇔ invertible |
 | Eigen Spire | Boss: the Eigenwarden, three matrix seals, armor 3, pushes heroes | Eigenvalue → eigenvector → eigenvalue |
 
@@ -110,7 +117,8 @@ See [docs/DESIGN.md](docs/DESIGN.md) for the design rationale and tuning knobs, 
 ```
 src/
   main.ts            game loop, mode switching (title / explore / combat)
-  campaign.ts        the Campaign interface (map, NPCs, story hooks, objectives)
+  campaign.ts        the Campaign interface (map, stages, NPCs, story hooks, objectives)
+  journey.ts         lands on the world map, cleared lands, per-land saved state
   campaigns/         numerola.ts, eigenvale.ts, registry.ts
   i18n.ts            t(key, params), language switch, Finnish decimal comma
   lang/en.json       every string in the game
@@ -124,7 +132,8 @@ src/
   combat/            grid combat, AP, AI, combat HUD
   story/             NPC dialogue scripts, skill trials
   ui/                dialog, question modal, balance scale, rune gate, farm, shop, menus, tutor chat,
-                     steps.ts (step puzzles), eq.ts (colour-coded formulas), plot.ts, notebook.ts
+                     steps.ts (step puzzles), eq.ts (colour-coded formulas), plot.ts, notebook.ts,
+                     worldmap.ts (the overview map)
   tutor/             tutor client and answer-leak guard
   art/iso.ts         isometric projection, diamond tops and shaded side faces
 tutor/               local bridge to Claude Code / Gemini / Codex (server.mjs, rules.md)

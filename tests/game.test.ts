@@ -4,6 +4,8 @@ import { describe, expect, it } from 'vitest';
 import { HEROES, ITEMS, PARTY_SKILLS, SKILLS, TRAINER_NPC, TRAINER_SKILLS } from '../src/data';
 import { ENEMIES } from '../src/combat/units';
 import { CAMPAIGNS } from '../src/campaigns/registry';
+import { game, newGame } from '../src/state';
+import { LANDS, ROADS } from '../src/journey';
 import { checkAns, det2, eigenMatrix, eigenvalues, generateLA, LA_TOPICS, matVec, sub, type Ans } from '../src/math/linalg';
 import { WARDEN_SEALS, eigenSolution, PRACTICE_EIGEN } from '../src/math/eigenseal';
 import en from '../src/lang/en.json';
@@ -83,6 +85,8 @@ describe('language files', () => {
       for (const n of c.npcs) keys.push(`chars.${n.id}`);
       keys.push(...c.intro);
     }
+    for (const l of LANDS) for (const k of ['name', 'tier', 'desc']) keys.push(`campaigns.${l.id}.${k}`);
+    for (const st of ['cleared', 'here', 'open', 'early', 'later']) keys.push(`worldmap.status.${st}`);
     for (const topic of LA_TOPICS) keys.push(`la.${topic}.title`, `la.${topic}.text`, `notebook.f.${topic}`, `notebook.d.${topic}`);
     for (const tr of Object.keys(TRAINER_SKILLS)) {
       for (const s of ['intro1', 'intro2', 'menu', 'menuDone', 'about1', 'about2', 'sealHint']) keys.push(`${tr}.${s}`);
@@ -341,31 +345,52 @@ describe('eigen seals', () => {
   });
 });
 
+/** Every tile the party can walk to from the campaign's start. */
+function reach(world: WorldMap, c: (typeof CAMPAIGNS)[keyof typeof CAMPAIGNS]): Set<string> {
+  const seen = new Set<string>([`${c.start.x},${c.start.y}`]);
+  const q = [[c.start.x, c.start.y]];
+  while (q.length) {
+    const [x, y] = q.shift()!;
+    for (const [dx, dy] of [
+      [1, 0],
+      [-1, 0],
+      [0, 1],
+      [0, -1],
+    ]) {
+      const nx = x + dx;
+      const ny = y + dy;
+      const k = `${nx},${ny}`;
+      if (seen.has(k) || !world.canStep(x, y, nx, ny)) continue;
+      if (c.npcs.some((n) => n.x === nx && n.y === ny)) continue;
+      seen.add(k);
+      q.push([nx, ny]);
+    }
+  }
+  return seen;
+}
+
+describe('journey', () => {
+  it('every playable land is a campaign, and every road joins known lands', () => {
+    for (const l of LANDS) if (l.campaign) expect(CAMPAIGNS[l.campaign], l.id).toBeTruthy();
+    for (const c of Object.keys(CAMPAIGNS)) expect(LANDS.some((l) => l.campaign === c), c).toBe(true);
+    const ids = new Set(LANDS.map((l) => l.id));
+    for (const [a, b] of ROADS) expect(ids.has(a) && ids.has(b)).toBe(true);
+    // Numerola is the tutorial: it needs nothing, everything else comes after it
+    expect(LANDS.find((l) => l.id === 'numerola')!.after).toEqual([]);
+    for (const l of LANDS) if (l.id !== 'numerola') expect(l.after.length, l.id).toBeGreaterThan(0);
+  });
+});
+
 describe('campaigns', () => {
   for (const c of Object.values(CAMPAIGNS)) {
     it(`${c.id}: NPCs, objects, entries and enemies are reachable`, () => {
       const world = c.buildWorld();
       for (const row of world.tiles) expect(row.length).toBe(world.w);
+      // with every stage cleared, every barrier is open
+      newGame(c.id);
+      c.dev('boss', () => {}, world);
       for (const o of c.interactables) world.replace(o.tiles, '_');
-      const seen = new Set<string>([`${c.start.x},${c.start.y}`]);
-      const q = [[c.start.x, c.start.y]];
-      while (q.length) {
-        const [x, y] = q.shift()!;
-        for (const [dx, dy] of [
-          [1, 0],
-          [-1, 0],
-          [0, 1],
-          [0, -1],
-        ]) {
-          const nx = x + dx;
-          const ny = y + dy;
-          const k = `${nx},${ny}`;
-          if (seen.has(k) || !world.canStep(x, y, nx, ny)) continue;
-          if (c.npcs.some((n) => n.x === nx && n.y === ny)) continue;
-          seen.add(k);
-          q.push([nx, ny]);
-        }
-      }
+      const seen = reach(world, c);
       const near = (x: number, y: number) =>
         [
           [0, 1],
@@ -386,6 +411,23 @@ describe('campaigns', () => {
               expect(inRect(e.region, en.x + dx, en.y + dy)).toBe(true);
             }
         }
+      }
+    });
+    it(`${c.id}: has three stages and a boss, and later stages are closed off at the start`, () => {
+      newGame(c.id);
+      const stages = c.stages(game);
+      expect(stages.length).toBe(4);
+      expect(stages.filter((s) => s.boss).length).toBe(1);
+      expect(stages[3].boss).toBe(true);
+      for (const s of stages) expect(s.name in EN, s.name).toBe(true);
+      const world = c.buildWorld();
+      c.prepareWorld(world);
+      const seen = reach(world, c);
+      const [first, ...later] = c.encounters;
+      expect([...seen].some((k) => { const [x, y] = k.split(',').map(Number); return inRect(first.trigger, x, y); }), first.id).toBe(true);
+      for (const e of later) {
+        const inside = [...seen].some((k) => { const [x, y] = k.split(',').map(Number); return inRect(e.trigger, x, y); });
+        expect(inside, `${e.id} should be closed at the start`).toBe(false);
       }
     });
   }

@@ -1,7 +1,7 @@
 import { spriteUrl } from '../art/sprites';
 import { skillTooltip } from '../combat/hud';
-import { CAMPAIGN_ORDER, campaign } from '../campaigns/registry';
-import { HEROES, ITEMS, PARTY_SKILLS, type CampaignId, type ItemId } from '../data';
+import { campaign } from '../campaigns/registry';
+import { HEROES, ITEMS, PARTY_SKILLS, type ItemId } from '../data';
 import { getLang, LANGS, setLang, t, type Lang } from '../i18n';
 import { summary } from '../math/mastery';
 import { game, setTimers, settings, type TimerMode } from '../state';
@@ -149,7 +149,7 @@ export function helpScreen(): Promise<void> {
   return screen(t('help.title'), keys.map((k) => h('p', { text: t(`help.${k}`) })));
 }
 
-export function pauseMenu(onChange: () => void, onTitle: () => void): Promise<void> {
+export function pauseMenu(onChange: () => void, onTitle: () => void, onWorldMap: () => void): Promise<void> {
   return new Promise((resolve) => {
     const content = h('div.col', { style: 'min-width:16em' }, [h('h2', { text: t('menu.title') })]);
     const modal = openModal(content);
@@ -170,6 +170,13 @@ export function pauseMenu(onChange: () => void, onTitle: () => void): Promise<vo
       ['notebook.title', then(notebookScreen)],
       ['menu.settings', then(() => settingsScreen(onChange))],
       ['menu.help', then(helpScreen)],
+      [
+        'menu.worldMap',
+        () => {
+          close();
+          onWorldMap();
+        },
+      ],
       [
         'menu.toTitle',
         () => {
@@ -192,30 +199,35 @@ export function pauseMenu(onChange: () => void, onTitle: () => void): Promise<vo
 
 // ---------- title & ending ----------
 
-export function titleScreen(onNew: (id: CampaignId) => void): void {
+/** Title: start a new journey or continue on the world map. */
+export function titleScreen(opts: { onNew: () => void; onContinue: (() => void) | null }): void {
   const el = h('div.title-screen');
   const render = () => {
-    const cards = CAMPAIGN_ORDER.map((id) =>
-      h('button.campaign-card', {
-        onclick: () => {
-          el.remove();
-          onNew(id);
-        },
-      }, [
-        h('div.camp-sprites', {}, (id === 'numerola' ? ['kai', 'golem', 'aino'] : ['sana', 'warden', 'otso']).map((sp) => img(spriteUrl(sp, sp === 'golem' || sp === 'warden' ? 2 : 4)))),
-        h('div.camp-name', { text: t(`campaigns.${id}.name`) }),
-        h('div.camp-tier', { text: t(`campaigns.${id}.tier`) }),
-        h('div.camp-desc', { text: t(`campaigns.${id}.desc`) }),
-      ]),
-    );
+    const start = h('button.primary.big', {
+      text: t('title.newJourney'),
+      onclick: () => {
+        el.remove();
+        opts.onNew();
+      },
+    });
+    const cont = opts.onContinue
+      ? h('button.big', {
+          text: t('title.continue'),
+          onclick: () => {
+            el.remove();
+            opts.onContinue!();
+          },
+        })
+      : null;
     el.replaceChildren(
       h('h1', { text: t('meta.title') }),
-      h('div.subtitle', { text: t('title.chooseCampaign') }),
-      h('div.campaigns', {}, cards),
+      h('div.subtitle', { text: t('title.tagline') }),
+      h('div.camp-sprites.title-sprites', {}, ['kai', 'aino', 'sana', 'otso'].map((sp) => img(spriteUrl(sp, 4)))),
+      h('div.col.title-buttons', {}, [cont, start].filter(Boolean) as HTMLElement[]),
       h('div.row', { style: 'justify-content:center' }, [h('button', { text: t('title.help'), onclick: () => void helpScreen() }), langButtons(render)]),
-      h('p.muted', { text: t('title.tagline'), style: 'margin-top:1em' }),
+      h('p.muted', { text: t('title.journeyNote'), style: 'margin-top:1em' }),
     );
-    requestAnimationFrame(() => el.querySelector<HTMLElement>('button.campaign-card')?.focus());
+    requestAnimationFrame(() => el.querySelector<HTMLElement>('.title-buttons button')?.focus());
   };
   render();
   uiRoot().append(el);
@@ -248,7 +260,7 @@ export function introSlides(slides: string[]): Promise<void> {
 }
 
 /** Ending: the campaign's own lines (first one is the title), then shared stats. */
-export function endingScreen(lines: string[], onTitle: () => void): void {
+export function endingScreen(lines: string[], onTitle: () => void, onTravel: () => void): void {
   const s = summary();
   const pct = s.attempts ? Math.round((100 * s.correct) / s.attempts) : 0;
   const total = Object.values(PARTY_SKILLS[game.campaign]).reduce((n, l) => n + (l?.length ?? 0), 0);
@@ -266,12 +278,19 @@ export function endingScreen(lines: string[], onTitle: () => void): void {
   const modal = openModal(content);
   content.append(
     h('div.row', {}, [
-      h('div.spacer'),
-      h('button.primary', {
+      h('button', {
         text: t('menu.toTitle'),
         onclick: () => {
           modal.close();
           onTitle();
+        },
+      }),
+      h('div.spacer'),
+      h('button.primary', {
+        text: t('ending.travelOn'),
+        onclick: () => {
+          modal.close();
+          onTravel();
         },
       }),
     ]),

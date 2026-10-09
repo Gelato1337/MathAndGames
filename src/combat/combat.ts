@@ -34,6 +34,10 @@ interface Reach {
 const FIRE_TURNS = 2;
 const FIRE_DMG = 3;
 const REFLECT_DMG = 2;
+const CHILL_AP = 2;
+const MEND_AP = 2;
+const HARDEN_MAX = 4;
+const MEND_HEAL = 5;
 const rand = (min: number, max: number) => min + Math.floor(Math.random() * (max - min + 1));
 
 export type CombatResult = 'win' | 'lose';
@@ -238,6 +242,12 @@ export class Combat {
     if (u.taunt > 0) u.taunt--;
     if (u.mark > 0) u.mark--;
     u.ap = Math.min(u.maxAp, u.ap + u.regen);
+    if (u.chill > 0) {
+      u.chill = 0;
+      u.ap = Math.max(0, u.ap - CHILL_AP);
+      this.float(u, t('combat.chillFloat'), '#73eff7');
+      this.addLog(t('combat.chilled', { name: this.name(u) }));
+    }
     u.moveLeft = 0;
     this.selected = null;
     this.focusMode = false;
@@ -250,6 +260,10 @@ export class Combat {
         this.nextTurn();
         return;
       }
+    }
+    if (u.abilities.includes('harden') && u.armor < HARDEN_MAX) {
+      u.armor++;
+      this.float(u, t('combat.hardenFloat'), '#94b0c2');
     }
     if (u.abilities.includes('grow')) {
       u.maxHp += 3;
@@ -269,7 +283,11 @@ export class Combat {
       if (u.focus) {
         this.state = 'busy';
         this.hud.render();
-        await this.releaseFocus(u);
+        try {
+          await this.releaseFocus(u);
+        } catch (e) {
+          console.error('focus release failed', e);
+        }
         if (this.checkEnd()) return;
       }
       this.state = 'player';
@@ -278,9 +296,11 @@ export class Combat {
       this.state = 'enemy';
       this.reach = null;
       this.hud.render();
-      this.runAI(u).then(() => {
-        if (this.state !== 'over') this.nextTurn();
-      });
+      this.runAI(u)
+        .catch((e: unknown) => console.error('enemy turn failed', e))
+        .then(() => {
+          if (this.state !== 'over') this.nextTurn();
+        });
       return;
     }
     this.hud.render();
@@ -417,6 +437,28 @@ export class Combat {
     u.dead = true;
     u.focus = null;
     this.addLog(t(u.team === 'hero' ? 'combat.down' : 'combat.defeated', { name: this.name(u) }));
+    if (u.abilities.includes('split')) this.split(u);
+  }
+
+  /** A splitter slime bursts into two droplets on the nearest free tiles. */
+  private split(u: Unit): void {
+    let made = 0;
+    for (let r = 1; r <= 2 && made < 2; r++) {
+      for (let dy = -r; dy <= r && made < 2; dy++) {
+        for (let dx = -r; dx <= r && made < 2; dx++) {
+          const d = makeEnemy('droplet', u.x + dx, u.y + dy);
+          if (!this.canStand(d, d.x, d.y)) continue;
+          d.ap = 0;
+          this.units.push(d);
+          this.order.push(d);
+          made++;
+        }
+      }
+    }
+    if (made) {
+      this.float(u, t('combat.splitFloat'), '#a7f070', 6);
+      this.addLog(t('combat.split', { name: this.name(u) }));
+    }
   }
 
   heal(target: Unit, amount: number): void {
@@ -590,6 +632,7 @@ export class Combat {
   }
 
   private async onClick(x: number, y: number): Promise<void> {
+    if (this.state !== 'player') return;
     const u = this.active;
     if (this.selected) {
       if (this.validTarget(this.selected, x, y)) await this.useSkill(this.selected, x, y);
@@ -641,7 +684,8 @@ export class Combat {
   async useSkill(id: SkillId, x: number, y: number): Promise<void> {
     const u = this.active;
     const def = SKILLS[id];
-    if (!this.canUse(u, id)) return;
+    // one action at a time (a double click must not start two)
+    if (this.state !== 'player' || !this.canUse(u, id)) return;
     const focusing = this.focusMode && this.canFocus(u, id);
     const target = this.unitAt(x, y);
     this.state = 'busy';
@@ -893,7 +937,43 @@ export class Combat {
       const dealt = this.damage(v, rand(atk.min, atk.max), u);
       if (u.abilities.includes('drain') && dealt > 0) this.heal(u, Math.ceil(dealt / 2));
       if (u.abilities.includes('push') && !v.dead) this.push(u, v);
+      if (u.abilities.includes('pull') && !v.dead) this.pull(u, v);
+      if (u.abilities.includes('chill') && !v.dead && dealt > 0) {
+        v.chill = 1;
+        this.float(v, t('combat.chillFloat'), '#73eff7', 4);
+      }
     }
+  }
+
+  /** Drag `v` one tile toward `u` (a frog's tongue). */
+  private pull(u: Unit, v: Unit): void {
+    if (unitDist(u, v) <= 1) return;
+    const nx = v.x + Math.sign(u.x - v.x);
+    const ny = v.y + Math.sign(u.y - v.y);
+    if (!this.canStand(v, nx, ny) || Math.abs(this.world.height(nx, ny) - this.z(v)) > 1) return;
+    this.place(v, nx, ny);
+    this.float(v, t('combat.pullFloat'), '#a7f070', 4);
+  }
+
+  /** A shade spends its turn healing the most hurt ally nearby; true if it did. */
+  private async mendAlly(u: Unit): Promise<boolean> {
+    if (u.abilityCd > 0) {
+      u.abilityCd--;
+      return false;
+    }
+    if (u.ap < MEND_AP) return false;
+    const hurt = this.alive('enemy')
+      .filter((e) => e !== u && e.hp < e.maxHp * 0.6 && unitDist(u, e) <= 4)
+      .sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0];
+    if (!hurt) return false;
+    u.ap -= MEND_AP;
+    u.flash = 0.2;
+    await this.shoot(u, hurt, '#a992ff');
+    this.heal(hurt, MEND_HEAL);
+    u.abilityCd = 1;
+    this.addLog(t('combat.mendLog', { name: this.name(u), target: this.name(hurt) }));
+    await wait(300);
+    return true;
   }
 
   /** Shove `v` two tiles directly away from `u` (stopping at obstacles). */
@@ -934,6 +1014,7 @@ export class Combat {
   private async runAI(u: Unit): Promise<void> {
     await wait(400);
     const attacks = ENEMIES[u.kind as EnemyKind].attacks;
+    if (u.abilities.includes('mend')) await this.mendAlly(u);
     for (let guard = 0; guard < 6 && this.state !== 'over'; guard++) {
       const targets = this.pickTargets();
       if (!targets.length) return;

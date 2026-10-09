@@ -22,6 +22,9 @@ export function objective(): string {
   const f = game.flags;
   if (!f.metElder) return t('obj.talkElder');
   if (f.golemDone) return t('obj.done');
+  if (!f.forestDone) return t('obj.forest');
+  if (!f.marshDone) return t('obj.marsh');
+  if (!f.cavesDone) return t('obj.caves');
   if (!hasSealBreaker()) return t('obj.train');
   if (!f.gateOpen) return t('obj.gate');
   return t('obj.golem');
@@ -58,7 +61,10 @@ async function elder(): Promise<void> {
     if (c === 'leave') return;
     if (c === 'golem') await sayAll('elder', ['elder.golem1', 'elder.golem2']);
     if (c === 'hint') {
-      if (!hasSealBreaker()) await say('elder', t('elder.hintTrain'));
+      if (!f.forestDone) await say('elder', t('elder.hintForest'));
+      else if (!f.marshDone) await say('elder', t('elder.hintMarsh'));
+      else if (!f.cavesDone) await say('elder', t('elder.hintCaves'));
+      else if (!hasSealBreaker()) await say('elder', t('elder.hintTrain'));
       else if (!f.gateOpen) await say('elder', t('elder.hintGate'));
       else await say('elder', t('elder.hintGolem'));
     }
@@ -202,6 +208,10 @@ export async function talk(npc: NpcDef, ctx: StoryCtx): Promise<void> {
 }
 
 export async function examineGate(ctx: StoryCtx): Promise<void> {
+  if (!game.flags.cavesDone) {
+    await say(null, t('gate.lockedStages'));
+    return;
+  }
   if (!hasSealBreaker()) {
     await say(null, t('gate.locked'));
     return;
@@ -219,6 +229,12 @@ export async function beforeBattle(id: string): Promise<void> {
   if (id === 'forest') {
     await say('kai', t('battle.forest1'));
     await messageBox(t('tutorial.title'), [t('tutorial.l1'), t('tutorial.l2'), t('tutorial.l3'), t('tutorial.l4'), t('tutorial.l5'), t('tutorial.l6'), t('tutorial.l7')]);
+  } else if (id === 'marsh') {
+    await say('aino', t('battle.marsh1'));
+    await messageBox(t('battle.marshTitle'), [t('battle.marshTip1'), t('battle.marshTip2')]);
+  } else if (id === 'caves') {
+    await say('kai', t('battle.caves1'));
+    await messageBox(t('battle.cavesTitle'), [t('battle.cavesTip1'), t('battle.cavesTip2')]);
   } else {
     await say('golem', t('battle.golem1'));
     await say('golem', t('battle.golem2'));

@@ -1,8 +1,23 @@
 import { HEROES, type HeroId, type SkillId } from '../data';
-import { WARDEN_SEALS, type AnySeal } from '../math/eigenseal';
+import { KNIGHT_SEALS, WARDEN_SEALS, type AnySeal } from '../math/eigenseal';
 import { GOLEM_SEALS } from '../math/seal';
 
-export type EnemyKind = 'slime' | 'golem' | 'wisp' | 'scalar' | 'crystal' | 'bat' | 'warden';
+export type EnemyKind =
+  | 'slime'
+  | 'frog'
+  | 'splitter'
+  | 'droplet'
+  | 'beetle'
+  | 'shade'
+  | 'golem'
+  | 'wisp'
+  | 'scalar'
+  | 'crystal'
+  | 'bat'
+  | 'sentry'
+  | 'wraith'
+  | 'knight'
+  | 'warden';
 export type UnitKind = HeroId | EnemyKind;
 
 /**
@@ -12,8 +27,13 @@ export type UnitKind = HeroId | EnemyKind;
  * - reflect: hurts back heroes who hit it with a learned (unfocused) attack
  * - drain: heals itself for half the damage it deals
  * - push: its attacks shove the target back along the attack direction
+ * - pull: its attacks drag the target one tile closer
+ * - split: bursts into two droplets when defeated
+ * - mend: heals a hurt ally instead of attacking
+ * - harden: gains 1 armor every turn (up to 6)
+ * - chill: its hits slow the target (2 less AP next turn)
  */
-export type Ability = 'blink' | 'grow' | 'reflect' | 'drain' | 'push';
+export type Ability = 'blink' | 'grow' | 'reflect' | 'drain' | 'push' | 'pull' | 'split' | 'mend' | 'harden' | 'chill';
 
 export interface Attack {
   id: string;
@@ -45,6 +65,13 @@ export interface EnemyDef {
 export const ENEMIES: Record<EnemyKind, EnemyDef> = {
   // Numerola
   slime: { hp: 16, init: 8, speed: 2, maxAp: 6, regen: 4, armor: 0, size: 1, abilities: [], attacks: [{ id: 'bite', ap: 2, min: 4, max: 6, range: 1, minRange: 1 }] },
+  // Numerola stage 2: Times-Table Marsh
+  frog: { hp: 14, init: 11, speed: 3, maxAp: 5, regen: 4, armor: 0, size: 1, abilities: ['pull'], attacks: [{ id: 'tongue', ap: 2, min: 3, max: 5, range: 2, minRange: 1 }] },
+  splitter: { hp: 18, init: 6, speed: 2, maxAp: 5, regen: 4, armor: 0, size: 1, abilities: ['split'], attacks: [{ id: 'bite', ap: 2, min: 4, max: 6, range: 1, minRange: 1 }] },
+  droplet: { hp: 6, init: 9, speed: 3, maxAp: 4, regen: 4, armor: 0, size: 1, abilities: [], attacks: [{ id: 'bite', ap: 2, min: 2, max: 3, range: 1, minRange: 1 }] },
+  // Numerola stage 3: Echo Caves
+  beetle: { hp: 20, init: 5, speed: 2, maxAp: 4, regen: 3, armor: 2, size: 1, abilities: [], attacks: [{ id: 'pinch', ap: 2, min: 4, max: 6, range: 1, minRange: 1 }] },
+  shade: { hp: 14, init: 12, speed: 3, maxAp: 4, regen: 3, armor: 0, size: 1, abilities: ['mend'], attacks: [{ id: 'gloom', ap: 2, min: 2, max: 4, range: 3, minRange: 1 }] },
   golem: {
     hp: 75, init: 6, speed: 2, maxAp: 4, regen: 3, armor: 2, size: 2, abilities: [],
     attacks: [
@@ -59,6 +86,15 @@ export const ENEMIES: Record<EnemyKind, EnemyDef> = {
   scalar: { hp: 18, init: 7, speed: 2, maxAp: 6, regen: 4, armor: 1, size: 1, abilities: ['grow'], attacks: [{ id: 'bite', ap: 2, min: 5, max: 7, range: 1, minRange: 1 }] },
   crystal: { hp: 30, init: 6, speed: 2, maxAp: 5, regen: 3, armor: 4, size: 1, abilities: ['reflect'], attacks: [{ id: 'slam', ap: 2, min: 7, max: 9, range: 1, minRange: 1 }] },
   bat: { hp: 13, init: 15, speed: 4, maxAp: 6, regen: 4, armor: 0, size: 1, abilities: ['drain'], attacks: [{ id: 'leech', ap: 2, min: 4, max: 6, range: 1, minRange: 1 }] },
+  // Eigenvale stage 3: Shear Glacier
+  sentry: { hp: 22, init: 5, speed: 1, maxAp: 4, regen: 3, armor: 1, size: 1, abilities: ['harden'], attacks: [{ id: 'icicle', ap: 3, min: 4, max: 6, range: 5, minRange: 2 }] },
+  wraith: { hp: 16, init: 14, speed: 3, maxAp: 4, regen: 3, armor: 0, size: 1, abilities: ['chill'], attacks: [{ id: 'frost', ap: 2, min: 3, max: 5, range: 2, minRange: 1 }] },
+  knight: {
+    hp: 34, init: 8, speed: 2, maxAp: 5, regen: 3, armor: 2, size: 1, abilities: [],
+    attacks: [{ id: 'lance', ap: 3, min: 6, max: 8, range: 2, minRange: 1 }],
+    seals: KNIGHT_SEALS,
+    thresholds: [0],
+  },
   warden: {
     hp: 100, init: 9, speed: 2, maxAp: 5, regen: 4, armor: 3, size: 2, abilities: ['push'],
     attacks: [
@@ -109,6 +145,10 @@ export interface Unit {
   taunt: number;
   /** turns left of taking +50% damage */
   mark: number;
+  /** chilled: 2 less AP at the start of the next turn */
+  chill: number;
+  /** turns until an ability (a shade's mend) can be used again */
+  abilityCd: number;
   focus: Focus | null;
   abilities: Ability[];
   // animation
@@ -146,6 +186,8 @@ function base(kind: UnitKind, team: Unit['team'], x: number, y: number): Unit {
     shield: 0,
     taunt: 0,
     mark: 0,
+    chill: 0,
+    abilityCd: 0,
     focus: null,
     abilities: [],
     px: x * 16,

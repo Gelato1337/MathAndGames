@@ -2,7 +2,7 @@ import type { EnemyKind } from '../combat/units';
 import { randInt } from '../math/problems';
 
 export const MAP_W = 60;
-export const MAP_H = 32;
+export const MAP_H = 46;
 
 export interface Rect {
   x: number;
@@ -32,7 +32,7 @@ export interface EncounterDef {
   enemies: EnemyPlacement[];
 }
 
-const BLOCKING = new Set(['T', 'R', 'H', 'w', 'D', 'F', '#', 'G', 'o', 'O', '~', 'L', 'l', 'X']);
+const BLOCKING = new Set(['T', 'R', 'H', 'w', 'D', 'F', '#', 'G', 'o', 'O', '~', 'L', 'l', 'X', 'I', 'M']);
 
 export const NPCS: NpcDef[] = [
   { id: 'elder', x: 5, y: 12 },
@@ -52,6 +52,17 @@ export const GATE_TILES = [
 
 export const PLAYER_START = { x: 6, y: 14 };
 
+/** Rocks on the forest path south: cleared once the forest clearing is safe. */
+export const MARSH_BARRIER = [
+  { x: 40, y: 22 },
+  { x: 41, y: 22 },
+];
+/** Rubble in the cave mouth: cleared once the marsh is safe. */
+export const CAVE_BARRIER = [
+  { x: 47, y: 37 },
+  { x: 47, y: 38 },
+];
+
 export const ENCOUNTERS: EncounterDef[] = [
   {
     id: 'forest',
@@ -61,6 +72,26 @@ export const ENCOUNTERS: EncounterDef[] = [
       { kind: 'slime', x: 42, y: 11 },
       { kind: 'slime', x: 43, y: 17 },
       { kind: 'slime', x: 40, y: 16 },
+    ],
+  },
+  {
+    id: 'marsh',
+    region: { x: 34, y: 32, w: 13, h: 12 },
+    trigger: { x: 35, y: 34, w: 11, h: 10 },
+    enemies: [
+      { kind: 'frog', x: 38, y: 38 },
+      { kind: 'frog', x: 44, y: 41 },
+      { kind: 'splitter', x: 42, y: 37 },
+    ],
+  },
+  {
+    id: 'caves',
+    region: { x: 48, y: 31, w: 10, h: 12 },
+    trigger: { x: 49, y: 31, w: 9, h: 12 },
+    enemies: [
+      { kind: 'beetle', x: 53, y: 34 },
+      { kind: 'beetle', x: 54, y: 40 },
+      { kind: 'shade', x: 56, y: 37 },
     ],
   },
   {
@@ -182,6 +213,19 @@ function buildHeights(t: string[][]): number[][] {
   }
   // the road and farm stay flat at ground level
   set(3, 18, 16, 12, 0);
+  // the forest path south and the marsh are low and flat, with a few tussocks
+  set(40, 21, 2, 12, 0);
+  set(34, 32, 13, 12, 0);
+  set(36, 35, 2, 2, 1);
+  set(43, 34, 2, 2, 1);
+  set(39, 41, 3, 1, 1);
+  // Echo Caves: a raised cave floor inside tall walls, with a ledge at the back
+  set(47, 30, 12, 14, 3);
+  set(48, 31, 10, 12, 1);
+  set(55, 32, 3, 3, 2);
+  for (const b of CAVE_BARRIER) hgt[b.y][b.x] = 1;
+  set(46, 37, 1, 2, 0);
+  for (let y = 32; y < 44; y++) for (let x = 34; x <= 46; x++) if (t[y][x] === '~') hgt[y][x] = -0.5;
   return hgt;
 }
 
@@ -202,6 +246,13 @@ export function tileLook(ch: string): { top: string; left: string; right: string
       return { top: '_', left: '#', right: '#', object: 'brazier' };
     case 'X':
       return { top: '_', left: '#', right: '#', object: 'crystals' };
+    case 'I':
+      return { top: 'S', left: 'i', right: 'i', object: 'icicles' };
+    case 'M':
+      return { top: 'm', left: 'dirt', right: 'dirt', object: 'rock' };
+    case 'S':
+    case 'i':
+      return { top: ch, left: 'i', right: 'i' };
     case 'l':
       return { top: '.', left: 'dirt', right: 'dirt', object: 'lantern' };
     case '_':
@@ -318,6 +369,45 @@ function buildTiles(): string[][] {
   ])
     t[y][x] = 'L';
   for (const x of [6, 14, 21, 29]) t[12][x] = 'l';
+
+  // deep woods fill the south of the map
+  fill(1, 31, 31, 14, 'T');
+  for (let i = 0; i < 60; i++) t[randInt(rng, 31, MAP_H - 2)][randInt(rng, 1, 31)] = '.';
+  fill(47, 23, 12, 7, 'T');
+  fill(47, 44, 12, 1, 'T');
+
+  // forest path south to the marsh, blocked by fallen rocks at first
+  fill(40, 21, 2, 11, '=');
+  for (const b of MARSH_BARRIER) t[b.y][b.x] = 'o';
+  // Times-Table Marsh: wet ground, pools and reeds
+  fill(34, 32, 13, 12, 'm');
+  fill(34, 44, 13, 1, 'T');
+  for (const [x, y, w, h] of [
+    [35, 33, 2, 1],
+    [44, 37, 2, 2],
+    [36, 41, 2, 2],
+    [41, 43, 3, 1],
+  ])
+    fill(x, y, w, h, '~');
+  t[39][40] = 'M';
+  t[35][41] = 'M';
+  t[40][44] = 'M';
+  fill(40, 32, 2, 2, '=');
+  // Echo Caves: tall rock walls, a crystal-lit floor, rubble in the mouth
+  fill(47, 30, 12, 14, '#');
+  fill(48, 31, 10, 12, '_');
+  for (const b of CAVE_BARRIER) t[b.y][b.x] = 'O';
+  fill(46, 37, 1, 2, 'm');
+  for (const [x, y] of [
+    [50, 32],
+    [57, 41],
+    [51, 40],
+    [56, 33],
+  ])
+    t[y][x] = 'X';
+  t[31][48] = 'L';
+  t[42][48] = 'L';
+  t[31][57] = 'L';
 
   // keep NPC spots and paths clear
   for (const n of NPCS) t[n.y][n.x] = t[n.y][n.x] === '=' ? '=' : '.';

@@ -578,10 +578,68 @@ SPRITES.crystals = [
   '................',
 ];
 
+// ---------- Numerola stage 2–3 and Eigenvale stage 3 enemies ----------
+
+SPRITES.frog = [
+  '................',
+  '................',
+  '................',
+  '................',
+  '...kkk....kkk...',
+  '..kwkgk..kgkwk..',
+  '..kkkggkkggkkk..',
+  '..kgggggggggggk.',
+  '.kgglggggggglgk.',
+  '.kggrrrrrrrrggk.',
+  '.kgggggggggggggk',
+  'kGgyyyyyyyyyygGk',
+  'kGGgyyyyyyyygGGk',
+  '.kkGGkkkkkkGGkk.',
+  '...kk......kk...',
+  '................',
+];
+
+SPRITES.beetle = [
+  '................',
+  '................',
+  '................',
+  '..k..........k..',
+  '...k........k...',
+  '....kkkkkkkk....',
+  '...kbbbbkcbbk...',
+  '..kbcbbbkbbbbk..',
+  '.kkbbbbbkbbbbkk.',
+  'k.knbbbbkbbbbnk.k',
+  '..knnbbbkbbbnnk.',
+  '.k.knnnnknnnnk.k',
+  '....kkkkkkkkk...',
+  '...k..k..k..k...',
+  '................',
+  '................',
+].map((r) => r.slice(0, 16).padEnd(16, '.'));
+
 /** Recolour a sprite by swapping palette letters. */
 function recolor(rows: string[], swap: Record<string, string>): string[] {
   return rows.map((r) => r.replace(/./g, (c) => swap[c] ?? c));
 }
+
+/** Shrink a sprite to a smaller blob (keeps it 16 × 16, centred at the bottom). */
+function shrink(rows: string[]): string[] {
+  const out: string[] = [];
+  for (let y = 0; y < 16; y += 2) out.push(rows[y].replace(/(.)./g, '$1'));
+  return [...new Array(8).fill('................'), ...out.map((r) => `....${r}....`)];
+}
+
+// a splitter slime: purple, it bursts into two droplets
+SPRITES.splitter = recolor(SPRITES.slime, { l: 'c', g: 'p', G: 'n', w: 'i' });
+SPRITES.droplet = shrink(recolor(SPRITES.slime, { l: 'i', g: 'c', G: 'b' }));
+// a shade: a dark wisp that mends its friends
+SPRITES.shade = recolor(SPRITES.wisp, { i: 'p', c: 'n', w: 'y' });
+// glacier: an ice sentry (pale crystal golem), a frost wraith and the Frost Knight
+SPRITES.sentry = recolor(SPRITES.crystal, { c: 'w', b: 'i', i: 'w', m: 's', f: 'm' });
+SPRITES.wraith = recolor(SPRITES.wisp, { i: 'w', c: 's', w: 'c' });
+SPRITES.knight = recolor(SPRITES.otso, { m: 'c', s: 'w', b: 'i', y: 'b' });
+SPRITES.icicles = recolor(SPRITES.crystals, { i: 'w', c: 'i', b: 's' });
 
 // a scalar slime keeps growing: warm colours
 SPRITES.scalar = recolor(SPRITES.slime, { l: 'y', g: 'o', G: 'r' });

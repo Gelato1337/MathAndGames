@@ -181,6 +181,40 @@ const builders: Record<string, (ctx: Ctx, rnd: () => number, frame: number) => v
     px(ctx, P.m, 2, 11, 3, 1);
   },
   _: floor,
+  // marsh: dark wet grass with puddles and reeds
+  m: (ctx, rnd) => {
+    px(ctx, '#3d6b45', 0, 0, 16, 16);
+    for (let i = 0; i < 10; i++) px(ctx, P.G, Math.floor(rnd() * 16), Math.floor(rnd() * 16), 2, 1);
+    if (rnd() < 0.6) {
+      const x = Math.floor(rnd() * 9);
+      const y = Math.floor(rnd() * 11);
+      px(ctx, '#2c4f5e', x, y, 6, 3);
+      px(ctx, '#2c4f5e', x + 1, y + 3, 4, 1);
+      px(ctx, '#5e8fa6', x + 1, y, 3, 1);
+    }
+    for (let i = 0; i < 3; i++) {
+      const x = 1 + Math.floor(rnd() * 14);
+      const y = 4 + Math.floor(rnd() * 10);
+      px(ctx, '#7c9a4a', x, y - 3, 1, 4);
+      px(ctx, P.u, x, y - 4, 1, 1);
+    }
+  },
+  // snow and ice for the glacier
+  S: (ctx, rnd) => {
+    px(ctx, '#dfe9f2', 0, 0, 16, 16);
+    for (let i = 0; i < 8; i++) px(ctx, P.s, Math.floor(rnd() * 16), Math.floor(rnd() * 16), 2, 1);
+    for (let i = 0; i < 6; i++) px(ctx, P.w, Math.floor(rnd() * 16), Math.floor(rnd() * 16));
+  },
+  i: (ctx, rnd) => {
+    px(ctx, '#9fd3ec', 0, 0, 16, 16);
+    px(ctx, '#bfe6f6', 0, 0, 16, 1);
+    for (let i = 0; i < 3; i++) {
+      const x = Math.floor(rnd() * 12);
+      const y = Math.floor(rnd() * 14);
+      px(ctx, P.w, x, y, 4, 1);
+      px(ctx, '#7fbcdc', x + 2, y + 1, 3, 1);
+    }
+  },
   dirt: (ctx, rnd) => {
     px(ctx, P.u, 0, 0, 16, 16);
     for (let y = 3; y < 16; y += 5) px(ctx, P.U, 0, y, 16, 1);

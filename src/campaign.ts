@@ -1,4 +1,5 @@
 import type { CampaignId, HeroId } from './data';
+import type { GameState } from './state';
 import type { EncounterDef, NpcDef, WorldMap } from './world/map';
 
 /** Something in the world you can click to examine (a gate, a door, a sign). */
@@ -7,6 +8,14 @@ export interface Interactable {
   tiles: Array<{ x: number; y: number }>;
   /** still there to examine (an opened door is no longer examinable) */
   active: (world: WorldMap) => boolean;
+}
+
+/** One step of a campaign's road to its final boss (shown on the world map and in the quest log). */
+export interface Stage {
+  /** lang key of the area's name */
+  name: string;
+  done: boolean;
+  boss?: boolean;
 }
 
 /** What a campaign's story code can ask the game to do. */
@@ -26,6 +35,10 @@ export interface Campaign {
   party: HeroId[];
   start: { x: number; y: number };
   buildWorld: () => WorldMap;
+  /** open the gates, doors and barriers the current progress has already opened */
+  prepareWorld: (world: WorldMap) => void;
+  /** the 3 stages and the final boss, in order, for a saved game of this campaign */
+  stages: (g: GameState) => Stage[];
   npcs: NpcDef[];
   interactables: Interactable[];
   encounters: EncounterDef[];

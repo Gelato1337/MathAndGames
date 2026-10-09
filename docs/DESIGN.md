@@ -94,6 +94,17 @@ Rules in battle (still grid-based, so AP, ranges and areas stay exact):
 - From lower ground: −15% damage.
 - The golem holds the dais, so the players have a reason to climb it.
 
+## The journey: lands, stages, bosses
+
+The **world map** (`src/ui/worldmap.ts`, `src/journey.ts`) shows every land. Numerola is the tutorial land: it teaches the mechanics (skills, trials, Focus, Auto, high ground, seals) with primary school math, so later lands can spend their time on harder math. Each land is built the same way:
+
+1. **Stage 1** – a fair first fight that learned skills and Auto can win.
+2. **Stage 2** – a new enemy rule that rewards a specific skill (area spells against splitting slimes; Focus against armor).
+3. **Stage 3** – the hardest area, which previews the boss (Numerola: armor and healers; Eigenvale: a knight with a one-step eigenvalue seal).
+4. **Final boss** – multi-phase seals that need the land's core math.
+
+Each stage opens the way to the next (rocks on the forest path, rubble in a cave mouth, an ice wall), so the order is enforced by the world, not by menus. Cleared lands are stored in `localStorage`; a land's full state is kept in memory while you travel, so leaving and coming back loses nothing during a visit. Future lands (probability, calculus, CS, physics) are on the map under fog, matching the plan in [CURRICULUM.md](CURRICULUM.md).
+
 ## Campaigns, not difficulty sliders
 
 Different math levels are separate campaigns (`src/campaigns/`), not a difficulty setting on one story. A first-grader's world and a linear algebra student's world need different stories, enemies and puzzle types; the engine (map, combat, dialog, trials, tutor) is shared. Within a campaign, `mastery.ts` still adapts problem levels 1–3 per topic. [CURRICULUM.md](CURRICULUM.md) maps tiers from grade 1 to university and lists candidate campaigns.
@@ -113,7 +124,7 @@ The **Notebook** (`N`, and inside every untimed puzzle) has a free-text page for
 - Cooldowns, area effects with friendly fire (Fireball), surfaces (fire that burns for 2 rounds).
 - **Boss seals:** a sealed boss takes no damage. Breaking a seal staggers it for a turn. A new, harder seal forms at HP thresholds (golem 50/25, Eigenwarden 70/35).
 - **Armor** subtracts from every hit except focused ones. **Shields** (Ward) absorb damage first. **Taunt** forces enemies to attack Otso; **Mark** makes a target take +50%.
-- **Enemy abilities:** blink (wisps teleport), grow (scalar slimes gain damage each round), reflect (crystal golems), drain (bats heal), push (the Eigenwarden shoves heroes back).
+- **Enemy abilities:** blink (wisps teleport), grow (scalar slimes gain HP each round), reflect (crystal golems), drain (bats heal), push (the Eigenwarden shoves heroes back), pull (frogs drag heroes in), split (splitter slimes burst into droplets), mend (cave shades heal allies), harden (ice sentries gain armor each turn, up to 4), chill (frost wraiths take 2 AP from their target's next turn).
 
 ## Tuning knobs
 

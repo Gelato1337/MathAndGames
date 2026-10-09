@@ -7,11 +7,13 @@ import type { CampaignId } from './data';
 import { getLang, onLangChange, setLang, t } from './i18n';
 import { clearInput, initInput, isHeld, takeWheel } from './input';
 import { COMBAT_ZOOM, Renderer } from './render';
-import { devUnlockAll, fadeAttunement, game, newGame } from './state';
+import { hasJourney, journey, markCleared, resetJourney } from './journey';
+import { devUnlockAll, fadeAttunement, game, newGame, restoreGame } from './state';
 import { checkTutor } from './tutor/client';
-import { isBlocking, uiRoot } from './ui/dom';
+import { isBlocking, toast, uiRoot } from './ui/dom';
 import { bagScreen, clearHud, endingScreen, introSlides, notebookScreen, pauseMenu, questsScreen, renderExploreHud, skillsScreen, titleScreen } from './ui/menus';
 import { messageBox } from './ui/question';
+import { worldMap } from './ui/worldmap';
 import { Explore, type Target } from './world/explore';
 import { chimneys, type EncounterDef, type WorldMap } from './world/map';
 
@@ -22,7 +24,7 @@ setLang(getLang());
 
 let world: WorldMap = campaign().buildWorld();
 r.setChimneys(chimneys(world));
-let mode: 'title' | 'explore' | 'combat' = 'title';
+let mode: 'title' | 'map' | 'explore' | 'combat' = 'title';
 let busy = false;
 let combat: Combat | null = null;
 let lastPrompt: string | null | undefined;
@@ -83,6 +85,7 @@ function openPause(): Promise<void> {
     pauseMenu(
       () => refreshHud(true),
       () => toTitle(),
+      () => void openWorldMap(true),
     ),
   );
 }
@@ -152,7 +155,12 @@ async function endEncounter(res: CombatResult, c: Combat): Promise<void> {
   const finished = await campaign().afterBattle(e.id, ctx);
   if (finished) {
     clearHud();
-    endingScreen(campaign().ending(), () => toTitle());
+    markCleared(game.campaign);
+    endingScreen(
+      campaign().ending(),
+      () => toTitle(),
+      () => void openWorldMap(false),
+    );
     return;
   }
   busy = false;
@@ -160,27 +168,76 @@ async function endEncounter(res: CombatResult, c: Combat): Promise<void> {
 }
 
 function toTitle(): void {
+  saveLand();
   combat?.destroy();
   combat = null;
   mode = 'title';
   busy = false;
   clearHud();
   uiRoot().replaceChildren();
-  titleScreen((id) => void startGame(id, false));
+  titleScreen({
+    onNew: () => {
+      resetJourney();
+      void openWorldMap(false);
+    },
+    onContinue: hasJourney() ? () => void openWorldMap(false) : null,
+  });
+}
+
+/** Remember where the party is, so travelling away and back loses nothing. */
+function saveLand(): void {
+  if (mode !== 'explore' || !journey.current) return;
+  const a = explore.leader;
+  journey.sessions.set(journey.current, { state: game, x: a.x, y: a.y });
+}
+
+/** The overview map. `fromLand`: opened from the pause menu (can be closed). */
+async function openWorldMap(fromLand: boolean): Promise<void> {
+  saveLand();
+  const prev = mode;
+  busy = true;
+  clearHud();
+  if (!fromLand) {
+    combat?.destroy();
+    combat = null;
+    uiRoot().replaceChildren();
+  }
+  mode = 'map';
+  const id = await worldMap(fromLand);
+  if (id === null) {
+    mode = prev;
+    busy = false;
+    refreshHud(true);
+    return;
+  }
+  if (fromLand && id === journey.current) {
+    mode = 'explore';
+    busy = false;
+    refreshHud(true);
+    return;
+  }
+  await startGame(id, false);
 }
 
 async function startGame(id: CampaignId, dev: boolean): Promise<void> {
-  newGame(id);
+  const saved = dev ? undefined : journey.sessions.get(id);
+  if (saved) restoreGame(saved.state);
+  else newGame(id);
+  journey.current = id;
   void checkTutor();
   world = campaign().buildWorld();
+  campaign().prepareWorld(world);
   r.setChimneys(chimneys(world));
   explore = makeExplore();
   mode = 'explore';
   busy = true;
   const params = new URLSearchParams(location.search);
-  if (dev || params.has('dev')) {
+  if (dev) {
     devUnlockAll();
     campaign().dev(params.get('dev'), (x, y) => explore.placeParty([{ x, y }, ...campaign().party.slice(1).map((_, i) => ({ x: x - 1 - i, y }))]), world);
+  } else if (saved) {
+    explore.placeParty(campaign().party.map(() => ({ x: saved.x, y: saved.y })));
+    toast(t('worldmap.welcomeBack', { land: t(`campaigns.${id}.name`) }));
   } else {
     clearHud();
     await introSlides(campaign().intro);
@@ -241,7 +298,7 @@ function loop(now: number): void {
     combat.update(dt);
     const u = combat.active;
     if (u) r.follow(u.px / TILE + (u.size - 1) / 2, u.py / TILE + (u.size - 1) / 2, world.height(u.x, u.y), 0.08);
-  } else if (mode === 'title') {
+  } else if (mode === 'title' || mode === 'map') {
     titleCam += dt * 0.5;
     r.follow(5 + titleCam, 14, 0, 1);
     if (titleCam > 40) titleCam = 0;

@@ -34,6 +34,17 @@ export const DOOR_TILES = [
 
 export const EV_START = { x: 9, y: 19 };
 
+/** Fallen rocks on the road south: cleared once the plains are safe. */
+export const MINES_BARRIER = [
+  { x: 12, y: 30 },
+  { x: 13, y: 30 },
+];
+/** An ice wall on the path to the glacier: it melts once the mines are cleared. */
+export const GLACIER_BARRIER = [
+  { x: 46, y: 28 },
+  { x: 47, y: 28 },
+];
+
 export const EV_ENCOUNTERS: EncounterDef[] = [
   {
     id: 'plains',
@@ -55,6 +66,18 @@ export const EV_ENCOUNTERS: EncounterDef[] = [
       { kind: 'crystal', x: 19, y: 37 },
       { kind: 'bat', x: 14, y: 37 },
       { kind: 'bat', x: 20, y: 33 },
+    ],
+  },
+  {
+    id: 'glacier',
+    region: { x: 35, y: 29, w: 21, h: 11 },
+    trigger: { x: 36, y: 31, w: 19, h: 8 },
+    enemies: [
+      { kind: 'sentry', x: 41, y: 33 },
+      { kind: 'sentry', x: 50, y: 36 },
+      { kind: 'wraith', x: 38, y: 37 },
+      { kind: 'wraith', x: 45, y: 35 },
+      { kind: 'knight', x: 53, y: 31 },
     ],
   },
   {
@@ -153,6 +176,35 @@ function buildEigenvale(): WorldMap {
     t[y][x] = 'X';
   t[31][8] = 'L';
   t[31][22] = 'L';
+  // the mine mouth is blocked by a rockfall until the plains are cleared
+  for (const b of MINES_BARRIER) t[b.y][b.x] = 'O';
+
+
+  // Shear Glacier: snowfields and ice terraces in the south-east
+  fill(46, 21, 2, 7, '=');
+  fill(34, 28, 23, 13, 'T');
+  fill(35, 29, 21, 11, 'S');
+  lift(35, 29, 21, 11, 0);
+  fill(46, 28, 2, 1, 'S');
+  for (const b of GLACIER_BARRIER) t[b.y][b.x] = 'I';
+  for (const [x, y, w, h] of [
+    [37, 32, 4, 2],
+    [44, 37, 5, 2],
+    [48, 31, 3, 2],
+  ])
+    fill(x, y, w, h, 'i');
+  // the Frost Knight's terrace at the back
+  lift(50, 29, 6, 4, 1);
+  lift(52, 29, 4, 2, 2);
+  lift(39, 35, 2, 2, 1);
+  for (const [x, y] of [
+    [36, 30],
+    [43, 31],
+    [41, 38],
+    [54, 38],
+    [48, 34],
+  ])
+    t[y][x] = 'I';
 
   // Eigen Spire: a high plateau behind the Determinant Door
   fill(45, 2, 14, 15, '#');
@@ -196,6 +248,7 @@ function objective(): string {
   if (f.wardenDone) return t('ev.obj.done');
   if (!f.plainsDone) return t('ev.obj.plains');
   if (!f.minesDone) return t('ev.obj.mines');
+  if (!f.glacierDone) return t('ev.obj.glacier');
   if (!hasSealBreaker()) return t('ev.obj.train');
   if (!f.doorOpen) return t('ev.obj.door');
   return t('ev.obj.warden');
@@ -289,7 +342,7 @@ const DOOR_LOCKS: Mat[] = [
 
 async function door(ctx: CampaignCtx): Promise<void> {
   const f = ev();
-  if (!f.plainsDone || !f.minesDone) {
+  if (!f.plainsDone || !f.minesDone || !f.glacierDone) {
     await say(null, t('ev.door.lockedAreas'));
     return;
   }
@@ -343,6 +396,9 @@ async function beforeBattle(id: string): Promise<void> {
   } else if (id === 'mines') {
     await say('otso', t('ev.battle.mines1'));
     await messageBox(t('ev.battle.minesTitle'), [t('ev.battle.minesTip1'), t('ev.battle.minesTip2')]);
+  } else if (id === 'glacier') {
+    await say('sana', t('ev.battle.glacier1'));
+    await messageBox(t('ev.battle.glacierTitle'), [t('ev.battle.glacierTip1'), t('ev.battle.glacierTip2'), t('ev.battle.glacierTip3')]);
   } else {
     await say('warden', t('ev.battle.warden1'));
     await say('warden', t('ev.battle.warden2'));
@@ -360,12 +416,19 @@ async function afterBattle(id: string, ctx: CampaignCtx): Promise<boolean> {
   if (id === 'plains') {
     f.plainsDone = true;
     game.gold += 15;
-    await messageBox(t('combat.winTitle'), [t('ev.win.plains'), t('combat.attuneNote')]);
+    ctx.world().replace(MINES_BARRIER, '_');
+    await messageBox(t('combat.winTitle'), [t('ev.win.plains'), t('combat.attuneNote'), t('combat.pathOpens', { area: t('areas.mines') })]);
   } else if (id === 'mines') {
     f.minesDone = true;
     game.gold += 15;
     game.inv.tea += 1;
-    await messageBox(t('combat.winTitle'), [t('ev.win.mines')]);
+    ctx.world().replace(GLACIER_BARRIER, 'S');
+    await messageBox(t('combat.winTitle'), [t('ev.win.mines'), t('combat.pathOpens', { area: t('areas.glacier') })]);
+  } else if (id === 'glacier') {
+    f.glacierDone = true;
+    game.gold += 15;
+    game.inv.tonic += 1;
+    await messageBox(t('combat.winTitle'), [t('ev.win.glacier')]);
   } else {
     f.wardenDone = true;
     await messageBox(t('combat.winTitle'), [t('ev.win.warden')]);
@@ -383,6 +446,21 @@ export const eigenvale: Campaign = {
   party: ['kai', 'aino', 'sana', 'otso'],
   start: EV_START,
   buildWorld: buildEigenvale,
+  prepareWorld: (w) => {
+    const f = ev();
+    if (f.plainsDone) w.replace(MINES_BARRIER, '_');
+    if (f.minesDone) w.replace(GLACIER_BARRIER, 'S');
+    if (f.doorOpen) w.replace(DOOR_TILES, '_');
+  },
+  stages: (g) => {
+    const f = g.ev;
+    return [
+      { name: 'areas.plains', done: f.plainsDone },
+      { name: 'areas.mines', done: f.minesDone },
+      { name: 'areas.glacier', done: f.glacierDone },
+      { name: 'areas.spire', done: f.wardenDone, boss: true },
+    ];
+  },
   npcs: EV_NPCS,
   interactables: [{ id: 'door', tiles: DOOR_TILES, active: (w) => DOOR_TILES.some((g) => w.get(g.x, g.y) === 'G') }],
   encounters: EV_ENCOUNTERS,
@@ -399,6 +477,12 @@ export const eigenvale: Campaign = {
       { x: 12, y: 32 },
       { x: 13, y: 32 },
     ],
+    glacier: [
+      { x: 46, y: 30 },
+      { x: 47, y: 30 },
+      { x: 45, y: 30 },
+      { x: 48, y: 30 },
+    ],
     spire: [
       { x: 49, y: 15 },
       { x: 50, y: 15 },
@@ -409,12 +493,13 @@ export const eigenvale: Campaign = {
   encounterActive: (id) => {
     const f = ev();
     if (id === 'plains') return !f.plainsDone;
-    if (id === 'mines') return !f.minesDone;
+    if (id === 'mines') return f.plainsDone && !f.minesDone;
+    if (id === 'glacier') return f.minesDone && !f.glacierDone;
     return f.doorOpen && !f.wardenDone;
   },
   encounterCleared: (id) => {
     const f = ev();
-    return id === 'plains' ? f.plainsDone : id === 'mines' ? f.minesDone : f.wardenDone;
+    return id === 'plains' ? f.plainsDone : id === 'mines' ? f.minesDone : id === 'glacier' ? f.glacierDone : f.wardenDone;
   },
   talk,
   examine: (_id, ctx) => door(ctx),
@@ -430,6 +515,7 @@ export const eigenvale: Campaign = {
       step(f.metIlona, t('ev.quests.main.s1')),
       step(f.plainsDone, t('ev.quests.main.s2')),
       step(f.minesDone, t('ev.quests.main.s3')),
+      step(f.glacierDone, t('ev.quests.main.glacier')),
       step(f.doorOpen, t('ev.quests.main.s4')),
       step(f.wardenDone, t('ev.quests.main.s5')),
     ]);
@@ -444,17 +530,21 @@ export const eigenvale: Campaign = {
   dev: (where, place, world) => {
     const f = ev();
     if (where === 'boss') {
-      f.plainsDone = f.minesDone = f.doorOpen = true;
-      world.replace(DOOR_TILES, '_');
+      f.plainsDone = f.minesDone = f.glacierDone = f.doorOpen = true;
       place(49, 17);
     } else if (where === 'plains') {
       place(29, 19);
     } else if (where === 'mines') {
+      f.plainsDone = true;
       place(12, 28);
-    } else if (where === 'door') {
+    } else if (where === 'glacier') {
       f.plainsDone = f.minesDone = true;
+      place(46, 25);
+    } else if (where === 'door') {
+      f.plainsDone = f.minesDone = f.glacierDone = true;
       place(49, 18);
     }
+    eigenvale.prepareWorld(world);
   },
 };
 

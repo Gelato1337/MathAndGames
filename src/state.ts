@@ -10,6 +10,8 @@ export interface Flags {
   farmStage: number;
   farmResult: 'exact' | 'over' | 'under' | null;
   forestDone: boolean;
+  marshDone: boolean;
+  cavesDone: boolean;
   gateOpen: boolean;
   golemDone: boolean;
   haggled: boolean;
@@ -20,6 +22,7 @@ export interface EvFlags {
   metIlona: boolean;
   plainsDone: boolean;
   minesDone: boolean;
+  glacierDone: boolean;
   doorOpen: boolean;
   wardenDone: boolean;
   /** 0 not started, 1 accepted, 2 done */
@@ -57,11 +60,13 @@ function fresh(campaign: CampaignId = 'numerola'): GameState {
       farmStage: 0,
       farmResult: null,
       forestDone: false,
+      marshDone: false,
+      cavesDone: false,
       gateOpen: false,
       golemDone: false,
       haggled: false,
     },
-    ev: { metIlona: false, plainsDone: false, minesDone: false, doorOpen: false, wardenDone: false, mapStage: 0 },
+    ev: { metIlona: false, plainsDone: false, minesDone: false, glacierDone: false, doorOpen: false, wardenDone: false, mapStage: 0 },
     approaches: new Set(),
     notes: '',
   };
@@ -90,6 +95,16 @@ export function setTimers(mode: TimerMode): void {
 export function timerSeconds(base: number): number {
   if (settings.timers === 'off') return 0;
   return settings.timers === 'relaxed' ? base * 2 : base;
+}
+
+/** Resume a land the party visited earlier on this journey. */
+export function restoreGame(state: GameState): void {
+  game = state;
+}
+
+/** A fresh game in a land (used for stage previews on the world map too). */
+export function freshGame(campaign: CampaignId): GameState {
+  return fresh(campaign);
 }
 
 export function newGame(campaign: CampaignId = 'numerola'): void {

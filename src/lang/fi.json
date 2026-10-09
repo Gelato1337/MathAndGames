@@ -31,10 +31,11 @@
     "advance": "▼ klikkaa / Enter"
   },
   "title": {
-    "newGame": "Uusi peli",
     "help": "Peliohjeet",
     "tagline": "Matematiikkaroolipelin prototyyppi · opi kerran, käytä monesti",
-    "chooseCampaign": "Valitse kampanja"
+    "newJourney": "Uusi matka",
+    "continue": "Jatka matkaa",
+    "journeyNote": "Aloita Numerolasta oppiaksesi pelin ja matkusta sitten vaikeampiin maihin."
   },
   "intro": {
     "p1": "Laakson kylässä Numerolassa kaikki pyörii lukujen varassa: sadot, kauppa ja jopa taikuus.",
@@ -62,7 +63,8 @@
     "settings": "Asetukset",
     "help": "Peliohjeet",
     "toTitle": "Takaisin alkuun",
-    "skillsHelp": "Opi taito kouluttajalta kerran ja käytä sitä vapaasti. Keskitä se taistelussa saadaksesi lisävoimaa."
+    "skillsHelp": "Opi taito kouluttajalta kerran ja käytä sitä vapaasti. Keskitä se taistelussa saadaksesi lisävoimaa.",
+    "worldMap": "Maailmankartta (matkusta)"
   },
   "settings": {
     "language": "Kieli",
@@ -116,7 +118,15 @@
     "scalar": "Skalaarilima",
     "crystal": "Kristalligolemi",
     "bat": "Leikkauslepakko",
-    "warden": "Ominaisvartija"
+    "warden": "Ominaisvartija",
+    "frog": "Kielisammakko",
+    "splitter": "Halkeilima",
+    "droplet": "Pisara",
+    "beetle": "Kuorikuoriainen",
+    "shade": "Luolavarjo",
+    "sentry": "Jäävahti",
+    "wraith": "Pakkaskummitus",
+    "knight": "Pakkasritari"
   },
   "classes": {
     "kai": "Ninja",
@@ -250,7 +260,10 @@
       "s2": "Opettele sinetin murtava taito (Koetteluisku tai Sinetinpurku)",
       "s3": "Avaa riimuportti idässä",
       "s4": "Voita Arvoitusgolemi",
-      "started": "Uusi tehtävä: Piilotettu luku"
+      "started": "Uusi tehtävä: Piilotettu luku",
+      "forest": "Vaihe 1: raivaa metsäaukio",
+      "marsh": "Vaihe 2: raivaa Kertotaulusuo",
+      "caves": "Vaihe 3: raivaa Kaikuluolat"
     },
     "farm": {
       "title": "Vino pelto",
@@ -272,13 +285,16 @@
     "farm0": "Helmi maatilalla (etelässä) saattaa tarvita apua.",
     "farm1": "Suunnittele Helmin pelto (puhu Helmille).",
     "farm2": "Viimeistele Helmin pellon suunnitelma.",
-    "farm3": "Osta siemenpusseja Pekalta (tarvitaan {seeds} siementä) ja vie ne Helmille."
+    "farm3": "Osta siemenpusseja Pekalta (tarvitaan {seeds} siementä) ja vie ne Helmille.",
+    "forest": "Mene itään sillan yli metsäaukiolle (vaihe 1).",
+    "marsh": "Kulje metsäpolkua etelään Kertotaulusuolle (vaihe 2).",
+    "caves": "Ylitä suo itään Kaikuluoliin (vaihe 3)."
   },
   "elder": {
     "intro1": "Kai, Aino, onneksi tulitte. Arvoitusgolemi istuu lähteemme päällä, eikä mikään terä pure sen kivikuoreen.",
     "intro2": "Sen kuori on sidottu sinetillä: piilotetulla luvulla. Löydä luku, niin sinetti murtuu.",
     "intro3": "Mestari Ren dojolla opettaa ninjan tien: nopean ajattelun, kokeile ja tarkista. Viisas Lumi kirjastossa opettaa taikurin tien: yhtälöt, jotka paljastavat tuntemattoman.",
-    "intro4": "Opetelkaa minkä ehditte. Sitten itään metsän läpi vanhojen raunioiden riimuportille.",
+    "intro4": "Opetelkaa minkä ehditte. Tie raunioille on pitkä: ensin metsäaukio, sitten suo etelässä ja lopuksi luolat. Vasta kun luolat ovat hiljaa, riimuportti herää.",
     "kaiReply": "Nopeaa ajattelua? Kuulostaa juuri minun treeniltäni.",
     "ainoReply": "Ja minun on se hidas ja ovela laji. Me löydämme sen luvun, Vanhin.",
     "intro5": "Ai niin, ja Helmi maatilalla kaipaisi apua. Sankaritkin tarvitsevat leipää.",
@@ -290,7 +306,10 @@
     "hintTrain": "Ette osaa vielä murtaa sinettiä. Opetelkaa Koetteluisku Mestari Reniltä tai Sinetinpurku Viisas Lumilta. Molemmat olisi vielä parempi.",
     "hintGate": "Menkää itään, sillan yli ja metsän läpi. Riimuportti vartioi raunioita.",
     "hintGolem": "Portti on auki. Golemi odottaa raunioilla. Olkaa rohkeita, ja tarkistakaa vastauksenne.",
-    "thanks": "Lähde virtaa taas! Numerola muistaa teidät, Kai ja Aino."
+    "thanks": "Lähde virtaa taas! Numerola muistaa teidät, Kai ja Aino.",
+    "hintForest": "Aloittakaa metsäaukiolta sillan itäpuolella. Siellä olevat limat ovat hyvä ensimmäinen taistelu.",
+    "hintMarsh": "Metsäpolku etelään vie Kertotaulusuolle. Siellä asuu sammakoita ja halkeilevia limoja.",
+    "hintCaves": "Suon itäpuolella ovat Kaikuluolat. Niiden kuoriaisilla on kova kuori: keskittäkää hyökkäyksenne."
   },
   "ren": {
     "busy": "Hmph. Puhu ensin Vanhin Vesan kanssa ja tule sitten takaisin.",
@@ -478,7 +497,8 @@
     "locked": "Riimut hehkuvat sinetöidyssä kiviportissa. Ääni jyrähtää: \"Vain ne, jotka osaavat löytää piilotetun luvun, saavat kulkea.\" (Opettele ensin Koetteluisku tai Sinetinpurku.)",
     "intro": "Portin riimut hehkuvat, jokaisessa kivessä on luku. Niissä on jokin sääntö...",
     "opened": "Viimeinen riimu leimahtaa, ja portti aukeaa raapien. Raunioista virtaa kylmää ilmaa.",
-    "foreshadow": "Kai, näitkö? Sääntö oli 3 × n + 4, ja 25 oli riimussa 7. Veikkaan, että golemin sinetit toimivat samalla tavalla."
+    "foreshadow": "Kai, näitkö? Sääntö oli 3 × n + 4, ja 25 oli riimussa 7. Veikkaan, että golemin sinetit toimivat samalla tavalla.",
+    "lockedStages": "Portin riimut ovat pimeät ja kylmät. Vanhin sanoi, että ne heräävät vasta kun metsä, suo ja luolat ovat hiljaa."
   },
   "runes": {
     "title": "Riimuportti",
@@ -505,7 +525,15 @@
     "sealTitle": "Sinetti",
     "sealRule": "Kun golemi on sinetöity, se ei ota vahinkoa. Murra sinetti, niin golemi on haavoittuvainen ja menettää myös seuraavan vuoronsa. Kun sen terveys laskee tarpeeksi, tilalle syntyy uusi, vaikeampi sinetti.",
     "tipProbe": "Kai, Koetteluisku: arvaa x:lle arvo ja laske. Liian pieni vai liian iso? Korjaa ja yritä uudelleen.",
-    "tipUnbind": "Aino, Sinetinpurku: ratkaise yhtälö kuin vaaka. Yksi oikea vastaus murtaa sinetin."
+    "tipUnbind": "Aino, Sinetinpurku: ratkaise yhtälö kuin vaaka. Yksi oikea vastaus murtaa sinetin.",
+    "marsh1": "Varovasti, Kai: nuo sammakot vetävät kielellään luokseen, ja tuo violetti lima halkeaa, kun se poksahtaa!",
+    "marshTitle": "Vaihe 2: Kertotaulusuo",
+    "marshTip1": "Kielisammakot vetävät sankareita luokseen. Halkeilimat hajoavat kahdeksi pisaraksi, kun ne kaatuvat.",
+    "marshTip2": "Tulipallo osuu 3 × 3 -alueelle: loistava vierekkäisiä pisaroita vastaan. Keskitä se ja ratkaise pinta-alatehtävä, niin räjähdys on suurempi.",
+    "caves1": "Kuorikuoriaisia! Iskuni vain kimpoavat tuosta panssarista.",
+    "cavesTitle": "Vaihe 3: Kaikuluolat",
+    "cavesTip1": "Kuorikuoriaisilla on 2 panssaria: jokainen opittu isku menettää 2 vahinkoa. Keskitetyt hyökkäykset läpäisevät panssarin.",
+    "cavesTip2": "Luolavarjo parantaa ystäviään. Kaatakaa se ensin."
   },
   "tutorial": {
     "title": "Taistelun perusteet",
@@ -546,7 +574,13 @@
       "zap": "Säkenöinti",
       "leech": "Imu",
       "stretch": "Venytys",
-      "pulse": "Pulssi"
+      "pulse": "Pulssi",
+      "tongue": "Kielenisku",
+      "pinch": "Nipistys",
+      "gloom": "Synkkyys",
+      "icicle": "Jääpuikko",
+      "frost": "Paleltuma",
+      "lance": "Jääkeihäs"
     },
     "apCost": "{n} TP",
     "round": "Kierros {n}",
@@ -587,7 +621,17 @@
     "tauntFloat": "Tule tänne!",
     "markFloat": "Merkitty",
     "pushFloat": "Työnnetty!",
-    "blinkFloat": "Välähdys"
+    "blinkFloat": "Välähdys",
+    "chillFloat": "Kohmeessa",
+    "chilled": "{name} on kohmeessa ja saa 2 TP vähemmän tällä vuorolla.",
+    "hardenFloat": "Panssari +1",
+    "splitFloat": "Halkeaa!",
+    "split": "{name} halkeaa kahdeksi pisaraksi!",
+    "pullFloat": "Vedetty!",
+    "mendLog": "{name} parantaa: {target}.",
+    "pathOpens": "Tie kohteeseen {area} on auki.",
+    "winMarsh": "Sammakot kurnuttavat ja loikkivat pois, ja viimeiset pisarat uppoavat mutaan. Kaislikon takana luolan suu on vapaa kivistä.",
+    "winCaves": "Kuoriaiset kipittävät pimeään ja varjot haihtuvat. Luolissa kaikuu hiljaisuus. Kaukana pohjoisessa portin riimut alkavat hehkua."
   },
   "probe": {
     "intro": "Sinetissä lukee: {eq}. Valitse x:lle kokonaisluku, jota kokeilet.",
@@ -697,7 +741,9 @@
       "none": "ei kylvetty"
     },
     "approaches": "Tavat, joilla mittasit pellon: {list}",
-    "thanks": "Kiitos, että pelasit prototyyppiä!"
+    "thanks": "Kiitos, että pelasit prototyyppiä!",
+    "nextLand": "Vuorten takana Ominaislaakso vääristyy. Matkanne voi jatkua sinne.",
+    "travelOn": "Jatka matkaa"
   },
   "tutor": {
     "ask": "Kysy Pöllö-opettajalta",
@@ -721,13 +767,33 @@
   "campaigns": {
     "numerola": {
       "name": "Numerola",
-      "tier": "Alakoulu · 7–12-vuotiaat",
-      "desc": "Yhteen- ja vähennyslaskut, kertotaulut, pinta-alat, puuttuvat luvut ja ensimmäiset yhtälöt. Murra Arvoitusgolemin sinetit."
+      "tier": "Opetusmaa · alakoulun matematiikka",
+      "desc": "Jokainen matka alkaa täältä. Opi peli: taidot, keskitys, automaatti, korkea maa. Yhteen- ja vähennyslaskut, kertotaulut, pinta-alat, puuttuvat luvut ja ensimmäiset yhtälöt. Kolme aluetta ja sitten Arvoitusgolemi."
     },
     "eigenvale": {
       "name": "Ominaislaakso",
       "tier": "Lineaarialgebra · lukio–yliopisto",
-      "desc": "Vektorit, pistetulo, matriisitulo, determinantit, ominaisarvot ja ominaisvektorit. Oikaise vääristynyt maa."
+      "desc": "Vektorit, pistetulo, matriisitulo, determinantit, ominaisarvot ja ominaisvektorit. Neljä sankaria, kolme aluetta ja sitten Ominaisvartija."
+    },
+    "chancewood": {
+      "name": "Sattumametsä",
+      "tier": "Todennäköisyys ja tilastot",
+      "desc": "Metsä, jossa jokainen polku haarautuu sattumalta. Laskeminen, todennäköisyys, odotusarvo."
+    },
+    "fluxreach": {
+      "name": "Virtaranta",
+      "tier": "Differentiaali- ja integraalilaskenta",
+      "desc": "Dyynit, jotka liikkuvat joka hetki. Muutosnopeudet, derivaatat ja integraalit."
+    },
+    "bitforge": {
+      "name": "Bittipaja",
+      "tier": "Tietojenkäsittelytiede",
+      "desc": "Rattaiden ja logiikkaporttien kaupunki. Binääriluvut, logiikka, algoritmit ja vaativuus."
+    },
+    "forcehold": {
+      "name": "Voimalinna",
+      "tier": "Fysiikka",
+      "desc": "Voimien ja liikkeen tulivuorilinnake. Mekaniikka, energia ja aallot."
     }
   },
   "renEv": {
@@ -940,25 +1006,27 @@
     },
     "obj": {
       "talkIlona": "Puhu kartanpiirtäjä Ilonan kanssa Origossa.",
-      "plains": "Mene itään ja raivaa Vektoritasangot.",
-      "mines": "Mene etelään ja raivaa Matriisikaivokset.",
+      "plains": "Mene itään ja raivaa Vektoritasangot (vaihe 1).",
+      "mines": "Kulje tietä etelään ja raivaa Matriisikaivokset (vaihe 2).",
       "train": "Opi Koetteleva isku (Ren) tai Purku (arkkimaagi Kerttu) murtaaksesi matriisisinettejä.",
       "door": "Avaa Determinanttiovi Ominaistornin juurella (idässä).",
       "warden": "Kiipeä torniin ja murra Ominaisvartijan sinetit.",
       "done": "Ominaislaakso on taas suora!",
       "survey0": "Ilona tarvitsee apua vääristymän kartoittamisessa.",
-      "survey1": "Viimeistele Ilonan kartoitus."
+      "survey1": "Viimeistele Ilonan kartoitus.",
+      "glacier": "Seuraa jäistä polkua kaakkoon Leikkausjäätikölle (vaihe 3)."
     },
     "quests": {
       "main": {
         "title": "Vääristynyt kartta",
         "desc": "Ominaisvartijan matriisit vääristävät Ominaislaaksoa.",
         "s1": "Tapaa Ilona Origossa",
-        "s2": "Raivaa Vektoritasangot",
-        "s3": "Raivaa Matriisikaivokset",
+        "s2": "Vaihe 1: raivaa Vektoritasangot",
+        "s3": "Vaihe 2: raivaa Matriisikaivokset",
         "s4": "Avaa Determinanttiovi",
         "s5": "Kukista Ominaisvartija",
-        "started": "Uusi tehtävä: Vääristynyt kartta"
+        "started": "Uusi tehtävä: Vääristynyt kartta",
+        "glacier": "Raivaa Leikkausjäätikkö"
       },
       "survey": {
         "title": "Kartoitus",
@@ -1000,7 +1068,7 @@
       "busy": "Ilmoittautukaa ensin Ilonalle, sotilaat."
     },
     "door": {
-      "lockedAreas": "Suuri kiviovi, johon on kaiverrettu kolme matriisia. Se ei liikahda. (Raivaa ensin Vektoritasangot ja Matriisikaivokset.)",
+      "lockedAreas": "Suuri kiviovi, johon on kaiverrettu kolme matriisia. Se ei liikahda. (Raivaa ensin Vektoritasangot, Matriisikaivokset ja Leikkausjäätikkö.)",
       "lockedSkill": "Matriisit hehkuvat, mutta et osaa vielä lukea niitä. (Opi ensin Koetteleva isku tai Purku.)",
       "intro1": "Kolme lukkoa, kolme matriisia. Ääni kaikuu: ”Vain kumottavissa oleva matriisi voi avata minut.”",
       "intro2": "Matriisi voidaan kumota täsmälleen silloin, kun sen determinantti ei ole 0. Laske kaikki kolme.",
@@ -1024,7 +1092,12 @@
       "sealRule": "Sinetöitynä Ominaisvartija ei ota vahinkoa. Murra sinetti tehdäksesi siitä haavoittuvan (ja se menettää vuoron). 70 ja 35 HP:n kohdalla muodostuu uusi sinetti. Sillä on myös 3 panssaria, joten keskitä isot hyökkäyksesi.",
       "tipProbe": "Kai, Koetteleva isku: arvaa λ, laske det(A − λI). Vektorisinettiin arvaa v ja laske Av.",
       "tipUnbind": "Aino, Purku: ensin jälki ja determinantti, sitten λ. Vektorisinettiin: A − λI, sitten v.",
-      "tipPush": "Sen Venytys-hyökkäys työntää sankareita pois. Pidä Otso edessä."
+      "tipPush": "Sen Venytys-hyökkäys työntää sankareita pois. Pidä Otso edessä.",
+      "glacier1": "Leikkausjäätikkö. Jäävahteja, pakkaskummituksia ja matriisiin sinetöity ritari.",
+      "glacierTitle": "Vaihe 3: Leikkausjäätikkö",
+      "glacierTip1": "Jäävahdit saavat 1 panssarin joka vuoro (enintään 4). Kaatakaa ne ajoissa tai läpäiskää keskityksellä.",
+      "glacierTip2": "Pakkaskummitukset kohmettavat kenet tahansa, johon ne osuvat: sankari saa 2 TP vähemmän seuraavalla vuorollaan.",
+      "glacierTip3": "Pakkasritari on sinetöity kolmiomatriisilla. Kolmiomatriisin ominaisarvot ovat sen lävistäjällä. Koetteleva isku tai Purku murtaa sinetin: esimakua Ominaisvartijasta."
     },
     "tutorial": {
       "l1": "Nyt sankareita on neljä: Kai, Aino, Sana ja Otso. Jokaisella on opittu perushyökkäys.",
@@ -1036,7 +1109,8 @@
     "win": {
       "plains": "Virvatulet hiipuvat ja limat lakkaavat kasvamasta. Tasankojen tiet ovat taas suoria.",
       "mines": "Kristallit halkeavat ja lepakot hajaantuvat. Raunioista löydät Keskitysteetä.",
-      "warden": "Viimeinen sinetti murtuu. Ominaisvartijan matriisista tulee yksikkömatriisi, ja maa napsahtaa takaisin suoriin linjoihin."
+      "warden": "Viimeinen sinetti murtuu. Ominaisvartijan matriisista tulee yksikkömatriisi, ja maa napsahtaa takaisin suoriin linjoihin.",
+      "glacier": "Vahdit halkeavat, kummitukset sulavat ja Pakkasritari kumartaa. Kun kaikki kolme aluetta ovat hiljaa, Determinanttiovi hurisee idässä."
     },
     "ending": {
       "title": "Ominaislaakso on taas suora!",
@@ -1044,5 +1118,36 @@
       "p2": "Opit, että matriisi siirtää avaruutta, determinantti mittaa pinta-alaa ja ominaisvektorit ovat suuntia, joita vain venytetään.",
       "p3": "Seuraava askel uteliaille: diagonalisointi, Markovin ketjut ja PageRank. Ne kaikki käyttävät samaa ideaa."
     }
+  },
+  "areas": {
+    "forest": "Metsäaukio",
+    "marsh": "Kertotaulusuo",
+    "caves": "Kaikuluolat",
+    "ruins": "Arvoitusgolemi (rauniot)",
+    "plains": "Vektoritasangot",
+    "mines": "Matriisikaivokset",
+    "glacier": "Leikkausjäätikkö",
+    "spire": "Ominaisvartija (Ominaistorni)"
+  },
+  "worldmap": {
+    "title": "Tunnetut maat",
+    "subtitle": "Valitse maa ja matkusta sinne. Edistymisesi jokaisessa maassa säilyy matkan aikana.",
+    "subtitleNew": "Jokainen matka alkaa Numerolasta, jossa opit pelin toiminnan.",
+    "close": "Takaisin (Esc)",
+    "status": {
+      "cleared": "✔ Läpäisty",
+      "here": "Olet täällä",
+      "open": "Valmis tutkittavaksi",
+      "early": "Suositellaan myöhemmin",
+      "later": "Tulossa myöhemmin"
+    },
+    "stage": "Vaihe {n}",
+    "boss": "Loppuvastus",
+    "stay": "Jää tänne",
+    "travel": "Matkusta tänne",
+    "travelAnyway": "Matkusta silti",
+    "earlyNote": "Suositellaan tämän jälkeen: {lands}. Jos osaat jo pelin perusteet, voit lähteä nyt.",
+    "laterNote": "Tämä maa on vielä sumun peitossa. Se ei ole vielä osa prototyyppiä.",
+    "welcomeBack": "Takaisin: {land}."
   }
 }

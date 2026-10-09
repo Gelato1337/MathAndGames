@@ -31,10 +31,11 @@
     "advance": "▼ click / Enter"
   },
   "title": {
-    "newGame": "New game",
     "help": "How to play",
     "tagline": "A math RPG prototype · learn once, cast many",
-    "chooseCampaign": "Choose a campaign"
+    "newJourney": "New journey",
+    "continue": "Continue journey",
+    "journeyNote": "Start in Numerola to learn the game, then travel to harder lands."
   },
   "intro": {
     "p1": "In the valley village of Numerola, everything runs on numbers: harvests, trade, even magic.",
@@ -62,7 +63,8 @@
     "settings": "Settings",
     "help": "How to play",
     "toTitle": "Back to title",
-    "skillsHelp": "Learn a skill from a trainer once, then use it freely. Focus it in battle for bonus power."
+    "skillsHelp": "Learn a skill from a trainer once, then use it freely. Focus it in battle for bonus power.",
+    "worldMap": "World map (travel)"
   },
   "settings": {
     "language": "Language",
@@ -116,7 +118,15 @@
     "scalar": "Scalar Slime",
     "crystal": "Crystal Golem",
     "bat": "Shear Bat",
-    "warden": "Eigenwarden"
+    "warden": "Eigenwarden",
+    "frog": "Tongue Frog",
+    "splitter": "Splitter Slime",
+    "droplet": "Droplet",
+    "beetle": "Shell Beetle",
+    "shade": "Cave Shade",
+    "sentry": "Ice Sentry",
+    "wraith": "Frost Wraith",
+    "knight": "Frost Knight"
   },
   "classes": {
     "kai": "Ninja",
@@ -250,7 +260,10 @@
       "s2": "Learn a seal-breaking skill (Probe Strike or Unbind)",
       "s3": "Open the rune gate in the east",
       "s4": "Defeat the Riddle Golem",
-      "started": "New quest: The Hidden Number"
+      "started": "New quest: The Hidden Number",
+      "forest": "Stage 1: clear the forest clearing",
+      "marsh": "Stage 2: clear the Times-Table Marsh",
+      "caves": "Stage 3: clear the Echo Caves"
     },
     "farm": {
       "title": "The Crooked Field",
@@ -272,13 +285,16 @@
     "farm0": "Helmi at the farm (south) might need help.",
     "farm1": "Plan Helmi's field (talk to Helmi).",
     "farm2": "Finish planning Helmi's field.",
-    "farm3": "Buy seed bags from Pekka ({seeds} seeds needed), then bring them to Helmi."
+    "farm3": "Buy seed bags from Pekka ({seeds} seeds needed), then bring them to Helmi.",
+    "forest": "Go east over the bridge to the forest clearing (stage 1).",
+    "marsh": "Take the forest path south to the Times-Table Marsh (stage 2).",
+    "caves": "Cross the marsh east into the Echo Caves (stage 3)."
   },
   "elder": {
     "intro1": "Kai, Aino, thank goodness you're here. The Riddle Golem sits on our spring, and no blade can cut its stone shell.",
     "intro2": "Its shell is bound by a seal: a hidden number. Find the number and the seal shatters.",
     "intro3": "Master Ren at the dojo teaches the ninja way: fast thinking, guess and check. Sage Lumi at the library teaches the mage way: equations that reveal the unknown.",
-    "intro4": "Learn what you can. Then go east through the forest to the rune gate of the old ruins.",
+    "intro4": "Learn what you can. The way to the ruins is long: first the forest clearing, then the marsh to the south, then the caves. Only when the caves are quiet will the rune gate wake.",
     "kaiReply": "Fast thinking? Sounds like my kind of training.",
     "ainoReply": "And mine is the slow, clever kind. We'll find that number, Elder.",
     "intro5": "Oh, and Helmi at the farm could use a hand. Even heroes need bread.",
@@ -290,7 +306,10 @@
     "hintTrain": "You can't break a seal yet. Learn Probe Strike from Master Ren, or Unbind from Sage Lumi. Both is even better.",
     "hintGate": "Go east, over the bridge and through the forest. The rune gate guards the ruins.",
     "hintGolem": "The gate is open. The golem waits in the ruins. Be brave, and check your answers.",
-    "thanks": "The spring flows again! Numerola will remember you, Kai and Aino."
+    "thanks": "The spring flows again! Numerola will remember you, Kai and Aino.",
+    "hintForest": "Start with the forest clearing east of the bridge. The slimes there are a good first fight.",
+    "hintMarsh": "The forest path south leads to the Times-Table Marsh. Frogs and splitting slimes live there.",
+    "hintCaves": "East of the marsh are the Echo Caves. Their beetles wear hard shells: Focus your attacks."
   },
   "ren": {
     "busy": "Hmph. Speak with Elder Vesa first, then come back.",
@@ -478,7 +497,8 @@
     "locked": "Runes glow on a sealed stone gate. A voice rumbles: \"Only those who can find a hidden number may pass.\" (Learn Probe Strike or Unbind first.)",
     "intro": "The runes on the gate glow, one number on each stone. There's a pattern...",
     "opened": "The last rune flares and the gate grinds open. Cold air flows out of the ruins.",
-    "foreshadow": "Kai, did you see? The rule was 3 × n + 4, and 25 was on rune 7. I bet the golem's seals work the same way."
+    "foreshadow": "Kai, did you see? The rule was 3 × n + 4, and 25 was on rune 7. I bet the golem's seals work the same way.",
+    "lockedStages": "The runes on the gate are dark and cold. The Elder said they would wake only when the forest, the marsh and the caves are quiet."
   },
   "runes": {
     "title": "The Rune Gate",
@@ -505,7 +525,15 @@
     "sealTitle": "The Seal",
     "sealRule": "While the golem is sealed, it takes no damage. Break the seal to make it vulnerable, and it also loses its next turn. When its health drops far enough, a new, harder seal forms.",
     "tipProbe": "Kai, Probe Strike: guess a value for x and calculate. Too small or too big? Adjust and try again.",
-    "tipUnbind": "Aino, Unbind: solve the equation like a balance scale. One correct answer breaks the seal."
+    "tipUnbind": "Aino, Unbind: solve the equation like a balance scale. One correct answer breaks the seal.",
+    "marsh1": "Careful, Kai: those frogs pull you in with their tongues, and that purple slime splits when it pops!",
+    "marshTitle": "Stage 2: Times-Table Marsh",
+    "marshTip1": "Tongue Frogs pull heroes towards them. Splitter Slimes burst into two droplets when defeated.",
+    "marshTip2": "Fireball hits a 3 × 3 area: great against droplets standing together. Focus it and solve an area question for a bigger blast.",
+    "caves1": "Shell beetles! My strikes just bounce off that armor.",
+    "cavesTitle": "Stage 3: Echo Caves",
+    "cavesTip1": "Shell Beetles have 2 armor: every learned hit loses 2 damage. Focused attacks pierce armor.",
+    "cavesTip2": "The Cave Shade mends its friends. Take it down first."
   },
   "tutorial": {
     "title": "Battle basics",
@@ -546,7 +574,13 @@
       "zap": "Zap",
       "leech": "Leech",
       "stretch": "Stretch",
-      "pulse": "Pulse"
+      "pulse": "Pulse",
+      "tongue": "Tongue Lash",
+      "pinch": "Pinch",
+      "gloom": "Gloom",
+      "icicle": "Icicle",
+      "frost": "Frostbite",
+      "lance": "Ice Lance"
     },
     "apCost": "{n} AP",
     "round": "Round {n}",
@@ -587,7 +621,17 @@
     "tauntFloat": "Come at me!",
     "markFloat": "Marked",
     "pushFloat": "Pushed!",
-    "blinkFloat": "Blink"
+    "blinkFloat": "Blink",
+    "chillFloat": "Chilled",
+    "chilled": "{name} is chilled and has 2 less AP this turn.",
+    "hardenFloat": "Armor +1",
+    "splitFloat": "Splits!",
+    "split": "{name} bursts into two droplets!",
+    "pullFloat": "Pulled!",
+    "mendLog": "{name} mends {target}.",
+    "pathOpens": "The way to {area} is open.",
+    "winMarsh": "The frogs croak and hop away, and the last droplets sink into the mud. Behind the reeds, the mouth of a cave is free of rubble.",
+    "winCaves": "The beetles scuttle into the dark and the shades fade. The caves echo with silence. Far to the north, the runes on the gate begin to glow."
   },
   "probe": {
     "intro": "The seal reads: {eq}. Pick a whole number for x to test.",
@@ -697,7 +741,9 @@
       "none": "not planted"
     },
     "approaches": "Ways you measured the field: {list}",
-    "thanks": "Thanks for playing the prototype!"
+    "thanks": "Thanks for playing the prototype!",
+    "nextLand": "Beyond the mountains, the land of Eigenvale is warping. Your journey can go on there.",
+    "travelOn": "Travel on"
   },
   "tutor": {
     "ask": "Ask Owl the tutor",
@@ -721,13 +767,33 @@
   "campaigns": {
     "numerola": {
       "name": "Numerola",
-      "tier": "Primary school · ages 7–12",
-      "desc": "Sums, times tables, areas, missing numbers and your first equations. Break the Riddle Golem’s seals."
+      "tier": "Tutorial land · primary school math",
+      "desc": "Where every journey starts. Learn the game: skills, Focus, Auto, high ground. Sums, times tables, areas, missing numbers and first equations. Three areas, then the Riddle Golem."
     },
     "eigenvale": {
       "name": "Eigenvale",
       "tier": "Linear algebra · upper secondary to university",
-      "desc": "Vectors, dot products, matrix multiplication, determinants, eigenvalues and eigenvectors. Unwarp the land."
+      "desc": "Vectors, dot products, matrix multiplication, determinants, eigenvalues and eigenvectors. Four heroes, three areas, then the Eigenwarden."
+    },
+    "chancewood": {
+      "name": "Chancewood",
+      "tier": "Probability and statistics",
+      "desc": "A forest where every path forks by chance. Counting, probability, expected value."
+    },
+    "fluxreach": {
+      "name": "Fluxreach",
+      "tier": "Calculus",
+      "desc": "Dunes that shift every moment. Rates of change, derivatives and integrals."
+    },
+    "bitforge": {
+      "name": "Bitforge",
+      "tier": "Computer science",
+      "desc": "A city of gears and logic gates. Binary, logic, algorithms and complexity."
+    },
+    "forcehold": {
+      "name": "Forcehold",
+      "tier": "Physics",
+      "desc": "A volcanic fortress of forces and motion. Mechanics, energy and waves."
     }
   },
   "renEv": {
@@ -940,25 +1006,27 @@
     },
     "obj": {
       "talkIlona": "Talk to Ilona, the cartographer, in Origin.",
-      "plains": "Go east and clear the Vector Plains.",
-      "mines": "Go south and clear the Matrix Mines.",
+      "plains": "Go east and clear the Vector Plains (stage 1).",
+      "mines": "Take the road south and clear the Matrix Mines (stage 2).",
       "train": "Learn Probe Strike (Ren) or Unbind (Archmage Kerttu) to break matrix seals.",
       "door": "Open the Determinant Door below the Eigen Spire (east).",
       "warden": "Climb the spire and break the Eigenwarden’s seals.",
       "done": "Eigenvale is straight again!",
       "survey0": "Ilona needs help surveying the warp.",
-      "survey1": "Finish Ilona’s survey."
+      "survey1": "Finish Ilona’s survey.",
+      "glacier": "Follow the icy path south-east to the Shear Glacier (stage 3)."
     },
     "quests": {
       "main": {
         "title": "The Warped Map",
         "desc": "The Eigenwarden’s matrices are warping Eigenvale.",
         "s1": "Meet Ilona in Origin",
-        "s2": "Clear the Vector Plains",
-        "s3": "Clear the Matrix Mines",
+        "s2": "Stage 1: clear the Vector Plains",
+        "s3": "Stage 2: clear the Matrix Mines",
         "s4": "Open the Determinant Door",
         "s5": "Defeat the Eigenwarden",
-        "started": "New quest: The Warped Map"
+        "started": "New quest: The Warped Map",
+        "glacier": "Clear the Shear Glacier"
       },
       "survey": {
         "title": "The Survey",
@@ -1000,7 +1068,7 @@
       "busy": "Report to Ilona first, soldiers."
     },
     "door": {
-      "lockedAreas": "A great door of stone, with three matrices carved into it. It won’t budge. (Clear the Vector Plains and the Matrix Mines first.)",
+      "lockedAreas": "A great door of stone, with three matrices carved into it. It won’t budge. (Clear the Vector Plains, the Matrix Mines and the Shear Glacier first.)",
       "lockedSkill": "The matrices glow, but you can’t read them yet. (Learn Probe Strike or Unbind first.)",
       "intro1": "Three locks, three matrices. A voice echoes: “Only a matrix that can be undone may open me.”",
       "intro2": "A matrix can be undone exactly when its determinant is not 0. Compute all three.",
@@ -1024,7 +1092,12 @@
       "sealRule": "While sealed, the Eigenwarden takes no damage. Break the seal to make it vulnerable (and lose a turn). At 70 and 35 HP a new seal forms. It also has 3 armor, so Focus your big attacks.",
       "tipProbe": "Kai, Probe Strike: guess λ, compute det(A − λI). For the vector seal, guess v and compute Av.",
       "tipUnbind": "Aino, Unbind: trace and determinant first, then λ. For the vector seal: A − λI, then v.",
-      "tipPush": "Its Stretch attack shoves heroes away. Keep Otso in front."
+      "tipPush": "Its Stretch attack shoves heroes away. Keep Otso in front.",
+      "glacier1": "The Shear Glacier. Ice sentries, frost wraiths, and a knight sealed in a matrix.",
+      "glacierTitle": "Stage 3: Shear Glacier",
+      "glacierTip1": "Ice Sentries gain 1 armor every turn (up to 4). Defeat them early, or pierce them with Focus.",
+      "glacierTip2": "Frost Wraiths chill whoever they hit: that hero has 2 less AP on their next turn.",
+      "glacierTip3": "The Frost Knight is sealed by a triangular matrix. For a triangular matrix the eigenvalues sit on the diagonal. Probe Strike or Unbind breaks the seal: a preview of the Eigenwarden."
     },
     "tutorial": {
       "l1": "Four heroes now: Kai, Aino, Sana and Otso. Each has a learned basic attack.",
@@ -1036,7 +1109,8 @@
     "win": {
       "plains": "The wisps fade and the slimes stop growing. The plains’ roads are straight again.",
       "mines": "The crystals crack and the bats scatter. In the rubble you find a Focus Tea.",
-      "warden": "The last seal breaks. The Eigenwarden’s matrix becomes the identity, and the land snaps back into straight lines."
+      "warden": "The last seal breaks. The Eigenwarden’s matrix becomes the identity, and the land snaps back into straight lines.",
+      "glacier": "The sentries crack, the wraiths melt, and the Frost Knight bows. With all three lands quiet, the Determinant Door hums in the east."
     },
     "ending": {
       "title": "Eigenvale is straight again!",
@@ -1044,5 +1118,36 @@
       "p2": "You learned that a matrix moves space, a determinant measures area, and eigenvectors are the directions that only stretch.",
       "p3": "Next step for the curious: diagonalisation, Markov chains and PageRank. They all use the same idea."
     }
+  },
+  "areas": {
+    "forest": "Forest Clearing",
+    "marsh": "Times-Table Marsh",
+    "caves": "Echo Caves",
+    "ruins": "Riddle Golem (Ruins)",
+    "plains": "Vector Plains",
+    "mines": "Matrix Mines",
+    "glacier": "Shear Glacier",
+    "spire": "Eigenwarden (Eigen Spire)"
+  },
+  "worldmap": {
+    "title": "The Known Lands",
+    "subtitle": "Pick a land and travel there. Your progress in each land is kept while you travel.",
+    "subtitleNew": "Every journey starts in Numerola, where you learn how the game works.",
+    "close": "Back (Esc)",
+    "status": {
+      "cleared": "✔ Cleared",
+      "here": "You are here",
+      "open": "Ready to explore",
+      "early": "Recommended later",
+      "later": "Coming later"
+    },
+    "stage": "Stage {n}",
+    "boss": "Final boss",
+    "stay": "Stay here",
+    "travel": "Travel here",
+    "travelAnyway": "Travel anyway",
+    "earlyNote": "Recommended after: {lands}. If you already know the basics of the game, you can go now.",
+    "laterNote": "This land is still covered in fog. It is not part of the prototype yet.",
+    "welcomeBack": "Back in {land}."
   }
 }

@@ -49,6 +49,18 @@ export const WARDEN_SEALS: EigenSeal[] = [
   },
 ];
 
+/** The Frost Knight's single seal: a triangular matrix, whose eigenvalues sit on the diagonal. */
+export const KNIGHT_SEALS: EigenSeal[] = [
+  {
+    kind: 'eig',
+    A: [
+      [3, 1],
+      [0, 2],
+    ],
+    mode: 'value',
+  },
+];
+
 export const PRACTICE_EIGEN: EigenSeal = {
   kind: 'eig',
   A: [
