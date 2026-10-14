@@ -135,7 +135,17 @@
     "mimic": "Onnenmatkija",
     "bandit": "Todennäköisyysrosvo",
     "joker": "Jokeri",
-    "fortuna": "Madame Fortuna"
+    "fortuna": "Madame Fortuna",
+    "meri": "Meri",
+    "keeper": "Majakanvartija Vilho",
+    "aava": "Kapteeni Aava",
+    "crab": "Vuorovesirapu",
+    "gull": "Myrskylokki",
+    "urchin": "Merisiili",
+    "eel": "Kipinäankerias",
+    "siren": "Seireeni",
+    "drowned": "Hukkunut merimies",
+    "serpent": "Vuorovesikäärme"
   },
   "classes": {
     "kai": "Ninja",
@@ -147,7 +157,9 @@
     "sanaDesc": "Suunnat ja kulmat: vektorit, pistetulo, kohtisuorat suorat.",
     "otsoDesc": "Suojelee ryhmää: determinantit (pinta-ala) ja matriisitulot.",
     "onni": "Uhkapeluri",
-    "onniDesc": "Pelaa todennäköisyyksillä: mahdollisuudet, ”ei”, nopat ja reilut pelit."
+    "onniDesc": "Pelaa todennäköisyyksillä: mahdollisuudet, ”ei”, nopat ja reilut pelit.",
+    "meri": "Suunnistaja",
+    "meriDesc": "Ohjaa kulmilla: suuntimat, aallot ja radiaanit."
   },
   "skills": {
     "strike": {
@@ -285,6 +297,46 @@
     "fortune": {
       "name": "Onnetar",
       "desc": "Anna liittolaiselle onnenamuletti, joka imee 10 vahinkoa."
+    },
+    "tstep": {
+      "name": "Vuorovesiaskel",
+      "desc": "Astu tyhjään ruutuun enintään 5 ruudun päähän."
+    },
+    "tflurry": {
+      "name": "Iskusarja",
+      "desc": "Kaksi nopeaa 5 vahingon iskua. Keskitä se: jokainen ajoissa oikeaan kulmaan käännetty valokeila lisää iskun."
+    },
+    "tprobe": {
+      "name": "Vuorovesi-isku",
+      "desc": "Nopea isku: 5 vahinkoa. Vuorovesisinettiä vastaan vastaa sen kysymykseen nopeasti ilman välivaiheita: oikea vastaus murskaa sinetin."
+    },
+    "twave": {
+      "name": "Siniaalto",
+      "desc": "Aalto, joka iskee 3 × 3 -alueelle: 9 vahinkoa."
+    },
+    "tmend": {
+      "name": "Parannus",
+      "desc": "Paranna liittolaista (tai itseäsi) 12 HP."
+    },
+    "tunbind": {
+      "name": "Purku",
+      "desc": "Ratkaise vuorovesisinetti vaihe vaiheelta Trigolinssin avulla. Oikea vastaus murskaa sen."
+    },
+    "harpoon": {
+      "name": "Harppuuna",
+      "desc": "Heitetty harppuuna: 5–7 vahinkoa, kantama 5."
+    },
+    "bearing": {
+      "name": "Suuntima",
+      "desc": "Ota vihollisesta suuntima 2 vuoroksi: se ottaa 50 % enemmän vahinkoa."
+    },
+    "tide": {
+      "name": "Hyökyaalto",
+      "desc": "Kutsu vuorovesi 3 × 3 -alueelle: 8 vahinkoa kuhunkin."
+    },
+    "beacon": {
+      "name": "Majakka",
+      "desc": "Kääri liittolainen majakan valoon, joka imee 10 vahinkoa."
     }
   },
   "items": {
@@ -512,6 +564,46 @@
     "fortune": {
       "intro": "Onnetar. Kannattaako peliä pelata? Odotusarvo: voiton todennäköisyys × palkinto. Kaksi oikein.",
       "outro": "Onnetar antaa liittolaiselle 10 pisteen amuletin. Keskitä se ja laske odotusarvo, niin amuletti on paljon vahvempi."
+    },
+    "tstep": {
+      "intro": "Vuorovesiaskel. Suorakulmaisella kolmiolla on kolme sivua: vastainen kateetti, viereinen kateetti ja hypotenuusa. Sin, cos ja tan ovat niiden suhteita. Kolme oikein.",
+      "outro": "Nyt voit astua minne tahansa 5 ruudun säteellä 1 TP:llä."
+    },
+    "tflurry": {
+      "intro": "Iskusarja Vuorovesirannan tapaan: käännä valokeilaa. Vedä Trigolinssiä, kunnes se näyttää pyydetyn arvon. Kolme oikein.",
+      "outro": "Keskitä Iskusarja ja käännä valokeilaa nopeasti: jokainen oikea kulma lisää uuden iskun."
+    },
+    "tprobe": {
+      "intro": "Vuorovesi-isku. Ensin tarkat silmät: kaksi kolmiota.",
+      "seal": "Nyt harjoitussinetti. Ei välivaiheita, vain vastaus ennen kuin vuorovesi kääntyy.",
+      "again": "Ei tällä kertaa. Sin on vastainen kateetti jaettuna hypotenuusalla: 30°:ssa puolet hypotenuusasta.",
+      "outro": "Vuorovesisinettiä vastaan Vuorovesi-isku antaa yhden nopean kysymyksen. Kirjoita √3/2 tai 0,866, kumpikin kelpaa."
+    },
+    "twave": {
+      "intro": "Siniaalto. Jos tiedät kulman ja hypotenuusan, vastainen kateetti on hypotenuusa × sin θ. Lue sin θ tarvittaessa Linssistä. Kolme oikein.",
+      "outro": "Siniaalto osuu 3 × 3 -alueelle. Keskitä se ja laske sivu, niin aalto on paljon suurempi."
+    },
+    "tmend": {
+      "intro": "Parannus. Yksikköympyrällä kolmion sivut ovat sin ja cos, ja hypotenuusa on 1. Siksi sin² + cos² = 1, aina. Kaksi oikein.",
+      "outro": "Keskitä Parannus ja käytä sin² + cos² = 1 sen lauetessa: se parantaa paljon enemmän."
+    },
+    "tunbind": {
+      "intro": "Purku on syvin oppitunti. Vuorovesikäärmeen sinetit ovat kolmioita, ympyröitä ja kaavoja. Ensin kolmion sivu.",
+      "circle": "Nyt yksikköympyrä: yli 90°:n valokeila osoittaa vasemmalle tai alas, ja sin tai cos muuttuu negatiiviseksi. Käytä kulmaa x-akseliin ja sitten etumerkkiä.",
+      "identity": "Lopuksi kaava: sin² + cos² = 1.",
+      "outro": "Purulla ratkaiset vuorovesisinetin vaihe vaiheelta Linssi vierelläsi. Välivaiheet lasketaan."
+    },
+    "bearing": {
+      "intro": "Suuntima. Suunnistaja löytää kulmat sivuista: sin θ = vastainen kateetti : hypotenuusa, ja sitten käännä Linssiä, kunnes sin θ täsmää. Kaksi oikein.",
+      "outro": "Merkitty vihollinen ottaa 50 % enemmän vahinkoa 2 vuoron ajan."
+    },
+    "tide": {
+      "intro": "Hyökyaalto. Vuorovesi on siniaalto: amplitudi kertoo, kuinka korkealle se nousee, jakso kuinka kauan yksi aalto kestää. Kolme oikein.",
+      "outro": "Hyökyaalto osuu 3 × 3 -alueelle. Keskitä se ja lue aalto, niin vuorovesi on voimakkaampi."
+    },
+    "beacon": {
+      "intro": "Majakka. Merenkulkijat mittaavat kulmia radiaaneina: puoli kierrosta, 180°, on π. Kolme oikein.",
+      "outro": "Majakka antaa liittolaiselle 10 pisteen valokilven. Keskitä se ja muunna kulma, niin majakka on voimakkaampi."
     }
   },
   "practice": {
@@ -679,7 +771,14 @@
       "knife": "Heittoveitsi",
       "card": "Korttiheitto",
       "fate": "Kohtalon käänne",
-      "wheel": "Onnenpyörä"
+      "wheel": "Onnenpyörä",
+      "peck": "Nokkaisu",
+      "spine": "Piikit",
+      "shock": "Sähköisku",
+      "song": "Seireenin laulu",
+      "cutlass": "Sapeli",
+      "fang": "Torahammas",
+      "surge": "Hyöky"
     },
     "apCost": "{n} TP",
     "round": "Kierros {n}",
@@ -736,7 +835,12 @@
     "luckyFloat": "Onnen 6!",
     "lucky": "{name} heittää kutosen: tuplavahinko!",
     "shuffleFloat": "Sekoitettu!",
-    "shuffle": "{name} sekoittaa: {a} ja {b} vaihtavat paikkaa!"
+    "shuffle": "{name} sekoittaa: {a} ja {b} vaihtavat paikkaa!",
+    "highTide": "Nousuvesi ×1,5",
+    "lowTide": "Laskuvesi ×0,5",
+    "tideHigh": "nousuvesi",
+    "tideLow": "laskuvesi",
+    "tideMid": "puolivesi"
   },
   "probe": {
     "intro": "Sinetissä lukee: {eq}. Valitse x:lle kokonaisluku, jota kokeilet.",
@@ -899,6 +1003,11 @@
       "name": "Voimalinna",
       "tier": "Fysiikka",
       "desc": "Voimien ja liikkeen tulivuorilinnake. Mekaniikka, energia ja aallot."
+    },
+    "tidewatch": {
+      "name": "Vuorovesiranta",
+      "tier": "Trigonometria · lukio",
+      "desc": "Sin, cos ja tan, jotka näet: suorakulmaiset kolmiot, yksikköympyrä, radiaanit, sin² + cos² = 1 ja aallot interaktiivisen Trigolinssin avulla. Kolme aluetta ja sitten Vuorovesikäärme."
     }
   },
   "renEv": {
@@ -969,7 +1078,15 @@
       "prob_not": "Ei",
       "prob_two": "Kaksi tapahtumaa",
       "prob_dice": "Kaksi noppaa",
-      "expect": "Odotusarvo"
+      "expect": "Odotusarvo",
+      "trig_ratio": "Sin, cos ja tan",
+      "trig_sides": "Sivu kulmasta",
+      "trig_angle": "Kulma sivuista",
+      "unit_circle": "Yksikköympyrä",
+      "radians": "Radiaanit",
+      "pythag_id": "sin² + cos² = 1",
+      "waves": "Aallot",
+      "trig_drag": "Linssin lukeminen"
     },
     "d": {
       "add_sub": "Järjestyksellä ei ole väliä, kun {1|lasket yhteen}: {1|a} + {2|b} on {2|b} + {1|a}.",
@@ -994,8 +1111,18 @@
       "prob_not": "Todennäköisyys, että {4|ei A}, on 1 miinus todennäköisyys, että {3|A}.",
       "prob_two": "Jos {1|A} ja {2|B} eivät vaikuta toisiinsa, kerro: {3|P(A ja B)} = P(A) × P(B).",
       "prob_dice": "Laske 6 × 6 -taulukosta {1|tavat}, joilla summa syntyy, {2|36} tuloksesta.",
-      "expect": "{1|Voiton todennäköisyys} kertaa {2|palkinto}: mitä voitat keskimäärin."
-    }
+      "expect": "{1|Voiton todennäköisyys} kertaa {2|palkinto}: mitä voitat keskimäärin.",
+      "trig_ratio": "Suorakulmaisessa kolmiossa: sin = {1|vastainen kateetti} : {3|hypotenuusa}, cos = {2|viereinen kateetti} : hypotenuusa, tan = vastainen : viereinen.",
+      "trig_sides": "{1|Vastainen kateetti} = {3|hypotenuusa} × sin θ, viereinen = hypotenuusa × cos θ.",
+      "trig_angle": "Laske sin θ = {1|vastainen} : {3|hypotenuusa} ja käännä Linssiä, kunnes sin täsmää: se on θ.",
+      "unit_circle": "Valokeilan kärki on pisteessä ({2|cos θ}, {1|sin θ}). Lampun vasemmalla puolella cos on negatiivinen; sen alapuolella sin on negatiivinen.",
+      "radians": "Puoli kierrosta, 180°, on {3|π} radiaania. Radiaanit = asteet : 180 × π.",
+      "pythag_id": "Yksikköympyrän kolmion sivut ovat {1|sin} ja {2|cos} ja hypotenuusa 1, joten Pythagoraan lauseen mukaan sin² + cos² = 1.",
+      "waves": "y = {1|A} sin({2|B}x): A on korkeus (amplitudi), 360° : B yhden aallon pituus (jakso).",
+      "trig_drag": "{1|sin θ} kertoo, kuinka korkealla valokeilan kärki on; {2|cos θ} kuinka kaukana sivulla."
+    },
+    "lens": "Trigolinssi",
+    "lensHelp": "Vedä valokeilaa ympyrän ympäri tai vedä aaltoa pitkin. Kytke kerroksia nähdäksesi, miten sin, cos ja tan liittyvät toisiinsa."
   },
   "steps": {
     "step": "Vaihe {n}",
@@ -1252,7 +1379,11 @@
     "glade": "Kolikkoaukio",
     "hollow": "Noppanotko",
     "maze": "Pelurin labyrintti",
-    "carnival": "Madame Fortuna (karnevaali)"
+    "carnival": "Madame Fortuna (karnevaali)",
+    "pools": "Vuorovesilammikot",
+    "cliffs": "Lokkijyrkänteet",
+    "reef": "Hylkyriutta",
+    "rock": "Vuorovesikäärme (Majakkakallio)"
   },
   "worldmap": {
     "title": "Tunnetut maat",
@@ -1553,6 +1684,293 @@
       "p1": "Madame Fortuna kumartaa ja korjaa pyöränsä. Kolikot putoavat kruunalle puolet ajasta, nopat heittävät jokaista lukua, ja Onni voittaa yhä... joskus.",
       "p2": "Opit tiivistämään dataa keskiarvolla, mediaanilla ja vaihteluvälillä sekä mittaamaan sattumaa: suotuisat kaikista, ”ei”, kaksi tapahtumaa yhtä aikaa, nopat ja reilut pelit.",
       "p3": "Seuraava askel uteliaille: puudiagrammit, ehdollinen todennäköisyys ja normaalijakauma."
+    }
+  },
+  "renTw": {
+    "intro1": "Kai! Meri-ilma sopii sinulle. Täällä nopeus tarkoittaa valokeilan kääntämistä oikeaan kulmaan, nopeasti.",
+    "intro2": "Samat säännöt kuin aina: läpäise koe kerran ja liike on sinun.",
+    "menu": "Valmis harjoitukseen?",
+    "menuDone": "Olet oppinut kaiken, mitä täällä opetan.",
+    "about1": "Sin on vastainen kateetti per hypotenuusa, cos viereinen kateetti per hypotenuusa, tan vastainen per viereinen.",
+    "about2": "Avaa Trigolinssi muistivihosta (N) ja vedä valokeilaa. Katso violettia sivua: se on sin.",
+    "sealHint": "Käärmeen sinetit kysyvät sivua, arvoa ympyrällä tai kaavaa. Vastaa nopeasti Vuorovesi-iskulla."
+  },
+  "keeper": {
+    "intro1": "Aino, eikö niin? Lamppuni sammui, kun Käärme tuli. Sillä aikaa opetan sinulle, mikä valokeila oikeastaan on.",
+    "intro2": "Valokeila on 1:n mittainen jana, joka kääntyy pisteen ympäri. Missä sen kärki on, sivuttain ja ylöspäin: se on cos ja sin.",
+    "menu": "Mitä opiskelemme tänä iltana?",
+    "menuDone": "Ymmärrät valon nyt yhtä hyvin kuin minä.",
+    "about1": "Valokeilan kärki on pisteessä (cos θ, sin θ). Vedä sitä Trigolinssissä, niin siniaalto aukeaa sen vierelle.",
+    "about2": "Käännä valokeila yli 90°:n, niin cos muuttuu negatiiviseksi: kärki on lampun vasemmalla puolella. Yli 180°:n myös sin on negatiivinen.",
+    "sealHint": "Purulla voit työskennellä rauhassa Linssi vierelläsi. Käytä kulmaa x-akseliin ja sitten etumerkkiä."
+  },
+  "aava": {
+    "intro1": "Meri, löysit ystäviä. Hyvä. Suunnistaja ei koskaan purjehdi yksin.",
+    "intro2": "Opetan sinulle suuntimat, aallot ja radiaanit. Meri puhuu kulmilla.",
+    "menu": "Valmis oppimaan meren?",
+    "menuDone": "Osaat suunnistaa nyt itse, Meri.",
+    "about1": "Aalto y = A sin(Bx): A kertoo korkeuden, 360° : B yhden aallon pituuden.",
+    "about2": "Radiaanit mittaavat kulmaa kaaren pituudella: kulje yhden säteen verran ympyrää pitkin, niin olet kääntynyt 1 radiaanin. Puoli kierrosta on π.",
+    "sealHint": "Ota suuntima vahvimmasta vihollisesta ja pidä majakka sen päällä, joka keskittyy."
+  },
+  "lens": {
+    "aria": "Trigolinssi: käännä valokeilaa vetämällä tai nuolinäppäimillä",
+    "triangle": "Kolmio",
+    "wave": "Siniaalto",
+    "cosWave": "Kosiniaalto",
+    "wall": "Tan-seinä",
+    "play": "Toista",
+    "reset": "Palauta",
+    "help": "Vedä valokeilaa tai aaltoa. Nuolinäppäimet: 1°, Shiftin kanssa 15°.",
+    "signs": "sin {s}, cos {c}",
+    "title": "Käännä valokeilaa",
+    "confirm": "Tämä kulma",
+    "task": {
+      "sin": "Käännä valokeilaa, kunnes sin θ = {v} ja θ on välillä {lo}°–{hi}°.",
+      "cos": "Käännä valokeilaa, kunnes cos θ = {v} ja θ on välillä {lo}°–{hi}°.",
+      "tan": "Käännä valokeilaa, kunnes tan θ = {v} ja θ on välillä {lo}°–{hi}°."
+    },
+    "hint": {
+      "sin": "sin θ kertoo, kuinka KORKEALLA valokeilan kärki on. Keskipisteen yläpuolella se on positiivinen, alapuolella negatiivinen.",
+      "cos": "cos θ kertoo, kuinka kaukana OIKEALLA kärki on. Keskipisteen vasemmalla puolella se on negatiivinen.",
+      "tan": "Kytke tan-seinä päälle: tan θ kertoo, kuinka korkealle valokeila osuu yhden säteen päässä olevaan seinään."
+    },
+    "answerWas": "Yksi oikea kulma on {a}°.",
+    "ex": {
+      "sin": "Kulmassa {a}° kärki on korkeudella {v}: sin {a}° = {v}.",
+      "cos": "Kulmassa {a}° kärki on {v} sivulla: cos {a}° = {v}.",
+      "tan": "Kulmassa {a}° valokeila osuu seinään korkeudella {v}: tan {a}° = {v}."
+    }
+  },
+  "tr": {
+    "w": {
+      "opposite": "vastainen kateetti",
+      "adjacent": "viereinen kateetti",
+      "hypotenuse": "hypotenuusa",
+      "refAngle": "kulma x-akseliin",
+      "sign": "etumerkki",
+      "amplitude": "amplitudi",
+      "highest": "korkein kohta",
+      "period": "jakso",
+      "point": "valokeilan kärki",
+      "height": "korkeus",
+      "across": "sivuttain",
+      "distance": "etäisyys"
+    },
+    "g": {
+      "opposite": "Sivu, joka on kulmaa θ vastapäätä.",
+      "adjacent": "Kulman θ vieressä oleva sivu (ei hypotenuusa).",
+      "hypotenuse": "Pisin sivu, suoraa kulmaa vastapäätä.",
+      "theta": "Kulma, jonka käännämme oikealle osoittavasta x-akselista vastapäivään.",
+      "sinCircle": "sin θ: kuinka korkealla valokeilan kärki on.",
+      "cosCircle": "cos θ: kuinka kaukana oikealla valokeilan kärki on.",
+      "tan": "tan θ: kuinka korkealle valokeila osuu yhden säteen päässä olevaan seinään (= sin : cos).",
+      "radian": "π radiaania = puoli kierrosta. Yksi radiaani on kulma, jonka kaari on yhden säteen pituinen.",
+      "amplitude": "Kuinka korkealle aalto nousee keskikohdan yläpuolelle.",
+      "frequency": "Kuinka monta aaltoa mahtuu 360°:een."
+    },
+    "cap": {
+      "triangle": "Kolmio. Värit vastaavat kaavaa.",
+      "lens": "Trigolinssi on asetettu tähän kulmaan. Lue siitä sin, cos tai tan (vedä tutkiaksesi, Palauta palataksesi).",
+      "find": "Käännä valokeilaa, kunnes sin θ vastaa lukuasi; lue sitten θ.",
+      "circle": "Valokeila tässä kulmassa. Vedä tutkiaksesi; luvut on piilotettu tarkoituksella.",
+      "arc": "Vaaleanpunainen kaari on kulma radiaaneina: sen pituus säteinä.",
+      "wave": "Aalto yhden täyden kierroksen ajan, 0°–360°."
+    },
+    "trig_ratio": {
+      "title": "Sin, cos ja tan",
+      "text": {
+        "sin": "Suorakulmaisen kolmion sivut ovat {o}, {a} ja {h}. Kulmasta θ katsottuna {1|vastainen kateetti} on {o} ja {3|hypotenuusa} on {h}. sin θ = vastainen : hypotenuusa.",
+        "cos": "Suorakulmaisen kolmion sivut ovat {o}, {a} ja {h}. Kulmasta θ katsottuna {2|viereinen kateetti} on {a} ja {3|hypotenuusa} on {h}. cos θ = viereinen : hypotenuusa.",
+        "tan": "Suorakulmaisen kolmion sivut ovat {o}, {a} ja {h}. Kulmasta θ katsottuna {1|vastainen kateetti} on {o} ja {2|viereinen kateetti} on {a}. tan θ = vastainen : viereinen."
+      },
+      "hint": "Etsi kuvasta kaksi sivua ja kirjoita ne murtolukuna.",
+      "ex": "{fn} θ = {top}/{bottom}."
+    },
+    "trig_sides": {
+      "title": "Sivu kulmasta",
+      "text": {
+        "sin": "{known} mittaiset tikkaat ({3|hypotenuusa}) nojaavat {angle}°:n kulmassa. Kuinka korkealle ne ulottuvat ({1|vastainen kateetti})? Vastainen = hypotenuusa × sin θ.",
+        "cos": "{known} mittainen köysi ({3|hypotenuusa}) on kiinnitetty {angle}°:n kulmassa. Kuinka kaukana maata pitkin kiinnike on ({2|viereinen kateetti})? Viereinen = hypotenuusa × cos θ.",
+        "tan": "Seisot {known} m päässä mastosta ({2|viereinen kateetti}) ja katsot ylös {angle}°:n kulmassa. Kuinka korkea masto on ({1|vastainen kateetti})? Vastainen = viereinen × tan θ."
+      },
+      "hint": "Lue kulman sin, cos tai tan Linssistä ja kerro.",
+      "hintSpecial": "sin 30° = 1/2 ja cos 60° = 1/2: sivu on puolet hypotenuusasta.",
+      "ex": "{mode} {angle}° = {f}, joten sivu on {known} × {f} ≈ {want}."
+    },
+    "trig_angle": {
+      "title": "Kulma sivuista",
+      "text": "{hyp} m pitkä köysi ({3|hypotenuusa}) pitää maston huippua {opp} m korkeudella ({1|vastainen kateetti}). Mikä on kulma θ? Ensin sin θ = vastainen : hypotenuusa, sitten käännä Linssiä, kunnes sin θ täsmää.",
+      "hint": "Jaa, ja vedä sitten valokeilaa, kunnes violetti sivu (sin) näyttää saman luvun. Lue θ.",
+      "ex": "sin θ = {s}, joten θ ≈ {a}°."
+    },
+    "unit_circle": {
+      "title": "Yksikköympyrä",
+      "text": {
+        "sin": "Käännä valokeila kulmaan {angle}°. Mikä on {1|sin} {angle}°? Käytä {5|kulmaa} takaisin x-akseliin (arvo, jonka tunnet) ja päätä etumerkki: onko kärki keskipisteen ylä- vai alapuolella?",
+        "cos": "Käännä valokeila kulmaan {angle}°. Mikä on {2|cos} {angle}°? Käytä {5|kulmaa} takaisin x-akseliin (arvo, jonka tunnet) ja päätä etumerkki: onko kärki keskipisteen vasemmalla vai oikealla puolella?"
+      },
+      "hint": "sin 30° = 1/2, sin 45° = √2/2 ≈ 0,707, sin 60° = √3/2 ≈ 0,866 (ja cos päinvastoin). Valitse sitten etumerkki kuvasta.",
+      "ex": "Kulma x-akseliin on {ref}°, ja kuva kertoo etumerkin: {fn} {angle}° = {v}."
+    },
+    "radians": {
+      "title": "Radiaanit",
+      "text": "Kirjoita {d}° radiaaneina luvun {3|π} murtolukuna. Puoli kierrosta, 180°, on π radiaania.",
+      "textBack": "Kirjoita {n}π/{m} radiaania asteina. {3|π} radiaania on 180°.",
+      "hint": "Jaa asteet luvulla 180: niin monta π:tä.",
+      "hintBack": "Korvaa π luvulla 180° ja laske murtoluku.",
+      "ex": "{d}° : 180° = {n}/{m}, joten {d}° = {n}π/{m}.",
+      "exBack": "{n}/{m} × 180° = {d}°."
+    },
+    "pythag_id": {
+      "title": "sin² + cos² = 1",
+      "text": "Kulmalle θ (alle 90°) sin θ = {o}/{h}. Laske cos θ. Yksikköympyrällä {1|sin² θ} + {2|cos² θ} = 1.",
+      "textTan": "Kulmalle θ (alle 90°) sin θ = {o}/{h}. Laske tan θ = sin θ : cos θ. Laske ensin cos θ kaavalla {1|sin² θ} + {2|cos² θ} = 1.",
+      "hint": "Korota sin θ toiseen, vähennä se luvusta 1 ja ota neliöjuuri.",
+      "hintTan": "Laske ensin cos θ kaavalla sin² + cos² = 1, ja jaa sitten sin cos:lla.",
+      "ex": "Kyse on {o}-{a}-{h}-kolmiosta: sin = {o}/{h}, cos = {a}/{h}, tan = {o}/{a}."
+    },
+    "waves": {
+      "title": "Aallot",
+      "text": "Vuorovesi noudattaa käyrää y = {A} · sin({B}x). Kuinka korkealle se nousee keskikohdan yläpuolelle? Se on {1|amplitudi}.",
+      "textPeriod": "Vuorovesi noudattaa käyrää y = {A} · sin({B}x). Montako astetta yksi kokonainen aalto kestää? Se on {2|jakso}: 360° : {B}.",
+      "hint": "Katso kuvaajan korkeinta kohtaa.",
+      "hintPeriod": "Laske aallot 360°:ssa tai jaa 360° x:n edessä olevalla luvulla.",
+      "ex": "Korkein kohta on {A}: amplitudi on {A}.",
+      "exPeriod": "360° : {B} = {P}°: yksi aalto {P}°:n välein."
+    }
+  },
+  "tseal": {
+    "title": "Vuorovesisinetti",
+    "ladder": "{hyp} m masto kallistuu 30°:n kulmassa veteen nähden. Kuinka korkealle sen huippu ulottuu? {1|Vastainen kateetti} = {3|hypotenuusa} × sin 30°.",
+    "circle": "Valokeila kääntyy kulmaan 120°. Mikä on {2|cos} 120°? Kärki on keskipisteen vasemmalla puolella, joten cos on negatiivinen.",
+    "identity": "Kulmalle {1|sin θ} = 3/5 (θ alle 90°). Mikä on {4|tan θ}? Laske ensin {2|cos θ} kaavalla sin² + cos² = 1.",
+    "label": {
+      "ladder": "vastainen?",
+      "circle": "cos 120°?",
+      "identity": "tan θ?",
+      "practice": "vastainen?"
+    },
+    "probeStory": "Vuorovesi-isku: ei välivaiheita, vain vastaus. Nopeasti!",
+    "unbindStory": "Sinetti on kysymys kulmista. Käy vaiheet läpi; Linssi on vierelläsi."
+  },
+  "tw": {
+    "intro": {
+      "p1": "Numerolan eteläpuolella maa päättyy mereen. Täällä Vuorovesirannalla majakan valokeila kääntyy koko yön ja vuorovesi nousee ja laskee kuin kello.",
+      "p2": "Mutta Vuorovesikäärme on kietoutunut Majakkakallion ympärille. Lamppu on sammunut, vuorovesi on menettänyt rytminsä ja laivat ajavat karille.",
+      "p3": "Kai ja Aino saapuvat Lyhtylahteen. Nuori suunnistaja Meri liittyy heihin. Majakanvartija Vilho odottaa kylmän lamppunsa vieressä."
+    },
+    "obj": {
+      "talkKeeper": "Puhu majakanvartija Vilhon kanssa Lyhtylahdessa.",
+      "done": "Majakka loistaa ja vuorovesi on taas rytmissä!",
+      "pools": "Mene itään ja raivaa Vuorovesilammikot (vaihe 1).",
+      "cliffs": "Kulje rantapolkua etelään ja raivaa Lokkijyrkänteet (vaihe 2).",
+      "reef": "Seuraa polkua kaakkoon Hylkyriutalle (vaihe 3).",
+      "train": "Opi Vuorovesi-isku (Ren) tai Purku (majakanvartija Vilho) murtaaksesi vuorovesisinettejä.",
+      "gate": "Avaa Majakkaportti Majakkakallion alapuolella (idässä).",
+      "serpent": "Kiipeä Majakkakalliolle ja murra Vuorovesikäärmeen sinetit.",
+      "survey0": "Majakanvartija Vilho haluaa majakan mitattavan.",
+      "survey1": "Viimeistele majakan mittaus."
+    },
+    "quests": {
+      "main": {
+        "title": "Pimeä majakka",
+        "desc": "Vuorovesikäärme on sammuttanut lampun ja rikkonut vuoroveden rytmin.",
+        "s1": "Tapaa majakanvartija Vilho Lyhtylahdessa",
+        "pools": "Vaihe 1: raivaa Vuorovesilammikot",
+        "cliffs": "Vaihe 2: raivaa Lokkijyrkänteet",
+        "reef": "Vaihe 3: raivaa Hylkyriutta",
+        "gate": "Avaa Majakkaportti",
+        "serpent": "Kukista Vuorovesikäärme",
+        "started": "Uusi tehtävä: Pimeä majakka"
+      },
+      "survey": {
+        "title": "Kuinka korkea majakka on?",
+        "desc": "Mittaa majakka kulman ja etäisyyden avulla.",
+        "s1": "Laske korkeus"
+      }
+    },
+    "keeper": {
+      "intro1": "Matkalaisia, vihdoin. Neljäkymmentä vuotta olen vartioinut tätä valoa, eikä se ole koskaan ollut näin pimeä.",
+      "intro2": "Vuorovesikäärme kietoutui Majakkakallion ympärille. Siitä asti vuorovesi tulee milloin sattuu, ei enää vanhassa tasaisessa rytmissään.",
+      "intro3": "Kallio on suljettu Majakkaportilla, ja Käärme piiloutuu kulmien sinettien taakse. Vain sin, cos ja tan ymmärtävä pääsee läpi.",
+      "meri": "Minä opastan teitä! Olen Meri, kapteeni Aavan suunnistaja. Ohjaan kulmilla.",
+      "aino": "Sin ja cos ovat aina tuntuneet minusta taikaluvuilta. Haluaisin vihdoin nähdä, mistä ne tulevat.",
+      "intro4": "Katso sitten Trigolinssin läpi: avaa muistivihko ja käännä valokeilaa. Harjoitelkaa Renin, kapteeni Aavan ja minun kanssani. Sitten lammikot, jyrkänteet ja riutta.",
+      "again": "Miten vartio sujuu?",
+      "thanks": "Valo kääntyy taas. Kiitos, teille kaikille.",
+      "optTrain": "Opeta Ainoa (ympyrä).",
+      "optSerpent": "Kerro Vuorovesikäärmeestä.",
+      "optSurvey": "Auta mittaamaan majakka.",
+      "optHint": "Mitä meidän pitäisi tehdä seuraavaksi?",
+      "serpent1": "Sen sinetit ovat kysymyksiä kulmista: kallistuva masto, valokeilan käännös ja ympyrän oma sääntö.",
+      "serpent2": "Vastaa yhteen, niin sinetti murtuu. Jokainen uusi sinetti on hieman vaikeampi.",
+      "survey1": "Satama haluaa tietää, kuinka korkea majakkani on. Kukaan ei pysty kiipeämään sinne mittanauhan kanssa tässä tuulessa.",
+      "survey2": "Mutta ei tarvitse kiivetä. Astu kauemmas, mittaa kulma huipulle ja anna tangentin kiivetä puolestasi.",
+      "surveyTitle": "Kuinka korkea majakka on?",
+      "surveyText": "Seisot {dist} m päässä majakasta ({2|etäisyys}, viereinen kateetti) ja katsot sen huipulle {angle}°:n kulmassa. Sen {1|korkeus} on vastainen kateetti: korkeus = etäisyys × tan θ.",
+      "gHeight": "Majakka: kulmaa vastapäätä oleva sivu.",
+      "gDist": "Kuinka kaukana seisot siitä: kulman viereinen sivu.",
+      "surveyCap": "Linssi on asetettu mittaamaasi kulmaan. Seinän sininen jana on tan θ.",
+      "surveyHint": "Lue tan θ Linssistä (tan-seinä) ja kerro etäisyydellä.",
+      "surveyEx": "tan {angle}° ≈ 0,700, joten korkeus ≈ {dist} × 0,700 ≈ {h} m.",
+      "surveyStory": "Mittaaminen kiipeämättä: kulma ja etäisyys riittävät.",
+      "surveyRetry": "Hmm, tuo ei täsmää sataman vanhoihin kirjoihin. Yritä myöhemmin uudelleen.",
+      "surveyDone": "Neljätoista metriä! Juuri niin kuin vanhat kirjat sanovat. Etkä edes lähtenyt maasta.",
+      "surveyMeri": "Niin suunnistajat mittaavat kallioita ja etäisyyksiä merellä: yksi kulma ja yksi sivu.",
+      "surveyReward": "+{g} kultaa, +{n} juomaa"
+    },
+    "aava": {
+      "busy": "Puhukaa ensin majakanvartijan kanssa, merimiehet."
+    },
+    "ren": {
+      "busy": "Kai! Puhu ensin majakanvartijan kanssa, hän tietää, mitä on tekeillä."
+    },
+    "gate": {
+      "lockedAreas": "Suuri rautaportti, jonka päällä on sammunut lamppu. Siihen on maalattu kolme laivaa. Se ei aukea. (Raivaa ensin Vuorovesilammikot, Lokkijyrkänteet ja Hylkyriutta.)",
+      "lockedSkill": "Maalatut laivat tuntuvat liikkuvan, mutta et osaa vielä lukea niiden kulmia. (Opi ensin Vuorovesi-isku tai Purku.)",
+      "intro1": "Portin lamppu lepattaa. Ääni vyöryy kuin tyrsky: ”Ohjaa kolme laivaani kotiin, niin aukenen.”",
+      "intro2": "Käännä valokeila kuhunkin laivaan. 0° osoittaa itään, 90° pohjoiseen, 180° länteen.",
+      "shipTitle": "Laiva {n}",
+      "story": "Ohjaa laiva kotiin valokeilalla.",
+      "ship1": "Laiva 1 on 8 km itään ja 8 km pohjoiseen. Valokeilan on noustava yhtä paljon kuin se kulkee sivuttain: tan θ = 1. Käännä valokeila siihen.",
+      "ship2": "Laiva 2 on suoraan majakan pohjoispuolella. Suoraan ylös osoittaessa kärki ei ole lainkaan vasemmalla eikä oikealla: cos θ = 0. Käännä valokeila siihen.",
+      "ship3": "Laiva 3 on 6 km länteen ja 6 km pohjoiseen. Ylös yhtä paljon kuin sivuttain, mutta länteen: tan θ = −1, välillä 90°–180°. Käännä valokeila siihen.",
+      "opened": "Kolmas laiva kääntyy kohti satamaa. Portin lamppu leimahtaa, ja Majakkaportti aukeaa.",
+      "meri": "45°, 90°, 135°: neljännes, puolet ja kolme neljännestä puolesta kierroksesta. Ihan kuin kompassi!"
+    },
+    "battle": {
+      "pools1": "Vuorovesirapuja! Ne nipistävät kovempaa nousuveden aikaan, ja vuorovesi noudattaa siniaaltoa.",
+      "poolsTitle": "Vaihe 1: Vuorovesilammikot",
+      "poolsTip1": "Nyt sankareita on kolme: Kai, Aino ja Meri. Meri heittää harppuunaansa kaukaa.",
+      "poolsTip2": "Vuorovesiravut iskevät ×1,5 nousuvedellä ja ×0,5 laskuvedellä. Kierros 1 on nousuvesi, sitten puolivesi, laskuvesi, puolivesi: vuorovesi on sin(kierros × 90°). Kierroslaskuri näyttää sen.",
+      "poolsTip3": "Iske kovaa laskuveden aikaan ja pidä etäisyyttä nousuvedellä.",
+      "cliffs1": "Lokkeja syöksyy jyrkänteiltä, ja nuo piikikkäät merisiilit purevat takaisin!",
+      "cliffsTitle": "Vaihe 2: Lokkijyrkänteet",
+      "cliffsTip1": "Myrskylokit nokkivat kaukaa ja lentävät pois jokaisen hyökkäyksen jälkeen.",
+      "cliffsTip2": "Merisiileillä on 2 panssaria, ja ne satuttavat sitä, joka lyö niitä opitulla hyökkäyksellä. Keskitys läpäisee panssarin eikä heijastu. Käytä korkeita jyrkänteitä lisävahinkoon.",
+      "reef1": "Hukkuneita merimiehiä, ankerias ja seireeni. Varovasti, hänen laulunsa vetää puoleensa!",
+      "reefTitle": "Vaihe 3: Hylkyriutta",
+      "reefTip1": "Hukkuneilla merimiehillä on 2 panssaria ja ne seuraavat vuorovettä. Kipinäankerias kohmettaa sen, johon se iskee (2 TP vähemmän seuraavalla vuorolla).",
+      "reefTip2": "Seireeni vetää sankareita laulullaan ja parantaa liittolaisiaan. Kaatakaa hänet ajoissa.",
+      "serpent1": "KUKA UHKAA KÄÄNTÄÄ VALON?",
+      "serpent2": "KIERTEENI OVAT KULMIA. VUOROVETENI OVAT AALTOJA. TUNNETTEKO NE?",
+      "serpentMeri": "Sen sinetit ovat kysymyksiä kulmista! Vastatkaa niihin, niin ne murtuvat.",
+      "sealRule": "Sinetöitynä Vuorovesikäärme ei ota vahinkoa. Murra sinetti tehdäksesi siitä haavoittuvan (ja se menettää vuoron). 70 ja 35 HP:n kohdalla muodostuu uusi sinetti. Sillä on 2 panssaria ja se seuraa vuorovettä: vahvimmillaan nousuvedellä.",
+      "tipProbe": "Kai, Vuorovesi-isku: yksi nopea kysymys ilman välivaiheita. 1/2, 0,5 ja √3/2 kelpaavat.",
+      "tipUnbind": "Aino, Purku: etene vaihe vaiheelta Linssi vierelläsi."
+    },
+    "win": {
+      "pools": "Ravut kipittävät kalliolammikoihin. Vesi tyyntyy; polku aukeaa jyrkänteille.",
+      "cliffs": "Lokit kaartavat pois meren ylle. Pesästä löydät Keskitysteetä.",
+      "reef": "Merimiehet vajoavat takaisin riuttaan ja seireeni vaikenee. Kun kaikki kolme paikkaa ovat hiljaa, Majakkaportin lamppu alkaa lepattaa.",
+      "serpent": "Viimeinen sinetti murtuu. Vuorovesikäärme aukeaa kerältä ja liukuu syvyyksiin, ja vuorovesi vyöryy taas: tasainen, säännöllinen, täydellinen siniaalto."
+    },
+    "ending": {
+      "title": "Valo kääntyy taas!",
+      "p1": "Majakanvartija Vilho sytyttää lampun. Valokeila pyyhkii merta, sen kärki piirtää ympyrää, ja sen varjo vedessä nousee ja laskee kuin vuorovesi.",
+      "p2": "Opit, että sin ja cos ovat kääntyvän valokeilan korkeus ja leveys, että tan kertoo, mihin se osuu seinässä, ja että aallot ovat aukikierrettyjä ympyröitä.",
+      "p3": "Seuraava askel uteliaille: sini- ja kosinilause mille tahansa kolmiolle sekä äänen ja valon aallot."
     }
   }
 }

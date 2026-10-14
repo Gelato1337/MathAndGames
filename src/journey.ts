@@ -2,7 +2,7 @@ import type { CampaignId } from './data';
 import type { GameState } from './state';
 
 /** Every land on the world map. Lands without a campaign are coming later. */
-export type LandId = CampaignId | 'chancewood' | 'fluxreach' | 'bitforge' | 'forcehold';
+export type LandId = CampaignId | 'fluxreach' | 'bitforge' | 'forcehold';
 
 export interface Land {
   id: LandId;
@@ -18,7 +18,8 @@ export interface Land {
 
 export const LANDS: Land[] = [
   { id: 'numerola', campaign: 'numerola', x: 40, y: 76, after: [], sprites: ['kai', 'golem', 'aino'] },
-  { id: 'eigenvale', campaign: 'eigenvale', x: 100, y: 50, after: ['numerola'], sprites: ['sana', 'warden', 'otso'] },
+  { id: 'tidewatch', campaign: 'tidewatch', x: 70, y: 96, after: ['numerola'], sprites: ['meri', 'serpent', 'keeper'] },
+  { id: 'eigenvale', campaign: 'eigenvale', x: 100, y: 50, after: ['tidewatch'], sprites: ['sana', 'warden', 'otso'] },
   { id: 'chancewood', campaign: 'chancewood', x: 38, y: 28, after: ['numerola'], sprites: ['onni', 'fortuna', 'tilda'] },
   { id: 'fluxreach', campaign: null, x: 156, y: 28, after: ['eigenvale'], sprites: [] },
   { id: 'bitforge', campaign: null, x: 110, y: 94, after: ['eigenvale'], sprites: [] },
@@ -27,6 +28,8 @@ export const LANDS: Land[] = [
 
 /** Roads drawn between lands. */
 export const ROADS: Array<[LandId, LandId]> = [
+  ['numerola', 'tidewatch'],
+  ['tidewatch', 'eigenvale'],
   ['numerola', 'eigenvale'],
   ['numerola', 'chancewood'],
   ['eigenvale', 'fluxreach'],
@@ -49,7 +52,7 @@ function load(): Set<CampaignId> {
     const raw = localStorage.getItem(KEY);
     if (!raw) return new Set();
     const s = JSON.parse(raw) as Saved;
-    return new Set((s.cleared ?? []).filter((c) => c === 'numerola' || c === 'eigenvale' || c === 'chancewood'));
+    return new Set((s.cleared ?? []).filter((c) => c === 'numerola' || c === 'eigenvale' || c === 'chancewood' || c === 'tidewatch'));
   } catch {
     return new Set();
   }

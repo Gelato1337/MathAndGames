@@ -135,7 +135,17 @@
     "mimic": "Lucky Mimic",
     "bandit": "Odds Bandit",
     "joker": "Joker",
-    "fortuna": "Madame Fortuna"
+    "fortuna": "Madame Fortuna",
+    "meri": "Meri",
+    "keeper": "Keeper Vilho",
+    "aava": "Captain Aava",
+    "crab": "Tide Crab",
+    "gull": "Storm Gull",
+    "urchin": "Sea Urchin",
+    "eel": "Spark Eel",
+    "siren": "Siren",
+    "drowned": "Drowned Sailor",
+    "serpent": "Tide Serpent"
   },
   "classes": {
     "kai": "Ninja",
@@ -147,7 +157,9 @@
     "sanaDesc": "Directions and angles: vectors, dot products, perpendicular lines.",
     "otsoDesc": "Protects the party: determinants (area) and matrix products.",
     "onni": "Gambler",
-    "onniDesc": "Plays the odds: chances, \"not\", dice and fair games."
+    "onniDesc": "Plays the odds: chances, \"not\", dice and fair games.",
+    "meri": "Navigator",
+    "meriDesc": "Steers by angles: bearings, waves and radians."
   },
   "skills": {
     "strike": {
@@ -285,6 +297,46 @@
     "fortune": {
       "name": "Fortune's Favour",
       "desc": "Give an ally a lucky charm that absorbs 10 damage."
+    },
+    "tstep": {
+      "name": "Tide Step",
+      "desc": "Step to an empty tile up to 5 tiles away."
+    },
+    "tflurry": {
+      "name": "Flurry",
+      "desc": "Two fast hits of 5 damage. Focus it: every beam you turn to the right angle in time adds a hit."
+    },
+    "tprobe": {
+      "name": "Tide Strike",
+      "desc": "A quick strike: 5 damage. Against a tide seal, answer its question fast, with no working: right shatters the seal."
+    },
+    "twave": {
+      "name": "Sine Wave",
+      "desc": "A wave that crashes over a 3 × 3 area: 9 damage."
+    },
+    "tmend": {
+      "name": "Mend",
+      "desc": "Heal an ally (or yourself) for 12 HP."
+    },
+    "tunbind": {
+      "name": "Unbind",
+      "desc": "Solve a tide seal step by step with the Trig Lens. A right answer shatters it."
+    },
+    "harpoon": {
+      "name": "Harpoon",
+      "desc": "A thrown harpoon: 5–7 damage, range 5."
+    },
+    "bearing": {
+      "name": "Take Bearing",
+      "desc": "Fix an enemy’s bearing for 2 turns: it takes 50% more damage."
+    },
+    "tide": {
+      "name": "Tidal Wave",
+      "desc": "Call the tide onto a 3 × 3 area: 8 damage each."
+    },
+    "beacon": {
+      "name": "Beacon",
+      "desc": "Wrap an ally in lighthouse light that absorbs 10 damage."
     }
   },
   "items": {
@@ -512,6 +564,46 @@
     "fortune": {
       "intro": "Fortune's Favour. Is a game worth playing? The expected value: chance to win × prize. Two correct.",
       "outro": "Fortune's Favour gives an ally a 10-point charm. Focus it and work out an expected value for a much stronger charm."
+    },
+    "tstep": {
+      "intro": "Tide Step. Every right triangle has three sides: opposite, adjacent and hypotenuse. sin, cos and tan are ratios of them: SOH CAH TOA. Three correct.",
+      "outro": "Now you can step anywhere within 5 tiles for 1 AP."
+    },
+    "tflurry": {
+      "intro": "Flurry, Tidewatch style: turn the beam. Drag the Trig Lens until it shows the value asked. Three correct.",
+      "outro": "Focus a Flurry and turn the beam fast: every right angle adds another hit."
+    },
+    "tprobe": {
+      "intro": "Tide Strike. Quick eyes first: two triangles.",
+      "seal": "Now a practice seal. No working, just the answer, before the tide turns.",
+      "again": "Not this time. sin is opposite over hypotenuse: half the hypotenuse at 30°.",
+      "outro": "Against a tide seal, Tide Strike gives you one fast question. Typing √3/2 or 0.866 both work."
+    },
+    "twave": {
+      "intro": "Sine Wave. If you know an angle and the hypotenuse, the opposite side is hypotenuse × sin θ. Read sin θ off the Lens if you need to. Three correct.",
+      "outro": "Sine Wave hits a 3 × 3 area. Focus it and work out a side for a much bigger wave."
+    },
+    "tmend": {
+      "intro": "Mend. On the unit circle the triangle’s sides are sin and cos, and the hypotenuse is 1. So sin² + cos² = 1, always. Two correct.",
+      "outro": "Focus Mend and use sin² + cos² = 1 when it fires: it heals far more."
+    },
+    "tunbind": {
+      "intro": "Unbind is the deepest lesson. The Tide Serpent’s seals are triangles, circles and identities. First, a side of a triangle.",
+      "circle": "Now the unit circle: past 90°, the beam points left or down, and sin or cos turn negative. Use the angle back to the x-axis, then the sign.",
+      "identity": "Last, the identity: sin² + cos² = 1.",
+      "outro": "With Unbind you solve a tide seal step by step, with the Lens beside you. The working counts."
+    },
+    "bearing": {
+      "intro": "Take Bearing. A navigator finds angles from sides: sin θ = opposite ÷ hypotenuse, then turn the Lens until sin θ matches. Two correct.",
+      "outro": "A marked enemy takes 50% more damage for 2 turns."
+    },
+    "tide": {
+      "intro": "Tidal Wave. The tide is a sine wave: its amplitude is how high it goes, its period how long one wave takes. Three correct.",
+      "outro": "Tidal Wave hits a 3 × 3 area. Focus it and read a wave for a stronger tide."
+    },
+    "beacon": {
+      "intro": "Beacon. Sailors measure angles in radians: half a turn, 180°, is π. Three correct.",
+      "outro": "Beacon gives an ally a 10-point shield of light. Focus it and convert an angle for a stronger beacon."
     }
   },
   "practice": {
@@ -679,7 +771,14 @@
       "knife": "Thrown Knife",
       "card": "Card Throw",
       "fate": "Twist of Fate",
-      "wheel": "Wheel of Fortune"
+      "wheel": "Wheel of Fortune",
+      "peck": "Peck",
+      "spine": "Spines",
+      "shock": "Shock",
+      "song": "Siren Song",
+      "cutlass": "Cutlass",
+      "fang": "Fang",
+      "surge": "Surge"
     },
     "apCost": "{n} AP",
     "round": "Round {n}",
@@ -736,7 +835,12 @@
     "luckyFloat": "Lucky 6!",
     "lucky": "{name} rolls a 6: double damage!",
     "shuffleFloat": "Shuffled!",
-    "shuffle": "{name} shuffles {a} and {b}!"
+    "shuffle": "{name} shuffles {a} and {b}!",
+    "highTide": "High tide ×1.5",
+    "lowTide": "Low tide ×0.5",
+    "tideHigh": "high tide",
+    "tideLow": "low tide",
+    "tideMid": "mid tide"
   },
   "probe": {
     "intro": "The seal reads: {eq}. Pick a whole number for x to test.",
@@ -899,6 +1003,11 @@
       "name": "Forcehold",
       "tier": "Physics",
       "desc": "A volcanic fortress of forces and motion. Mechanics, energy and waves."
+    },
+    "tidewatch": {
+      "name": "Tidewatch",
+      "tier": "Trigonometry · upper secondary",
+      "desc": "Sin, cos and tan you can see: right triangles, the unit circle, radians, sin² + cos² = 1 and waves, with the interactive Trig Lens. Three areas, then the Tide Serpent."
     }
   },
   "renEv": {
@@ -969,7 +1078,15 @@
       "prob_not": "Not",
       "prob_two": "Two events",
       "prob_dice": "Two dice",
-      "expect": "Expected value"
+      "expect": "Expected value",
+      "trig_ratio": "SOH CAH TOA",
+      "trig_sides": "A side from an angle",
+      "trig_angle": "An angle from sides",
+      "unit_circle": "The unit circle",
+      "radians": "Radians",
+      "pythag_id": "sin² + cos² = 1",
+      "waves": "Waves",
+      "trig_drag": "Reading the Lens"
     },
     "d": {
       "add_sub": "Order doesn’t matter when you {1|add}: {1|a} + {2|b} is {2|b} + {1|a}.",
@@ -994,8 +1111,18 @@
       "prob_not": "The chance of {4|not A} is 1 minus the chance of {3|A}.",
       "prob_two": "If {1|A} and {2|B} do not affect each other, multiply: {3|P(A and B)} = P(A) × P(B).",
       "prob_dice": "Count the {1|ways} to make the sum in the 6 × 6 table, out of {2|36}.",
-      "expect": "The {1|chance to win} times the {2|prize}: what you win on average."
-    }
+      "expect": "The {1|chance to win} times the {2|prize}: what you win on average.",
+      "trig_ratio": "In a right triangle: sin = {1|opposite} ÷ {3|hypotenuse}, cos = {2|adjacent} ÷ hypotenuse, tan = opposite ÷ adjacent.",
+      "trig_sides": "{1|Opposite} = {3|hypotenuse} × sin θ, adjacent = hypotenuse × cos θ.",
+      "trig_angle": "Work out sin θ = {1|opposite} ÷ {3|hypotenuse}, then turn the Lens until sin matches: that is θ.",
+      "unit_circle": "The beam’s tip is at ({2|cos θ}, {1|sin θ}). Left of the lamp, cos is negative; below it, sin is negative.",
+      "radians": "Half a turn, 180°, is {3|π} radians. Radians = degrees ÷ 180 × π.",
+      "pythag_id": "The triangle in the unit circle has sides {1|sin} and {2|cos} and hypotenuse 1, so by Pythagoras sin² + cos² = 1.",
+      "waves": "y = {1|A} sin({2|B}x): A is the height (amplitude), 360° ÷ B the length of one wave (period).",
+      "trig_drag": "{1|sin θ} is how high the beam’s tip is; {2|cos θ} is how far across."
+    },
+    "lens": "Trig Lens",
+    "lensHelp": "Drag the beam around the circle, or drag along the wave. Toggle the layers to see how sin, cos and tan are connected."
   },
   "steps": {
     "step": "Step {n}",
@@ -1252,7 +1379,11 @@
     "glade": "Coinflip Glade",
     "hollow": "Dice Hollow",
     "maze": "Gambler's Maze",
-    "carnival": "Madame Fortuna (Carnival)"
+    "carnival": "Madame Fortuna (Carnival)",
+    "pools": "Tidepools",
+    "cliffs": "Gull Cliffs",
+    "reef": "Shipwreck Reef",
+    "rock": "Tide Serpent (Lighthouse Rock)"
   },
   "worldmap": {
     "title": "The Known Lands",
@@ -1553,6 +1684,293 @@
       "p1": "Madame Fortuna bows and fixes her wheel. Coins land heads half the time, dice roll every number, and Onni still wins... sometimes.",
       "p2": "You learned to sum up data with the mean, the median and the range, and to measure chance: favourable out of all, \"not\", two events at once, dice and fair games.",
       "p3": "Next step for the curious: tree diagrams, conditional probability, and the normal distribution."
+    }
+  },
+  "renTw": {
+    "intro1": "Kai! The sea air suits you. Here, speed means turning the beam to the right angle, fast.",
+    "intro2": "Same rules as always: pass a trial once and the move is yours.",
+    "menu": "Ready to train?",
+    "menuDone": "You have learned all I teach here.",
+    "about1": "SOH CAH TOA: sin is Opposite over Hypotenuse, cos is Adjacent over Hypotenuse, tan is Opposite over Adjacent.",
+    "about2": "Open the Trig Lens in your notebook (N) and drag the beam. Watch the purple side: that is sin.",
+    "sealHint": "The Serpent’s seals ask for a side, a value on the circle, or an identity. Answer fast with Tide Strike."
+  },
+  "keeper": {
+    "intro1": "Aino, is it? My lamp went dark when the Serpent came. While it’s out, let me teach you what a beam really is.",
+    "intro2": "The beam is a line of length 1 turning around a point. Where its tip is, across and up: that is cos and sin.",
+    "menu": "What shall we study tonight?",
+    "menuDone": "You understand the light now as well as I do.",
+    "about1": "The tip of the beam is at (cos θ, sin θ). Drag it in the Trig Lens and the sine wave unrolls beside it.",
+    "about2": "Turn the beam past 90° and cos goes negative, the tip is left of the lamp. Past 180°, sin goes negative too.",
+    "sealHint": "With Unbind you can work slowly, with the Lens beside you. Use the reference angle, then the sign."
+  },
+  "aava": {
+    "intro1": "Meri, you’ve found some friends. Good. A navigator never sails alone.",
+    "intro2": "I’ll teach you bearings, waves and radians. The sea speaks in angles.",
+    "menu": "Ready to learn the sea?",
+    "menuDone": "You can navigate by yourself now, Meri.",
+    "about1": "A wave y = A sin(Bx): A is how high, 360° ÷ B is how long one wave is.",
+    "about2": "Radians measure angles by arc length: walk one radius along the circle and you have turned 1 radian. Half a turn is π.",
+    "sealHint": "Take a bearing on the strongest foe, and keep the beacon on whoever is focusing."
+  },
+  "lens": {
+    "aria": "Trig Lens: drag to turn the beam, or use the arrow keys",
+    "triangle": "Triangle",
+    "wave": "Sine wave",
+    "cosWave": "Cos wave",
+    "wall": "Tan wall",
+    "play": "Play",
+    "reset": "Reset",
+    "help": "Drag the beam or the wave. Arrow keys: 1°, with Shift: 15°.",
+    "signs": "sin {s}, cos {c}",
+    "title": "Turn the beam",
+    "confirm": "This angle",
+    "task": {
+      "sin": "Turn the beam until sin θ = {v}, with θ between {lo}° and {hi}°.",
+      "cos": "Turn the beam until cos θ = {v}, with θ between {lo}° and {hi}°.",
+      "tan": "Turn the beam until tan θ = {v}, with θ between {lo}° and {hi}°."
+    },
+    "hint": {
+      "sin": "sin θ is how HIGH the beam’s tip is. Above the centre it is positive, below it negative.",
+      "cos": "cos θ is how far the tip is to the RIGHT. Left of the centre it is negative.",
+      "tan": "Turn on the tan wall: tan θ is how high the beam hits the wall one radius away."
+    },
+    "answerWas": "One right angle is {a}°.",
+    "ex": {
+      "sin": "At {a}° the tip is at height {v}: sin {a}° = {v}.",
+      "cos": "At {a}° the tip is {v} across: cos {a}° = {v}.",
+      "tan": "At {a}° the beam hits the wall at height {v}: tan {a}° = {v}."
+    }
+  },
+  "tr": {
+    "w": {
+      "opposite": "opposite",
+      "adjacent": "adjacent",
+      "hypotenuse": "hypotenuse",
+      "refAngle": "angle to the x-axis",
+      "sign": "sign",
+      "amplitude": "amplitude",
+      "highest": "highest point",
+      "period": "period",
+      "point": "the tip of the beam",
+      "height": "height",
+      "across": "across",
+      "distance": "distance"
+    },
+    "g": {
+      "opposite": "The side across from the angle θ.",
+      "adjacent": "The side next to the angle θ (not the hypotenuse).",
+      "hypotenuse": "The longest side, across from the right angle.",
+      "theta": "The angle we turn, measured from the right-hand x-axis, anticlockwise.",
+      "sinCircle": "sin θ: how high the tip of the beam is.",
+      "cosCircle": "cos θ: how far right the tip of the beam is.",
+      "tan": "tan θ: how high the beam hits the wall one radius away (= sin ÷ cos).",
+      "radian": "π radians = half a turn. One radian is the angle whose arc is one radius long.",
+      "amplitude": "How high the wave goes above the middle.",
+      "frequency": "How many waves fit in 360°."
+    },
+    "cap": {
+      "triangle": "The triangle. Colours match the formula.",
+      "lens": "The Trig Lens is set to this angle. Read sin, cos or tan from it (drag to explore, Reset to come back).",
+      "find": "Turn the beam until sin θ matches your value; then read θ.",
+      "circle": "The beam at this angle. Drag to explore; the numbers are hidden on purpose.",
+      "arc": "The pink arc is the angle in radians: its length counted in radii.",
+      "wave": "The wave over one full turn, 0° to 360°."
+    },
+    "trig_ratio": {
+      "title": "SOH CAH TOA",
+      "text": {
+        "sin": "A right triangle has sides {o}, {a} and {h}. From the angle θ, the {1|opposite} side is {o} and the {3|hypotenuse} is {h}. sin θ = opposite ÷ hypotenuse.",
+        "cos": "A right triangle has sides {o}, {a} and {h}. From the angle θ, the {2|adjacent} side is {a} and the {3|hypotenuse} is {h}. cos θ = adjacent ÷ hypotenuse.",
+        "tan": "A right triangle has sides {o}, {a} and {h}. From the angle θ, the {1|opposite} side is {o} and the {2|adjacent} side is {a}. tan θ = opposite ÷ adjacent."
+      },
+      "hint": "Find the two sides in the picture, then write them as a fraction.",
+      "ex": "{fn} θ = {top}/{bottom}."
+    },
+    "trig_sides": {
+      "title": "A side from an angle",
+      "text": {
+        "sin": "A ladder of length {known} (the {3|hypotenuse}) leans at {angle}°. How high does it reach (the {1|opposite} side)? Opposite = hypotenuse × sin θ.",
+        "cos": "A rope of length {known} (the {3|hypotenuse}) is pegged at {angle}°. How far along the ground is the peg (the {2|adjacent} side)? Adjacent = hypotenuse × cos θ.",
+        "tan": "You stand {known} m from a mast (the {2|adjacent} side) and look up at {angle}°. How tall is the mast (the {1|opposite} side)? Opposite = adjacent × tan θ."
+      },
+      "hint": "Read the sin, cos or tan of the angle from the Lens, then multiply.",
+      "hintSpecial": "sin 30° = 1/2 and cos 60° = 1/2: the side is half of the hypotenuse.",
+      "ex": "{mode} {angle}° = {f}, so the side is {known} × {f} ≈ {want}."
+    },
+    "trig_angle": {
+      "title": "An angle from sides",
+      "text": "A rope {hyp} m long (the {3|hypotenuse}) holds a mast top {opp} m high (the {1|opposite} side). What is the angle θ? First sin θ = opposite ÷ hypotenuse, then turn the Lens until sin θ matches.",
+      "hint": "Divide, then drag the beam until the purple side (sin) shows the same number. Read θ.",
+      "ex": "sin θ = {s}, so θ ≈ {a}°."
+    },
+    "unit_circle": {
+      "title": "The unit circle",
+      "text": {
+        "sin": "Turn the beam to {angle}°. What is {1|sin} {angle}°? Use the {5|angle} back to the x-axis (a value you know), then decide the sign: is the tip above or below the centre?",
+        "cos": "Turn the beam to {angle}°. What is {2|cos} {angle}°? Use the {5|angle} back to the x-axis (a value you know), then decide the sign: is the tip left or right of the centre?"
+      },
+      "hint": "sin 30° = 1/2, sin 45° = √2/2 ≈ 0.707, sin 60° = √3/2 ≈ 0.866 (and cos is the other way round). Then pick the sign from the picture.",
+      "ex": "The angle to the x-axis is {ref}°, and the picture gives the sign: {fn} {angle}° = {v}."
+    },
+    "radians": {
+      "title": "Radians",
+      "text": "Write {d}° in radians, as a fraction of {3|π}. Half a turn, 180°, is π radians.",
+      "textBack": "Write {n}π/{m} radians in degrees. {3|π} radians is 180°.",
+      "hint": "Divide the degrees by 180: that is how many π.",
+      "hintBack": "Replace π with 180°, then work out the fraction.",
+      "ex": "{d}° ÷ 180° = {n}/{m}, so {d}° = {n}π/{m}.",
+      "exBack": "{n}/{m} × 180° = {d}°."
+    },
+    "pythag_id": {
+      "title": "sin² + cos² = 1",
+      "text": "An angle θ (less than 90°) has sin θ = {o}/{h}. Find cos θ. On the unit circle {1|sin² θ} + {2|cos² θ} = 1.",
+      "textTan": "An angle θ (less than 90°) has sin θ = {o}/{h}. Find tan θ = sin θ ÷ cos θ. First use {1|sin² θ} + {2|cos² θ} = 1 to find cos θ.",
+      "hint": "Square sin θ, take it away from 1, then take the square root.",
+      "hintTan": "Find cos θ first with sin² + cos² = 1, then divide sin by cos.",
+      "ex": "It is the {o}-{a}-{h} triangle: sin = {o}/{h}, cos = {a}/{h}, tan = {o}/{a}."
+    },
+    "waves": {
+      "title": "Waves",
+      "text": "The tide follows y = {A} · sin({B}x). How high does it rise above the middle? That is the {1|amplitude}.",
+      "textPeriod": "The tide follows y = {A} · sin({B}x). How many degrees does one whole wave take? That is the {2|period}: 360° ÷ {B}.",
+      "hint": "Look at the highest point of the graph.",
+      "hintPeriod": "Count the waves in 360°, or divide 360° by the number in front of x.",
+      "ex": "The highest point is {A}: the amplitude is {A}.",
+      "exPeriod": "360° ÷ {B} = {P}°: one wave every {P}°."
+    }
+  },
+  "tseal": {
+    "title": "Tide seal",
+    "ladder": "A {hyp} m mast leans at 30° to the water. How high does its top reach? The {1|opposite} side = {3|hypotenuse} × sin 30°.",
+    "circle": "The beam turns to 120°. What is {2|cos} 120°? The tip is left of the centre, so cos is negative.",
+    "identity": "An angle has {1|sin θ} = 3/5 (θ less than 90°). What is {4|tan θ}? First {2|cos θ} from sin² + cos² = 1.",
+    "label": {
+      "ladder": "opposite?",
+      "circle": "cos 120°?",
+      "identity": "tan θ?",
+      "practice": "opposite?"
+    },
+    "probeStory": "Tide Strike: no working, just the answer. Quick!",
+    "unbindStory": "The seal is a question about angles. Work through the steps; the Lens is beside you."
+  },
+  "tw": {
+    "intro": {
+      "p1": "South of Numerola the land ends at the sea. Here, in Tidewatch, the lighthouse beam turns all night and the tides rise and fall like clockwork.",
+      "p2": "But the Tide Serpent has coiled around Lighthouse Rock. The lamp is dark, the tides have lost their rhythm, and ships run aground.",
+      "p3": "Kai and Aino reach Lantern Cove. Meri, a young navigator, joins them. Keeper Vilho is waiting by his cold lamp."
+    },
+    "obj": {
+      "talkKeeper": "Talk to Keeper Vilho in Lantern Cove.",
+      "done": "The lighthouse shines and the tides are back in rhythm!",
+      "pools": "Go east and clear the Tidepools (stage 1).",
+      "cliffs": "Take the cliff path south and clear the Gull Cliffs (stage 2).",
+      "reef": "Follow the path south-east to the Shipwreck Reef (stage 3).",
+      "train": "Learn Tide Strike (Ren) or Unbind (Keeper Vilho) to break tide seals.",
+      "gate": "Open the Beacon Gate below Lighthouse Rock (east).",
+      "serpent": "Climb Lighthouse Rock and break the Tide Serpent’s seals.",
+      "survey0": "Keeper Vilho wants the lighthouse measured.",
+      "survey1": "Finish measuring the lighthouse."
+    },
+    "quests": {
+      "main": {
+        "title": "The Dark Lighthouse",
+        "desc": "The Tide Serpent has put out the lamp and broken the rhythm of the tides.",
+        "s1": "Meet Keeper Vilho in Lantern Cove",
+        "pools": "Stage 1: clear the Tidepools",
+        "cliffs": "Stage 2: clear the Gull Cliffs",
+        "reef": "Stage 3: clear the Shipwreck Reef",
+        "gate": "Open the Beacon Gate",
+        "serpent": "Defeat the Tide Serpent",
+        "started": "New quest: The Dark Lighthouse"
+      },
+      "survey": {
+        "title": "How Tall Is the Lighthouse?",
+        "desc": "Measure the lighthouse with an angle and a distance.",
+        "s1": "Work out the height"
+      }
+    },
+    "keeper": {
+      "intro1": "Travellers, at last. Forty years I’ve kept this light, and never has it been this dark.",
+      "intro2": "The Tide Serpent wrapped itself around Lighthouse Rock. Since then the tides come whenever they like, not in their old smooth rhythm.",
+      "intro3": "The Rock is closed by the Beacon Gate, and the Serpent hides behind seals of angles. Only someone who understands sin, cos and tan gets through.",
+      "meri": "I’ll guide you! I’m Meri, Captain Aava’s navigator. I steer by angles.",
+      "aino": "Sin and cos always felt like magic numbers to me. I’d like to finally see where they come from.",
+      "intro4": "Then look through the Trig Lens: open your notebook and turn the beam. Train with Ren, Captain Aava and me. Then the pools, the cliffs and the reef.",
+      "again": "How goes the watch?",
+      "thanks": "The light turns again. Thank you, all of you.",
+      "optTrain": "Teach Aino (the circle).",
+      "optSerpent": "Tell us about the Tide Serpent.",
+      "optSurvey": "Help measure the lighthouse.",
+      "optHint": "What should we do next?",
+      "serpent1": "Its seals are questions about angles: a leaning mast, a turn of the beam, and the circle’s own rule.",
+      "serpent2": "Answer one and the seal breaks. Each new seal is a little harder.",
+      "survey1": "The harbour wants to know how tall my lighthouse is. Nobody can climb it with a tape measure in this wind.",
+      "survey2": "But you don’t need to climb. Stand back, measure the angle up to the top, and let tan do the climbing.",
+      "surveyTitle": "How tall is the lighthouse?",
+      "surveyText": "You stand {dist} m from the lighthouse (the {2|distance}, the adjacent side) and look up to its top at {angle}°. Its {1|height} is the opposite side: height = distance × tan θ.",
+      "gHeight": "The lighthouse: the side opposite the angle.",
+      "gDist": "How far you stand from it: the side next to the angle.",
+      "surveyCap": "The Lens is set to the angle you measured. The blue line on the wall is tan θ.",
+      "surveyHint": "Read tan θ from the Lens (the tan wall), then multiply by the distance.",
+      "surveyEx": "tan {angle}° ≈ 0.700, so the height ≈ {dist} × 0.700 ≈ {h} m.",
+      "surveyStory": "Measuring without climbing: an angle and a distance are enough.",
+      "surveyRetry": "Hmm, that doesn’t match the old harbour records. Try again later.",
+      "surveyDone": "Fourteen metres! Exactly what the old records say. And you never left the ground.",
+      "surveyMeri": "That’s how navigators measure cliffs and distances at sea: one angle and one side.",
+      "surveyReward": "+{g} gold, +{n} tonics"
+    },
+    "aava": {
+      "busy": "Speak with the keeper first, sailors."
+    },
+    "ren": {
+      "busy": "Kai! Talk to the keeper first, he knows what is going on."
+    },
+    "gate": {
+      "lockedAreas": "A great iron gate with a dark lamp on top. Three ships are painted on it. It won’t open. (Clear the Tidepools, the Gull Cliffs and the Shipwreck Reef first.)",
+      "lockedSkill": "The painted ships seem to move, but you can’t read their angles yet. (Learn Tide Strike or Unbind first.)",
+      "intro1": "The gate’s lamp flickers. A voice rolls like surf: \"Guide my three ships home, and I will open.\"",
+      "intro2": "Turn the beam onto each ship. 0° points east, 90° north, 180° west.",
+      "shipTitle": "Ship {n}",
+      "story": "Guide the ship home with the beam.",
+      "ship1": "Ship 1 is 8 km east and 8 km north. The beam must climb as much as it goes across: tan θ = 1. Turn the beam onto it.",
+      "ship2": "Ship 2 is straight north of the lighthouse. Straight up, the tip is not left or right at all: cos θ = 0. Turn the beam onto it.",
+      "ship3": "Ship 3 is 6 km west and 6 km north. Up as much as across, but to the west: tan θ = −1, between 90° and 180°. Turn the beam onto it.",
+      "opened": "The third ship turns for harbour. The lamp on the gate blazes, and the Beacon Gate swings open.",
+      "meri": "45°, 90°, 135°: a quarter, a half and three quarters of a half turn. Just like a compass!"
+    },
+    "battle": {
+      "pools1": "Tide Crabs! They pinch harder at high tide, and the tide follows a sine wave.",
+      "poolsTitle": "Stage 1: the Tidepools",
+      "poolsTip1": "Three heroes now: Kai, Aino and Meri. Meri throws her harpoon from range.",
+      "poolsTip2": "Tide Crabs hit ×1.5 at high tide and ×0.5 at low tide. Round 1 is high tide, then mid, low, mid: the tide is sin(round × 90°). The round counter shows it.",
+      "poolsTip3": "Strike hard at low tide, and keep your distance at high tide.",
+      "cliffs1": "Gulls diving from the cliffs, and those spiny urchins bite back!",
+      "cliffsTitle": "Stage 2: the Gull Cliffs",
+      "cliffsTip1": "Storm Gulls peck from range and fly off after each attack.",
+      "cliffsTip2": "Sea Urchins have 2 armor and hurt whoever hits them with a learned attack. Focus pierces armor and is not reflected. Use the high cliffs for +damage.",
+      "reef1": "Drowned sailors, an eel and a siren. Careful, her song pulls you in!",
+      "reefTitle": "Stage 3: the Shipwreck Reef",
+      "reefTip1": "Drowned Sailors have 2 armor and follow the tide. The Spark Eel chills whoever it shocks (2 less AP next turn).",
+      "reefTip2": "The Siren pulls heroes in with her song and heals her allies. Take her down early.",
+      "serpent1": "WHO DARES TO TURN THE LIGHT?",
+      "serpent2": "MY COILS ARE ANGLES. MY TIDES ARE WAVES. DO YOU KNOW THEM?",
+      "serpentMeri": "Its seals are questions about angles! Answer them and they break.",
+      "sealRule": "While sealed, the Tide Serpent takes no damage. Break a seal to make it vulnerable (and lose a turn). At 70 and 35 HP a new seal forms. It has 2 armor and follows the tide: strongest at high tide.",
+      "tipProbe": "Kai, Tide Strike: one fast question, no working. 1/2, 0.5, √3/2 all work.",
+      "tipUnbind": "Aino, Unbind: work step by step with the Lens beside you."
+    },
+    "win": {
+      "pools": "The crabs scuttle into the rock pools. The water settles; a path opens to the cliffs.",
+      "cliffs": "The gulls wheel away over the sea. In a nest you find a Focus Tea.",
+      "reef": "The sailors sink back into the reef and the siren falls silent. With all three places quiet, the lamp on the Beacon Gate starts to flicker.",
+      "serpent": "The last seal breaks. The Tide Serpent uncoils and slides into the deep, and the tides roll in again: smooth, regular, a perfect sine wave."
+    },
+    "ending": {
+      "title": "The light turns again!",
+      "p1": "Keeper Vilho lights the lamp. The beam sweeps the sea, its tip tracing a circle, its shadow on the water rising and falling like the tide.",
+      "p2": "You learned that sin and cos are the height and the width of a turning beam, that tan is where it hits the wall, and that waves are circles unrolled.",
+      "p3": "Next step for the curious: the sine and cosine rules for any triangle, and the waves of sound and light."
     }
   }
 }

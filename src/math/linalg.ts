@@ -6,14 +6,19 @@
  */
 import { t, type Params } from '../i18n';
 import { CHANCE_GEN } from './chance';
+import { TRIG_GEN } from './trig';
 import { randInt, type Rng, type Step, type Topic } from './problems';
 
 export type Mat = number[][];
 export type Vec = number[];
 
 export type Ans =
-  /** `frac` shows the answer as a fraction (probabilities) */
-  | { kind: 'num'; v: number; frac?: [number, number] }
+  /**
+   * `frac` shows the answer as a fraction (probabilities); `tol` accepts
+   * answers this close (values read off the Trig Lens); `text` is the exact
+   * form to show (e.g. "√3/2").
+   */
+  | { kind: 'num'; v: number; frac?: [number, number]; tol?: number; text?: string }
   | { kind: 'vec'; v: Vec }
   | { kind: 'mat'; v: Mat }
   /** unordered list of numbers (e.g. both eigenvalues) */
@@ -43,6 +48,12 @@ export interface Plot {
   dice?: { hit: Array<[number, number]>; k: number; single?: boolean };
   /** statistics: a bar for every value in a data set */
   bars?: { values: number[]; k: number };
+  /** trigonometry: a right triangle with whole sides */
+  triangle?: { opp: number; adj: number; hyp: number; show: Array<'opp' | 'adj' | 'hyp'> };
+  /** trigonometry: the interactive Trig Lens at this angle (degrees) */
+  trig?: { angle: number; lens: boolean; readout: boolean; arc?: boolean; scale?: number; given?: 'hyp' | 'adj'; wall?: boolean };
+  /** trigonometry: the graph of y = A · sin(B · x) */
+  wave?: { A: number; B: number };
   /** caption under the picture (default: the vector caption) */
   caption?: Step;
 }
@@ -117,6 +128,7 @@ export function checkAns(given: Ans, want: Ans): boolean {
   switch (want.kind) {
     case 'num':
       // probabilities may be typed as rounded decimals (0.33 for 1/3)
+      if (want.tol !== undefined) return Math.abs((given as typeof want).v - want.v) <= want.tol + 1e-9;
       return eq((given as typeof want).v, want.v) || (!!want.frac && Math.abs((given as typeof want).v - want.v) < 0.005);
     case 'vec': {
       const g = (given as typeof want).v;
@@ -423,6 +435,7 @@ const GEN: Partial<Record<Topic, (level: number, rng: Rng) => StepProblem>> = {
   eigen_val: (l, r) => eigenValueProblem(l, r),
   eigen_vec: (l, r) => eigenVectorProblem(l, r),
   ...CHANCE_GEN,
+  ...TRIG_GEN,
 };
 
 export const LA_TOPICS = Object.keys(GEN) as Topic[];

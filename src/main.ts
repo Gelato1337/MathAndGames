@@ -330,7 +330,7 @@ const params = new URLSearchParams(location.search);
 if (params.has('dev')) {
   uiRoot().replaceChildren();
   const want = params.get('campaign');
-  const id: CampaignId = want === 'eigenvale' || want === 'chancewood' ? want : 'numerola';
+  const id: CampaignId = want === 'eigenvale' || want === 'chancewood' || want === 'tidewatch' ? want : 'numerola';
   void startGame(id, true);
 }
 requestAnimationFrame(loop);

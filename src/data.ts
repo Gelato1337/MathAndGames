@@ -1,7 +1,7 @@
 import type { Topic } from './math/problems';
 
-export type CampaignId = 'numerola' | 'eigenvale' | 'chancewood';
-export type HeroId = 'kai' | 'aino' | 'sana' | 'otso' | 'onni';
+export type CampaignId = 'numerola' | 'eigenvale' | 'chancewood' | 'tidewatch';
+export type HeroId = 'kai' | 'aino' | 'sana' | 'otso' | 'onni' | 'meri';
 export type SkillId =
   // Numerola
   | 'strike'
@@ -37,9 +37,20 @@ export type SkillId =
   | 'toss'
   | 'jinx'
   | 'dice'
-  | 'fortune';
+  | 'fortune'
+  // Tidewatch
+  | 'tstep'
+  | 'tflurry'
+  | 'tprobe'
+  | 'twave'
+  | 'tmend'
+  | 'tunbind'
+  | 'harpoon'
+  | 'bearing'
+  | 'tide'
+  | 'beacon';
 export type ItemId = 'tonic' | 'tea' | 'seeds';
-export type TrainerId = 'ren' | 'lumi' | 'ilona' | 'kerttu' | 'vera' | 'renEv' | 'renCh' | 'tilda' | 'hannu';
+export type TrainerId = 'ren' | 'lumi' | 'ilona' | 'kerttu' | 'vera' | 'renEv' | 'renCh' | 'tilda' | 'hannu' | 'renTw' | 'keeper' | 'aava';
 
 export type TrialDef =
   | { kind: 'problems'; topic: Topic; need: number }
@@ -242,6 +253,59 @@ export const SKILLS: Record<SkillId, SkillDef> = {
     focus: { topic: 'expect', timed: false },
     trainer: 'hannu', trial: { kind: 'problems', topic: 'expect', need: 2 },
   }),
+
+  // ---------- Tidewatch ----------
+  tstep: S({
+    id: 'tstep', owner: 'kai', ap: 1, cooldown: 2, range: 5, target: 'emptyTile', area: 0,
+    effect: { kind: 'teleport' },
+    trainer: 'renTw', trial: { kind: 'problems', topic: 'trig_ratio', need: 3 },
+  }),
+  tflurry: S({
+    id: 'tflurry', owner: 'kai', ap: 3, cooldown: 2, range: 1, target: 'enemy', area: 0,
+    effect: { kind: 'multi', hits: 2, dmg: 5 },
+    focus: { topic: 'trig_drag', timed: true },
+    trainer: 'renTw', trial: { kind: 'problems', topic: 'trig_drag', need: 3 },
+  }),
+  tprobe: S({
+    id: 'tprobe', owner: 'kai', ap: 2, cooldown: 0, range: 1, target: 'enemy', area: 0,
+    effect: { kind: 'probe', dmg: 5 },
+    trainer: 'renTw', trial: { kind: 'probe' },
+  }),
+  twave: S({
+    id: 'twave', owner: 'aino', ap: 3, cooldown: 2, range: 6, target: 'tile', area: 1,
+    effect: { kind: 'aoe', dmg: 9 },
+    focus: { topic: 'trig_sides', timed: false },
+    trainer: 'keeper', trial: { kind: 'problems', topic: 'trig_sides', need: 3 },
+  }),
+  tmend: S({
+    id: 'tmend', owner: 'aino', ap: 2, cooldown: 2, range: 4, target: 'ally', area: 0,
+    effect: { kind: 'heal', amount: 12 },
+    focus: { topic: 'pythag_id', timed: false },
+    trainer: 'keeper', trial: { kind: 'problems', topic: 'pythag_id', need: 2 },
+  }),
+  tunbind: S({
+    id: 'tunbind', owner: 'aino', ap: 2, cooldown: 1, range: 6, target: 'enemy', area: 0,
+    effect: { kind: 'unbind' },
+    trainer: 'keeper', trial: { kind: 'unbind' },
+  }),
+  harpoon: S({ id: 'harpoon', owner: 'meri', ap: 2, cooldown: 0, range: 5, target: 'enemy', area: 0, basic: true, effect: { kind: 'hit', min: 5, max: 7, projectile: '#94b0c2' } }),
+  bearing: S({
+    id: 'bearing', owner: 'meri', ap: 1, cooldown: 3, range: 7, target: 'enemy', area: 0,
+    effect: { kind: 'mark', turns: 2 },
+    trainer: 'aava', trial: { kind: 'problems', topic: 'trig_angle', need: 2 },
+  }),
+  tide: S({
+    id: 'tide', owner: 'meri', ap: 3, cooldown: 3, range: 6, target: 'tile', area: 1,
+    effect: { kind: 'aoe', dmg: 8 },
+    focus: { topic: 'waves', timed: false },
+    trainer: 'aava', trial: { kind: 'problems', topic: 'waves', need: 3 },
+  }),
+  beacon: S({
+    id: 'beacon', owner: 'meri', ap: 2, cooldown: 2, range: 3, target: 'ally', area: 0,
+    effect: { kind: 'shield', amount: 10 },
+    focus: { topic: 'radians', timed: false },
+    trainer: 'aava', trial: { kind: 'problems', topic: 'radians', need: 3 },
+  }),
 };
 
 /** Which skills each hero has, per campaign (first one is the basic attack). */
@@ -261,6 +325,11 @@ export const PARTY_SKILLS: Record<CampaignId, Partial<Record<HeroId, SkillId[]>>
     aino: ['bolt', 'cstorm', 'cmend', 'cunbind'],
     onni: ['toss', 'jinx', 'dice', 'fortune'],
   },
+  tidewatch: {
+    kai: ['strike', 'tstep', 'tflurry', 'tprobe'],
+    aino: ['bolt', 'twave', 'tmend', 'tunbind'],
+    meri: ['harpoon', 'bearing', 'tide', 'beacon'],
+  },
 };
 
 /** Skills each trainer teaches, in the order they must be learned. */
@@ -274,10 +343,13 @@ export const TRAINER_SKILLS: Record<TrainerId, SkillId[]> = {
   renCh: ['cstep', 'cflurry', 'cprobe'],
   tilda: ['cstorm', 'cmend', 'cunbind'],
   hannu: ['jinx', 'dice', 'fortune'],
+  renTw: ['tstep', 'tflurry', 'tprobe'],
+  keeper: ['twave', 'tmend', 'tunbind'],
+  aava: ['bearing', 'tide', 'beacon'],
 };
 
 /** The NPC sprite/name for a trainer (Ren teaches in both campaigns). */
-export const TRAINER_NPC: Record<TrainerId, string> = { ren: 'ren', lumi: 'lumi', renEv: 'ren', kerttu: 'kerttu', ilona: 'ilona', vera: 'vera', renCh: 'ren', tilda: 'tilda', hannu: 'hannu' };
+export const TRAINER_NPC: Record<TrainerId, string> = { ren: 'ren', lumi: 'lumi', renEv: 'ren', kerttu: 'kerttu', ilona: 'ilona', vera: 'vera', renCh: 'ren', tilda: 'tilda', hannu: 'hannu', renTw: 'ren', keeper: 'keeper', aava: 'aava' };
 
 export interface HeroDef {
   id: HeroId;
@@ -293,6 +365,7 @@ export const HEROES: Record<HeroId, HeroDef> = {
   sana: { id: 'sana', hp: 28, init: 12, speed: 3 },
   otso: { id: 'otso', hp: 40, init: 7, speed: 2 },
   onni: { id: 'onni', hp: 30, init: 11, speed: 3 },
+  meri: { id: 'meri', hp: 28, init: 12, speed: 3 },
 };
 
 export interface ItemDef {

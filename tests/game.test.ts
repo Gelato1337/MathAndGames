@@ -8,6 +8,8 @@ import { game, newGame } from '../src/state';
 import { LANDS, ROADS } from '../src/journey';
 import { checkAns, det2, eigenMatrix, eigenvalues, generateLA, LA_TOPICS, matVec, sub, type Ans, type StepProblem } from '../src/math/linalg';
 import { chanceSealProblem, FORTUNA_SEALS, PRACTICE_CHANCE } from '../src/math/chance';
+import { dragOk, exactText, generateDrag, PRACTICE_TRIG, SERPENT_SEALS, sinD, trigSealProblem } from '../src/math/trig';
+import { parseExpr } from '../src/math/answer';
 import { WARDEN_SEALS, eigenSolution, PRACTICE_EIGEN } from '../src/math/eigenseal';
 import en from '../src/lang/en.json';
 import fi from '../src/lang/fi.json';
@@ -379,6 +381,51 @@ describe('probability and statistics problems', () => {
     expect((chanceSealProblem(PRACTICE_CHANCE).answer as { v: number }).v).toBeCloseTo(1 / 4);
     for (const s of [...FORTUNA_SEALS, PRACTICE_CHANCE]) for (const k of problemKeys(chanceSealProblem(s))) expect(k in EN, k).toBe(true);
     for (const id of ['pouch', 'dice7', 'coins', 'practice']) expect(`cseal.label.${id}` in EN).toBe(true);
+  });
+});
+
+describe('trigonometry', () => {
+  it('reads typed exact values like √3/2', () => {
+    expect(parseExpr('√3/2')).toBeCloseTo(Math.sqrt(3) / 2);
+    expect(parseExpr('-sqrt(2)/2')).toBeCloseTo(-Math.SQRT1_2);
+    expect(parseExpr('−√3')).toBeCloseTo(-Math.sqrt(3));
+    expect(parseExpr('2π/3')).toBeCloseTo((2 * Math.PI) / 3);
+    expect(parseExpr('10 × 0,5')).toBe(5);
+    expect(parseExpr('1/0')).toBeNull();
+    expect(parseExpr('alert(1)')).toBeNull();
+  });
+  it('knows the exact values of special angles', () => {
+    expect(exactText('sin', 30)).toBe('1/2');
+    expect(exactText('cos', 150)).toBe('−√3/2');
+    expect(exactText('sin', 225)).toBe('−√2/2');
+    expect(exactText('tan', 135)).toBe('−1');
+    expect(exactText('cos', 90)).toBe('0');
+  });
+  it('drag tasks: the stated answer is right and has a unique quadrant', () => {
+    const rng = seeded(9);
+    for (let lv = 1; lv <= 3; lv++)
+      for (let i = 0; i < 60; i++) {
+        const task = generateDrag(lv, rng);
+        expect(dragOk(task, task.answer), JSON.stringify(task)).toBe(true);
+        // the mirror angle (same sin, other side) is outside the range unless it equals the answer
+        if (task.fn === 'sin' && task.answer % 90 !== 0) expect(dragOk(task, 180 - task.answer)).toBe(false);
+      }
+  });
+  it('problems answer consistently: sides = known × ratio, unit-circle signs match', () => {
+    const rng = seeded(4);
+    for (let i = 0; i < 80; i++) {
+      const p = generateLA('unit_circle', 1 + (i % 3), rng);
+      const [ref, sign] = p.steps.map((s) => (s.ans as { v: number }).v);
+      const v = (p.answer as { v: number }).v;
+      expect(Math.sign(v)).toBe(sign);
+      expect(Math.abs(v)).toBeCloseTo(Math.abs(p.eq[0] && (p.eq[0] as { t: string }).t.startsWith('sin') ? sinD(ref) : Math.cos((ref * Math.PI) / 180)), 6);
+    }
+  });
+  it("the Tide Serpent's seals have the right answers", () => {
+    const answers = SERPENT_SEALS.map((s) => (trigSealProblem(s).answer as { v: number }).v);
+    expect(answers).toEqual([5, -0.5, 0.75]);
+    expect((trigSealProblem(PRACTICE_TRIG).answer as { v: number }).v).toBe(4);
+    for (const s of [...SERPENT_SEALS, PRACTICE_TRIG]) for (const k of problemKeys(trigSealProblem(s))) expect(k in EN, k).toBe(true);
   });
 });
 

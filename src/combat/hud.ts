@@ -56,7 +56,10 @@ export class CombatHud {
         .filter((x) => !x.dead)
         .map((x) => h(`div.slot${x.team === 'enemy' ? '.enemy' : ''}${x === u ? '.active' : ''}`, { title: c.name(x) }, [img(spriteUrl(x.kind, 2))])),
     );
-    const roundLabel = h('div.round-label', { text: t('combat.round', { n: c.round }) });
+    const tidal = c.units.some((u) => !u.dead && u.abilities.includes('tide'));
+    const tide = Math.round(Math.sin((c.round * Math.PI) / 2));
+    const tideText = tidal ? ` · ${t(tide > 0 ? 'combat.tideHigh' : tide < 0 ? 'combat.tideLow' : 'combat.tideMid')}` : '';
+    const roundLabel = h('div.round-label', { text: t('combat.round', { n: c.round }) + tideText });
     const log = h('div.combat-log', {}, c.log.map((l) => h('div', { text: l })));
     const children: HTMLElement[] = [order, roundLabel, log];
 

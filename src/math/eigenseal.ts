@@ -1,6 +1,7 @@
 import { fmtNum, t } from '../i18n';
 import { eigenvalues, eigenvector, type Mat } from './linalg';
 import type { ChanceSeal } from './chance';
+import type { TrigSeal } from './trig';
 import type { Seal } from './seal';
 
 /**
@@ -15,7 +16,11 @@ export interface EigenSeal {
   lambda?: number;
 }
 
-export type AnySeal = Seal | EigenSeal | ChanceSeal;
+export type AnySeal = Seal | EigenSeal | ChanceSeal | TrigSeal;
+
+export function isTrigSeal(s: AnySeal): s is TrigSeal {
+  return (s as TrigSeal).kind === 'trig';
+}
 
 export function isChanceSeal(s: AnySeal): s is ChanceSeal {
   return (s as ChanceSeal).kind === 'chance';

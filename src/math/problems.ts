@@ -1,6 +1,15 @@
 import type { Params } from '../i18n';
 
 export type Topic =
+  // Tidewatch (trigonometry)
+  | 'trig_ratio'
+  | 'trig_sides'
+  | 'trig_angle'
+  | 'unit_circle'
+  | 'radians'
+  | 'pythag_id'
+  | 'waves'
+  | 'trig_drag'
   // Chancewood (probability and statistics)
   | 'stat_mean'
   | 'stat_median'

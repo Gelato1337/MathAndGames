@@ -203,3 +203,13 @@ Only *Numerola* and *Eigenvale* are fixed names. The others are placeholders.
 | **Interleaving** | Mixing problem types in practice improved later math test scores compared with blocked practice (Rohrer & Taylor 2007, *Instructional Science*, [doi:10.1007/s11251-007-9015-8](https://doi.org/10.1007/s11251-007-9015-8)). | In later battles of a tier, mix that tier's skills so the player must choose the method. Interleave skills from the same tier only. |
 
 **A practical adaptive rule.** Each skill has 3–5 internal levels inside its tier (e.g. Tier 2 multiplication: ×2/×5/×10 → ×3/×4 → ×6–×9 → two-digit × one-digit). Move up after a run of correct answers and down after repeated misses. Never move past the tier's ceiling. When a player hits that ceiling, offer the next campaign instead of harder content.
+
+
+## Built lands so far
+
+| Land | Tier | What the prototype covers |
+|---|---|---|
+| Numerola | Tier 1–2 (primary) | Arithmetic, times tables, area, missing numbers, first equations (tutorial land) |
+| Chancewood | Tier 2–3 | Mean, median, range; classical probability, complement, two independent events, two dice, expected value |
+| Tidewatch | Tier 4 (upper secondary: FI-LOPS MAA3/MAA7, US-CCSS HSG-SRT and HSF-TF, UK-NC KS4 trigonometry) | SOH CAH TOA, sides and angles of right triangles, the unit circle and signs by quadrant, radians, sin² + cos² = 1, amplitude and period of waves |
+| Eigenvale | Tier 4–5 | Vectors, dot product, matrix × vector, matrix × matrix, determinants, eigenvalues and eigenvectors |

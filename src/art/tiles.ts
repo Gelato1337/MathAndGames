@@ -199,6 +199,21 @@ const builders: Record<string, (ctx: Ctx, rnd: () => number, frame: number) => v
       px(ctx, P.u, x, y - 4, 1, 1);
     }
   },
+  // Tidewatch: sand and shallow water you can wade through
+  Y: (ctx, rnd) => {
+    px(ctx, '#e4c88a', 0, 0, 16, 16);
+    for (let i = 0; i < 10; i++) px(ctx, '#c79a62', Math.floor(rnd() * 16), Math.floor(rnd() * 16));
+    for (let i = 0; i < 4; i++) px(ctx, '#f4e4b8', Math.floor(rnd() * 16), Math.floor(rnd() * 16), 2, 1);
+  },
+  V: (ctx, _rnd, frame) => {
+    px(ctx, '#41a6f6', 0, 0, 16, 16);
+    px(ctx, '#3b8fd6', 0, 8, 16, 8);
+    for (let row = 0; row < 3; row++) {
+      const y = 2 + row * 5;
+      const off = (frame + row * 2) % 8;
+      px(ctx, '#bfe6f6', (off + 2) % 16, y, 4, 1);
+    }
+  },
   // Chancewood carnival: a purple and gold checkerboard
   q: (ctx) => {
     px(ctx, '#5d275d', 0, 0, 16, 16);
@@ -243,7 +258,7 @@ const tileCache = new Map<string, HTMLCanvasElement>();
 
 /** Get a 16×16 canvas for tile `ch`, with a deterministic variant per position. */
 export function tileCanvas(ch: string, x: number, y: number, frame: number): HTMLCanvasElement {
-  const animated = ch === '~' || ch === 'G';
+  const animated = ch === '~' || ch === 'G' || ch === 'V';
   const variant = ((x * 73856093) ^ (y * 19349663)) % 4;
   const key = `${ch}:${Math.abs(variant)}:${animated ? frame % 8 : 0}`;
   let cv = tileCache.get(key);

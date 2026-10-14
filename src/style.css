@@ -1442,3 +1442,63 @@ button.big {
     width: auto;
   }
 }
+
+/* ---------- Trig Lens ---------- */
+.lens-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+  max-width: 100%;
+}
+canvas.lens {
+  width: 100%;
+  max-width: 34em;
+  height: auto;
+  aspect-ratio: 5 / 3;
+  border-radius: 0.3em;
+  border: 0.1em solid var(--slate);
+  touch-action: none;
+  cursor: grab;
+}
+canvas.lens:focus-visible {
+  outline: 0.15em solid var(--yellow);
+}
+.lens-readout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2em 0.9em;
+  font-size: 0.9em;
+}
+.lens-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3em;
+}
+.lens-controls button.small {
+  font-size: 0.8em;
+  padding: 0.2em 0.6em;
+}
+.lens-controls button.on {
+  border-color: var(--yellow);
+  color: var(--yellow);
+}
+.lens-help {
+  font-size: 0.8em;
+}
+.steps-side.wide {
+  flex-basis: 22em;
+}
+.question.drag {
+  max-width: 34em;
+}
+.lens-task {
+  font-size: 1.1em;
+  color: var(--ice);
+}
+.question.drag canvas.lens {
+  max-width: 24em;
+  align-self: center;
+}
+.question.drag .lens-wrap {
+  align-items: center;
+}

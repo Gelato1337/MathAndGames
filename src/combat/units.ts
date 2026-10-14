@@ -1,5 +1,6 @@
 import { HEROES, type HeroId, type SkillId } from '../data';
 import { FORTUNA_SEALS } from '../math/chance';
+import { SERPENT_SEALS } from '../math/trig';
 import { KNIGHT_SEALS, WARDEN_SEALS, type AnySeal } from '../math/eigenseal';
 import { GOLEM_SEALS } from '../math/seal';
 
@@ -24,7 +25,14 @@ export type EnemyKind =
   | 'mimic'
   | 'bandit'
   | 'joker'
-  | 'fortuna';
+  | 'fortuna'
+  | 'crab'
+  | 'gull'
+  | 'urchin'
+  | 'eel'
+  | 'siren'
+  | 'drowned'
+  | 'serpent';
 export type UnitKind = HeroId | EnemyKind;
 
 /**
@@ -42,8 +50,9 @@ export type UnitKind = HeroId | EnemyKind;
  * - dodge: a coin flip dodges every learned (unfocused) hit: heads, it misses
  * - lucky: rolls a die with every hit; a 6 doubles the damage
  * - shuffle: swaps two heroes' places after its turn
+ * - tide: its strength follows a sine wave over the rounds: ×1.5 at high tide, ×0.5 at low tide
  */
-export type Ability = 'blink' | 'grow' | 'reflect' | 'drain' | 'push' | 'pull' | 'split' | 'mend' | 'harden' | 'chill' | 'dodge' | 'lucky' | 'shuffle';
+export type Ability = 'blink' | 'grow' | 'reflect' | 'drain' | 'push' | 'pull' | 'split' | 'mend' | 'harden' | 'chill' | 'dodge' | 'lucky' | 'shuffle' | 'tide';
 
 export interface Attack {
   id: string;
@@ -126,6 +135,22 @@ export const ENEMIES: Record<EnemyKind, EnemyDef> = {
       { id: 'wheel', ap: 3, min: 5, max: 7, range: 1, minRange: 1, aoe: 1 },
     ],
     seals: FORTUNA_SEALS,
+    thresholds: [70, 35, 0],
+  },
+  // Tidewatch
+  crab: { hp: 18, init: 7, speed: 2, maxAp: 4, regen: 3, armor: 1, size: 1, abilities: ['tide'], attacks: [{ id: 'pinch', ap: 2, min: 4, max: 6, range: 1, minRange: 1 }] },
+  gull: { hp: 12, init: 14, speed: 4, maxAp: 4, regen: 3, armor: 0, size: 1, abilities: ['blink'], attacks: [{ id: 'peck', ap: 2, min: 3, max: 5, range: 3, minRange: 1 }] },
+  urchin: { hp: 16, init: 3, speed: 1, maxAp: 3, regen: 3, armor: 2, size: 1, abilities: ['reflect'], attacks: [{ id: 'spine', ap: 2, min: 3, max: 5, range: 1, minRange: 1 }] },
+  eel: { hp: 16, init: 13, speed: 3, maxAp: 4, regen: 3, armor: 0, size: 1, abilities: ['chill'], attacks: [{ id: 'shock', ap: 2, min: 4, max: 5, range: 2, minRange: 1 }] },
+  siren: { hp: 18, init: 10, speed: 2, maxAp: 4, regen: 3, armor: 0, size: 1, abilities: ['pull', 'mend'], attacks: [{ id: 'song', ap: 2, min: 3, max: 5, range: 4, minRange: 1 }] },
+  drowned: { hp: 22, init: 6, speed: 2, maxAp: 4, regen: 3, armor: 2, size: 1, abilities: ['tide'], attacks: [{ id: 'cutlass', ap: 2, min: 5, max: 7, range: 1, minRange: 1 }] },
+  serpent: {
+    hp: 100, init: 9, speed: 2, maxAp: 5, regen: 3, armor: 2, size: 2, abilities: ['tide'],
+    attacks: [
+      { id: 'fang', ap: 3, min: 6, max: 9, range: 1, minRange: 1 },
+      { id: 'surge', ap: 3, min: 5, max: 7, range: 4, minRange: 1, aoe: 1 },
+    ],
+    seals: SERPENT_SEALS,
     thresholds: [70, 35, 0],
   },
   warden: {

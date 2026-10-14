@@ -41,6 +41,18 @@ export interface CwFlags {
   logStage: number;
 }
 
+/** Tidewatch (trigonometry campaign) progress. */
+export interface TwFlags {
+  metKeeper: boolean;
+  poolsDone: boolean;
+  cliffsDone: boolean;
+  reefDone: boolean;
+  gateOpen: boolean;
+  serpentDone: boolean;
+  /** the keeper's lighthouse survey: 0 not started, 1 accepted, 2 done */
+  surveyStage: number;
+}
+
 export interface GameState {
   campaign: CampaignId;
   gold: number;
@@ -51,6 +63,7 @@ export interface GameState {
   flags: Flags;
   ev: EvFlags;
   cw: CwFlags;
+  tw: TwFlags;
   approaches: Set<string>;
   /** The player's own notebook, per campaign (free text). */
   notes: string;
@@ -81,6 +94,7 @@ function fresh(campaign: CampaignId = 'numerola'): GameState {
     },
     ev: { metIlona: false, plainsDone: false, minesDone: false, glacierDone: false, doorOpen: false, wardenDone: false, mapStage: 0 },
     cw: { metTilda: false, gladeDone: false, hollowDone: false, mazeDone: false, gateOpen: false, fortunaDone: false, logStage: 0 },
+    tw: { metKeeper: false, poolsDone: false, cliffsDone: false, reefDone: false, gateOpen: false, serpentDone: false, surveyStage: 0 },
     approaches: new Set(),
     notes: '',
   };

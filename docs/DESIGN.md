@@ -117,6 +117,22 @@ Longer formulas are split into **working steps** (`src/math/linalg.ts` → `Step
 
 The **Notebook** (`N`, and inside every untimed puzzle) has a free-text page for the player's own working, plus a formula sheet that fills up as skills are learned.
 
+## Seeing trigonometry: the Trig Lens (Tidewatch)
+
+Trigonometry is usually taught as numbers to memorise; the Lens makes the relations visible. It combines well-known interactive diagrams:
+
+- the unit circle whose point **unrolls into the sine wave** at the same height (as in GeoGebra's "unwrapping the unit circle" applets and [Jason Davies' animated trig](https://www.jasondavies.com/animated-trig/));
+- [BetterExplained's intuitive trigonometry](https://betterexplained.com/articles/intuitive-trigonometry/) picture of tan as the height where the beam hits a **wall**;
+- a SOH CAH TOA triangle whose sides keep the formula's colours (opposite = sin, adjacent = cos, hypotenuse = 1).
+
+Three ways to use it, from exploring to answering:
+
+1. **Explore** (Notebook → Trig Lens): drag freely; snapping shows exact values at special angles.
+2. **Read** (step puzzles): the Lens sits beside the puzzle, set to the problem's angle. For unit-circle and identity questions the numbers are hidden on purpose, so you reason from the picture (reference angle + sign).
+3. **Answer by turning** (drag puzzles, the Beacon Gate, Kai's timed Flurry): the answer is an angle you set with your hand, which trains the "where is sin = −1/2?" intuition directly.
+
+The tide enemies make the sine wave a game mechanic: their damage is ×(1 + ½·sin(round·90°)), and the round counter says high, mid or low tide.
+
 ## Combat (DOS2 / BG3-style)
 
 - Grid, 8-directional movement, initiative order shown at the top.
@@ -125,7 +141,7 @@ The **Notebook** (`N`, and inside every untimed puzzle) has a free-text page for
 - **Boss seals:** a sealed boss takes no damage. Breaking a seal staggers it for a turn. A new, harder seal forms at HP thresholds (golem 50/25, Eigenwarden 70/35).
 - **Armor** subtracts from every hit except focused ones. **Shields** (Ward) absorb damage first. **Taunt** forces enemies to attack Otso; **Mark** makes a target take +50%.
 - **Chance as a mechanic (Chancewood):** the enemies make the math visible. Imps dodge learned hits on a coin flip, so about half of them miss; dice cubes hit for the sum of two dice, so you feel that 7 is common and 12 is rare; lucky 6s double damage one time in six. Focus never misses, which is the reason to do the math.
-- **Enemy abilities:** dodge (coin imps), lucky (a 6 doubles the hit), shuffle (the joker swaps two heroes), dice attacks (2d6), blink (wisps teleport), grow (scalar slimes gain HP each round), reflect (crystal golems), drain (bats heal), push (the Eigenwarden shoves heroes back), pull (frogs drag heroes in), split (splitter slimes burst into droplets), mend (cave shades heal allies), harden (ice sentries gain armor each turn, up to 4), chill (frost wraiths take 2 AP from their target's next turn).
+- **Enemy abilities:** tide (damage follows a sine wave over the rounds), dodge (coin imps), lucky (a 6 doubles the hit), shuffle (the joker swaps two heroes), dice attacks (2d6), blink (wisps teleport), grow (scalar slimes gain HP each round), reflect (crystal golems), drain (bats heal), push (the Eigenwarden shoves heroes back), pull (frogs drag heroes in), split (splitter slimes burst into droplets), mend (cave shades heal allies), harden (ice sentries gain armor each turn, up to 4), chill (frost wraiths take 2 AP from their target's next turn).
 
 ## Tuning knobs
 

@@ -10,10 +10,11 @@ A prototype math RPG. Your party unlocks skills by solving math problems. The wo
 |---|---|---|---|
 | **Numerola** (tutorial) | Primary school (ages 7–12) | Forest Clearing → Times-Table Marsh → Echo Caves | The Riddle Golem (equation seals) |
 | **Chancewood** | Probability and statistics, the basics | Coinflip Glade → Dice Hollow → Gambler's Maze | Madame Fortuna (chance seals) |
+| **Tidewatch** | Trigonometry (upper secondary) | Tidepools → Gull Cliffs → Shipwreck Reef | The Tide Serpent (angle seals) |
 | **Eigenvale** | Linear algebra (upper secondary → university) | Vector Plains → Matrix Mines → Shear Glacier | The Eigenwarden (matrix seals) |
 | Fluxreach, Bitforge, Forcehold | Calculus, computer science, physics | coming later (in fog on the map) | |
 
-Chancewood and Eigenvale are recommended after Numerola, but the map lets experienced players "travel anyway".
+The recommended road is Numerola → Tidewatch → Eigenvale, with Chancewood open any time after Numerola; the map lets experienced players "travel anyway".
 
 Linear algebra puzzles are **step puzzles**: you fill in the working (each step is checked and earns partial credit), with colour-coded formulas (hover a coloured term to see what it means), a vector/unit-square plot, and a **Notebook** for your own notes and the formulas you have learned.
 
@@ -44,6 +45,7 @@ Dev shortcuts (only with `npm run dev`):
 - `?dev=forest` also starts you next to the first battle.
 - `?dev=boss` also opens the rune gate and puts you at the boss.
 - `?dev=marsh`, `?dev=caves`, `?dev=gate` jump to Numerola's later stages.
+- `?dev&campaign=tidewatch` with `dev=pools`, `cliffs`, `reef`, `gate` or `boss` jumps into Tidewatch.
 - `?dev&campaign=chancewood` with `dev=glade`, `hollow`, `maze`, `gate` or `boss` jumps into Chancewood.
 - `?dev&campaign=eigenvale` does the same for Eigenvale; `dev=plains`, `dev=mines`, `dev=glacier`, `dev=door` and `dev=boss` jump to its areas.
 
@@ -111,6 +113,30 @@ Party of three: Kai (ninja), Aino (mage) and **Onni** (gambler, new). Every prob
 
 **Lucky Strike** (Kai) answers a seal fast, with no working; **Unbind** (Aino) counts the outcomes step by step.
 
+## Tidewatch (trigonometry)
+
+Party of three: Kai, Aino and **Meri** (navigator, new). The centrepiece is the **Trig Lens**, an interactive unit circle that is also in the Notebook (`N` → Trig Lens):
+
+- drag the beam around the circle (or drag along the wave, or use the arrow keys); it snaps to special angles and shows their exact values (1/2, √2/2, √3/2…);
+- the right triangle inside the circle has **opposite = sin θ** (purple) and **adjacent = cos θ** (green), with hypotenuse 1;
+- the **sine wave unrolls** beside the circle at the same height, joined by a dashed line, so the wave is visibly the beam's height over time; a cos wave can be shown too;
+- the **tan wall**: tan θ is how high the beam hits a wall one radius away;
+- the radian arc: the angle as arc length in radii.
+
+Some puzzles are answered by **turning the beam** instead of typing ("make sin θ = 1/2 with θ between 90° and 180°"); others put the Lens beside a step puzzle so you can read sin 40° yourself. Exact values can be typed as `√3/2`, `sqrt(2)/2` or decimals.
+
+| Place | What you do | Math |
+|---|---|---|
+| Keeper Vilho (story, trains Aino) | Sine Wave, Mend, Unbind | A side from an angle, sin² + cos² = 1, the unit circle |
+| Ren (trains Kai) | Tide Step, Flurry, Tide Strike | SOH CAH TOA ratios; drag-the-beam puzzles against the clock |
+| Captain Aava (trains Meri) | Take Bearing, Tidal Wave, Beacon | An angle from sides, waves (amplitude and period), radians |
+| The keeper's survey (side quest) | How tall is the lighthouse? | height = distance × tan θ, read off the Lens |
+| Tidepools (stage 1) | Tide Crabs: damage follows the tide, sin(round × 90°): ×1.5, ×1, ×0.5, ×1 | A sine wave you fight against |
+| Gull Cliffs (stage 2) | Storm Gulls (ranged, fly off), Sea Urchins (armor, spines) | |
+| Shipwreck Reef (stage 3) | Drowned Sailors (armor, tide), a Spark Eel (chill), a Siren (pulls, heals) | |
+| Beacon Gate | Turn the beam onto three ships: tan θ = 1, cos θ = 0, tan θ = −1 | Angles from positions, quadrants |
+| Lighthouse Rock | Boss: the Tide Serpent, three seals | A side (10 × sin 30°) → cos 120° → tan θ from sin θ = 3/5 |
+
 ## Eigenvale (linear algebra)
 
 Party of four: Kai (ninja), Aino (mage), **Sana** (ranger) and **Otso** (shieldbearer).
@@ -147,14 +173,16 @@ src/
   state.ts           game state, attunement, settings
   math/              problem generators, answer parsing, mastery, seal equations,
                      linalg.ts (step problems), eigenseal.ts (matrix seals),
-                     chance.ts (probability and statistics problems, chance seals)
+                     chance.ts (probability and statistics problems, chance seals),
+                     trig.ts (trigonometry problems, drag tasks, angle seals)
   art/               pixel-art sprites (as strings) and procedural tiles
   world/             map layout, exploration movement and interaction
   combat/            grid combat, AP, AI, combat HUD
   story/             NPC dialogue scripts, skill trials
   ui/                dialog, question modal, balance scale, rune gate, farm, shop, menus, tutor chat,
                      steps.ts (step puzzles), eq.ts (colour-coded formulas), plot.ts, notebook.ts,
-                     worldmap.ts (the overview map)
+                     worldmap.ts (the overview map), triglens.ts (the Trig Lens),
+                     askangle.ts (answer by turning the beam), askany.ts
   tutor/             tutor client and answer-leak guard
   art/iso.ts         isometric projection, diamond tops and shaded side faces
 tutor/               local bridge to Claude Code / Gemini / Codex (server.mjs, rules.md)

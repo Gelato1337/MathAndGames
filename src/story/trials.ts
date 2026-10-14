@@ -1,22 +1,21 @@
 import { SKILLS, TRAINER_NPC, type SkillId } from '../data';
 import { t } from '../i18n';
 import { PRACTICE_CHANCE } from '../math/chance';
+import { PRACTICE_TRIG } from '../math/trig';
 import { PRACTICE_EIGEN } from '../math/eigenseal';
-import { generateLA, isLinalg } from '../math/linalg';
 import { level } from '../math/mastery';
-import { generate, type Topic } from '../math/problems';
+import type { Topic } from '../math/problems';
 import { PRACTICE_SEAL } from '../math/seal';
 import { learn } from '../state';
 import { balancePuzzle, type BalanceStage } from '../ui/balance';
 import { say } from '../ui/dialog';
-import { ask, messageBox } from '../ui/question';
-import { probeChance, probeEigen, probeSeal } from '../ui/seals';
-import { askSteps } from '../ui/steps';
+import { messageBox } from '../ui/question';
+import { probeChance, probeEigen, probeSeal, probeTrig } from '../ui/seals';
+import { askProblem } from '../ui/askany';
 
 /** One question of any kind; true when answered right. */
 async function askTopic(topic: Topic, lv: number, title: string, story?: string): Promise<boolean> {
-  if (isLinalg(topic)) return (await askSteps(generateLA(topic, lv), { title, story })).correct;
-  return (await ask(generate(topic, lv), { title, story, hint: true })).correct;
+  return (await askProblem(topic, lv, { title, story, hint: true })).correct;
 }
 
 async function problemRun(skill: SkillId, topic: Topic, need: number, startLevel = 1): Promise<void> {
@@ -57,6 +56,16 @@ export async function runTrial(skill: SkillId): Promise<void> {
       if (r.shattered) break;
       if (r.cancelled) await say(who, t('trial.probe.keepTrying'));
     }
+  } else if (trial.kind === 'probe' && skill === 'tprobe') {
+    // Tidewatch: two triangles first, then a practice seal against the clock
+    await problemRun(skill, 'trig_ratio', 2);
+    await say(who, t('trial.tprobe.seal'));
+    const log: string[] = [];
+    for (;;) {
+      const r = await probeTrig(PRACTICE_TRIG, log, title);
+      if (r.shattered) break;
+      await say(who, t('trial.tprobe.again'));
+    }
   } else if (trial.kind === 'probe' && skill === 'cprobe') {
     // Chancewood: a few pouches first, then a practice seal against the clock
     await problemRun(skill, 'prob_simple', 2);
@@ -76,6 +85,13 @@ export async function runTrial(skill: SkillId): Promise<void> {
       if (r.shattered) break;
       if (r.cancelled) await say(who, t('trial.probe.keepTrying'));
     }
+  } else if (skill === 'tunbind') {
+    // Tidewatch: a triangle, the unit circle, then the identity
+    await problemRun(skill, 'trig_sides', 1);
+    await say(who, t('trial.tunbind.circle'));
+    await problemRun(skill, 'unit_circle', 1);
+    await say(who, t('trial.tunbind.identity'));
+    await problemRun(skill, 'pythag_id', 1);
   } else if (skill === 'cunbind') {
     // Chancewood: one outcome, the complement, then two events together
     await problemRun(skill, 'prob_simple', 1);
@@ -115,6 +131,8 @@ function practiceTopic(id: SkillId): Topic {
   if (id === 'eprobe') return 'det2';
   if (id === 'eunbind') return 'eigen_val';
   if (id === 'cprobe') return 'prob_simple';
+  if (id === 'tprobe') return 'trig_ratio';
+  if (id === 'tunbind') return 'unit_circle';
   if (id === 'cunbind') return 'prob_two';
   return 'eq2';
 }

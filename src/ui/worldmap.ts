@@ -1,4 +1,4 @@
-import { PALETTE as P, spriteUrl } from '../art/sprites';
+import { PALETTE as P, SPRITES, spriteUrl } from '../art/sprites';
 import { CAMPAIGNS } from '../campaigns/registry';
 import type { CampaignId } from '../data';
 import { t } from '../i18n';
@@ -14,6 +14,7 @@ const BIOME: Record<LandId, { grass: string; dark: string }> = {
   numerola: { grass: '#38b764', dark: '#2a8a52' },
   eigenvale: { grass: '#3fa69a', dark: '#257179' },
   chancewood: { grass: '#2a8a52', dark: '#1e5e3c' },
+  tidewatch: { grass: '#c9b47a', dark: '#a8925a' },
   fluxreach: { grass: '#d9b06a', dark: '#b08440' },
   bitforge: { grass: '#7d8ea3', dark: '#566c86' },
   forcehold: { grass: '#9a5a44', dark: '#6e3a2c' },
@@ -237,7 +238,7 @@ export function worldMap(canClose: boolean): Promise<CampaignId | null> {
       const l = selected;
       const st = status(l);
       const parts: Array<HTMLElement | null> = [
-        l.sprites.length ? h('div.camp-sprites', {}, l.sprites.map((sp) => img(spriteUrl(sp, sp === 'golem' || sp === 'warden' ? 2 : 3)))) : null,
+        l.sprites.length ? h('div.camp-sprites', {}, l.sprites.map((sp) => img(spriteUrl(sp, (SPRITES[sp]?.[0]?.length ?? 16) > 16 ? 2 : 3)))) : null,
         h('h2', { text: t(`campaigns.${l.id}.name`) }),
         h('div.camp-tier', { text: t(`campaigns.${l.id}.tier`) }),
         h('p', { text: t(`campaigns.${l.id}.desc`) }),

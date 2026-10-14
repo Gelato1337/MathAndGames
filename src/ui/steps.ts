@@ -1,5 +1,5 @@
 import { fmtNum, t } from '../i18n';
-import { parseAnswer } from '../math/answer';
+import { parseAnswer, parseExpr } from '../math/answer';
 import { ansNumbers, checkAns, segText, type Ans, type StepProblem } from '../math/linalg';
 import { record } from '../math/mastery';
 import { game } from '../state';
@@ -7,6 +7,7 @@ import { autofocus, h, openModal } from './dom';
 import { colourText, linkTerms, plainText, segsEl } from './eq';
 import { notebookPanel } from './notebook';
 import { plotCanvas } from './plot';
+import { trigLens, type Lens } from './triglens';
 import { stepText } from './question';
 import { tutorPanel } from './tutor';
 
@@ -49,7 +50,7 @@ function parseCell(text: string): number | null {
     const v = parseAnswer(pct[1]);
     return v === null ? null : v / 100;
   }
-  return parseAnswer(text);
+  return parseAnswer(text) ?? parseExpr(text);
 }
 
 function field(want: Ans, label: string): Field {
@@ -89,7 +90,11 @@ function field(want: Ans, label: string): Field {
 }
 
 export function ansText(a: Ans): string {
-  if (a.kind === 'num') return a.frac && a.frac[1] !== 1 ? `${a.frac[0]}/${a.frac[1]} = ${fmtNum(Math.round(a.v * 1000) / 1000)}` : fmtNum(a.v);
+  if (a.kind === 'num') {
+    const approx = fmtNum(Math.round(a.v * 1000) / 1000);
+    if (a.text && a.text !== String(a.v)) return `${a.text} ≈ ${approx}`;
+    return a.frac && a.frac[1] !== 1 ? `${a.frac[0]}/${a.frac[1]} = ${approx}` : fmtNum(a.v);
+  }
   if (a.kind === 'mat') return `[${a.v.map((r) => r.map(fmtNum).join(' ')).join(' ; ')}]`;
   if (a.kind === 'set') return a.v.map(fmtNum).join(', ');
   return `(${a.v.map(fmtNum).join(', ')})`;
@@ -140,7 +145,14 @@ export function askSteps(p: StepProblem, opts: StepsOpts = {}): Promise<StepsRes
     const timerBar = h('div');
     const timer = opts.seconds ? h('div.timer', {}, [timerBar]) : null;
     const side = h('div.steps-side');
-    if (p.plot) side.append(plotCanvas(p.plot), h('div.plot-caption.muted', { text: p.plot.caption ? stepText(p.plot.caption) : t('steps.plotCaption') }));
+    let lens: Lens | null = null;
+    if (p.plot?.trig) {
+      const tr = p.plot.trig;
+      lens = trigLens({ angle: tr.angle, interactive: tr.lens, readout: tr.readout, arc: tr.arc, scale: tr.scale, given: tr.given, width: 330, layers: tr.wall ? { wall: true } : {} });
+      side.classList.add('wide');
+      side.append(lens.el);
+    } else if (p.plot) side.append(plotCanvas(p.plot));
+    if (p.plot) side.append(h('div.plot-caption.muted', { text: p.plot.caption ? stepText(p.plot.caption) : t('steps.plotCaption') }));
 
     const main = h('div.steps-main', {}, [card, timer, work, buttons, feedback, explain]);
     const body = h('div.steps-body', {}, [main, side]);
@@ -232,6 +244,7 @@ export function askSteps(p: StepProblem, opts: StepsOpts = {}): Promise<StepsRes
         closed = true;
         window.removeEventListener('keydown', onKey, true);
         modal.close();
+        lens?.destroy();
         resolve(result);
       };
       const onKey = (e: KeyboardEvent) => {

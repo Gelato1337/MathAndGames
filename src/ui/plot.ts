@@ -26,6 +26,8 @@ export function plotCanvas(plot: Plot, size = 240): HTMLCanvasElement {
   if (plot.tokens) return drawTokens(ctx, cv, plot.tokens, size);
   if (plot.dice) return drawDice(ctx, cv, plot.dice, size);
   if (plot.bars) return drawBars(ctx, cv, plot.bars, size);
+  if (plot.triangle) return drawTriangle(ctx, cv, plot.triangle, size);
+  if (plot.wave) return drawWave(ctx, cv, plot.wave, size);
 
   // fit everything that will be drawn
   const pts: number[][] = [[1, 1]];
@@ -202,6 +204,96 @@ function drawBars(ctx: CanvasRenderingContext2D, cv: HTMLCanvasElement, b: NonNu
     ctx.fillStyle = '#f4f4f4';
     ctx.fillText(String(v), x + w / 2, v >= 0 ? base - hgt - 6 : base + 14);
   });
+  ctx.textAlign = 'start';
+  return cv;
+}
+
+/** A right triangle with the angle θ at the bottom left; sides coloured like SOH CAH TOA. */
+function drawTriangle(ctx: CanvasRenderingContext2D, cv: HTMLCanvasElement, tr: NonNullable<Plot['triangle']>, size: number): HTMLCanvasElement {
+  background(ctx, size);
+  const s = (size - 70) / Math.max(tr.adj, tr.opp);
+  const x0 = 34;
+  const y0 = size - 34;
+  const x1 = x0 + tr.adj * s;
+  const y1 = y0 - tr.opp * s;
+  const seg = (ax: number, ay: number, bx: number, by: number, k: number) => {
+    ctx.strokeStyle = TERM_COLORS[k];
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(ax, ay);
+    ctx.lineTo(bx, by);
+    ctx.stroke();
+  };
+  seg(x0, y0, x1, y0, 2);
+  seg(x1, y0, x1, y1, 1);
+  seg(x0, y0, x1, y1, 3);
+  ctx.strokeStyle = 'rgba(244,244,244,0.6)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(x1 - 10, y0 - 10, 10, 10);
+  ctx.strokeStyle = TERM_COLORS[5];
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(x0, y0, 22, -Math.atan2(tr.opp, tr.adj), 0);
+  ctx.stroke();
+  ctx.font = FONT;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = TERM_COLORS[5];
+  ctx.fillText('θ', x0 + 32, y0 - 9);
+  if (tr.show.includes('adj')) {
+    ctx.fillStyle = TERM_COLORS[2];
+    ctx.fillText(String(tr.adj), (x0 + x1) / 2, y0 + 14);
+  }
+  if (tr.show.includes('opp')) {
+    ctx.fillStyle = TERM_COLORS[1];
+    ctx.fillText(String(tr.opp), x1 + 14, (y0 + y1) / 2);
+  }
+  if (tr.show.includes('hyp')) {
+    ctx.fillStyle = TERM_COLORS[3];
+    ctx.fillText(String(tr.hyp), (x0 + x1) / 2 - 12, (y0 + y1) / 2 - 10);
+  }
+  ctx.textAlign = 'start';
+  return cv;
+}
+
+/** The graph of y = A · sin(B · x) for x from 0° to 360°, with the height and one period marked. */
+function drawWave(ctx: CanvasRenderingContext2D, cv: HTMLCanvasElement, w: NonNullable<Plot['wave']>, size: number): HTMLCanvasElement {
+  background(ctx, size);
+  const x0 = 26;
+  const x1 = size - 10;
+  const cy = size / 2;
+  const sy = (size / 2 - 26) / 5;
+  const X = (d: number) => x0 + ((x1 - x0) * d) / 360;
+  ctx.strokeStyle = 'rgba(148,176,194,0.14)';
+  ctx.lineWidth = 1;
+  for (let v = -5; v <= 5; v++) {
+    ctx.beginPath();
+    ctx.moveTo(x0, cy - v * sy);
+    ctx.lineTo(x1, cy - v * sy);
+    ctx.stroke();
+  }
+  ctx.strokeStyle = 'rgba(148,176,194,0.5)';
+  ctx.beginPath();
+  ctx.moveTo(x0, cy);
+  ctx.lineTo(x1, cy);
+  ctx.moveTo(x0, 10);
+  ctx.lineTo(x0, size - 10);
+  ctx.stroke();
+  ctx.font = FONT;
+  ctx.fillStyle = '#94b0c2';
+  ctx.textAlign = 'right';
+  for (const v of [-5, 0, 5]) ctx.fillText(String(v), x0 - 4, cy - v * sy + 4);
+  ctx.textAlign = 'center';
+  for (const d of [90, 180, 270, 360]) ctx.fillText(`${d}°`, X(d), size - 6);
+  ctx.strokeStyle = TERM_COLORS[1];
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  for (let d = 0; d <= 360; d += 2) {
+    const y = cy - w.A * Math.sin((w.B * d * Math.PI) / 180) * sy;
+    if (d === 0) ctx.moveTo(X(d), y);
+    else ctx.lineTo(X(d), y);
+  }
+  ctx.stroke();
   ctx.textAlign = 'start';
   return cv;
 }

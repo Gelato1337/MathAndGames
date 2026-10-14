@@ -720,6 +720,103 @@ SPRITES.mimic = [
   '................',
 ];
 
+// ---------- Tidewatch ----------
+
+SPRITES.crab = [
+  '................',
+  '................',
+  '................',
+  '................',
+  '..kk........kk..',
+  '.krrk......krrk.',
+  '.krk..k..k..krk.',
+  '..krk.kwkwk.kr..',
+  '...krkrrrrrkrk..',
+  '..krrrrrrrrrrk..',
+  '.krrorrrrrrorrk.',
+  '.krrrrrrrrrrrrk.',
+  '..kkrkkkkkkrkk..',
+  '..k.k......k.k..',
+  '................',
+  '................',
+];
+
+SPRITES.gull = [
+  '................',
+  '................',
+  '................',
+  '..........kkk...',
+  '.........kwwwk..',
+  '........kwwkwyy.',
+  '.kkk....kwwwwk..',
+  'kssskk.kwwwwk...',
+  '.kssswkwwwwwk...',
+  '..kssswwwwwk....',
+  '...kkswwwwk.....',
+  '.....kkwwk......',
+  '.......yky......',
+  '................',
+  '................',
+  '................',
+];
+
+SPRITES.urchin = [
+  '................',
+  '................',
+  '................',
+  '................',
+  '.......k........',
+  '...k...p...k....',
+  '....p.kpk.p.....',
+  '.....kpppk......',
+  '..kppppppppk....',
+  '.....kpppk......',
+  '....p.kpk.p.....',
+  '...k...p...k....',
+  '.......k........',
+  '................',
+  '................',
+  '................',
+].map((r) => r.slice(0, 16).padEnd(16, '.'));
+
+SPRITES.eel = [
+  '................',
+  '................',
+  '................',
+  '...........kkk..',
+  '..........kyyyk.',
+  '.........kyykyk.',
+  '........kyyyyk..',
+  '.......kyyyk....',
+  '......kyyyk.....',
+  '.....kyyyk......',
+  '....kyyyk.......',
+  '...kyyyk........',
+  '..kyyk..........',
+  '..kk............',
+  '................',
+  '................',
+].map((r) => r.replace(/y/g, 'c'));
+
+const serpentSmall = [
+  '................',
+  '......kkkk......',
+  '.....kttttk.....',
+  '....ktwkttwk....',
+  '....kttttttk....',
+  '....ktrrrrtk....',
+  '.....kttttk.....',
+  '..k...kttk...k..',
+  '.ktk..kttk..ktk.',
+  '.kttk.kttk.kttk.',
+  '..kttkkttkkttk..',
+  '...kttttttttk...',
+  '....kttttttk....',
+  '...kttiiiittk...',
+  '..kttiiiiiittk..',
+  '..kkkkkkkkkkkk..',
+];
+
 SPRITES.mushroom = [
   '................',
   '................',
@@ -801,3 +898,11 @@ export function spriteUrl(name: string, scale = 4): string {
   }
   return url;
 }
+
+// Tidewatch people and the Tide Serpent (twice as big)
+SPRITES.serpent = upscale(serpentSmall);
+SPRITES.meri = recolor(SPRITES.sana, { g: 'c', G: 'n', e: 'w', y: 'w' });
+SPRITES.keeper = recolor(SPRITES.elder, { m: 'n', w: 'y', u: 'U' });
+SPRITES.aava = recolor(SPRITES.pekka, { r: 'n', w: 'b', u: 'U' });
+SPRITES.siren = recolor(SPRITES.helmi, { y: 'i', o: 'c', g: 't', w: 'i' });
+SPRITES.drowned = recolor(SPRITES.kai, { f: 't', r: 'm', n: 'k', h: 's' });

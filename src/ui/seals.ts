@@ -1,6 +1,7 @@
 import { fmtNum, t } from '../i18n';
 import { chanceLabel, chanceSealProblem, type ChanceSeal } from '../math/chance';
-import { eigenLabel, fmtMat, isChanceSeal, isEigenSeal, type AnySeal, type EigenSeal } from '../math/eigenseal';
+import { eigenLabel, fmtMat, isChanceSeal, isEigenSeal, isTrigSeal, type AnySeal, type EigenSeal } from '../math/eigenseal';
+import { trigLabel, trigSealProblem, type TrigSeal } from '../math/trig';
 import { timerSeconds } from '../state';
 import { eigenValueProblem, eigenvalues, eigenVectorProblem, matVec } from '../math/linalg';
 import { askSteps } from './steps';
@@ -209,18 +210,34 @@ export async function unbindChance(seal: ChanceSeal, title = t('skills.cunbind.n
   return r.correct;
 }
 
+/** Tidewatch, ninja's way: one fast answer, no working ("Tide Strike"). */
+export async function probeTrig(seal: TrigSeal, log: string[], title = t('skills.tprobe.name')): Promise<ProbeResult> {
+  const p = trigSealProblem(seal);
+  const r = await askSteps({ ...p, steps: [] }, { title, story: t('tseal.probeStory'), seconds: timerSeconds(30) });
+  log.push(t(r.correct ? 'cseal.logHit' : 'cseal.logMiss'));
+  return { shattered: r.correct, computedOk: r.correct, cancelled: false };
+}
+
+/** Tidewatch, mage's way: step by step with the Trig Lens. */
+export async function unbindTrig(seal: TrigSeal, title = t('skills.tunbind.name')): Promise<boolean> {
+  return (await askSteps(trigSealProblem(seal), { title, story: t('tseal.unbindStory') })).correct;
+}
+
 /** Text shown above a sealed enemy, for any kind of seal. */
 export function sealLabel(s: AnySeal): string {
+  if (isTrigSeal(s)) return trigLabel(s);
   if (isChanceSeal(s)) return chanceLabel(s);
   return isEigenSeal(s) ? eigenLabel(s) : fmtSeal(s);
 }
 
 export function probeAny(s: AnySeal, log: string[]): Promise<ProbeResult> {
+  if (isTrigSeal(s)) return probeTrig(s, log);
   if (isChanceSeal(s)) return probeChance(s, log);
   return isEigenSeal(s) ? probeEigen(s, log) : probeSeal(s, log);
 }
 
 export function unbindAny(s: AnySeal): Promise<boolean> {
+  if (isTrigSeal(s)) return unbindTrig(s);
   if (isChanceSeal(s)) return unbindChance(s);
   return isEigenSeal(s) ? unbindEigen(s) : unbindSeal(s);
 }

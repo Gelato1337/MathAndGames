@@ -2,7 +2,7 @@ import { TILE } from '../art/tiles';
 import { FOCUS_MULT, PARTY_SKILLS, SKILLS, TEA_AP, TONIC_HEAL, type HeroId, type ItemId, type SkillId } from '../data';
 import { t } from '../i18n';
 import { mousePos, takeClicks, takePressed } from '../input';
-import { generateLA, isLinalg } from '../math/linalg';
+import { isStepTopic } from '../math/linalg';
 import { level } from '../math/mastery';
 import { generate } from '../math/problems';
 import type { Renderer } from '../render';
@@ -10,7 +10,7 @@ import { attuneMult, game, timerSeconds } from '../state';
 import { wait } from '../ui/dom';
 import { ask } from '../ui/question';
 import { probeAny, sealLabel, unbindAny } from '../ui/seals';
-import { askSteps } from '../ui/steps';
+import { askProblem, isDragTopic } from '../ui/askany';
 import { inRect, type EncounterDef, type WorldMap } from '../world/map';
 import { tileCenter } from '../art/iso';
 import { CombatHud } from './hud';
@@ -731,17 +731,16 @@ export class Combat {
     if (def.effect.kind === 'multi' && oc.timed) {
       // ninja chain: every quick right answer adds a hit
       for (let i = 0; i < 4; i++) {
-        const ok = isLinalg(oc.topic)
-          ? (await askSteps(generateLA(oc.topic, level(oc.topic)), { title, tag, seconds: timerSeconds(14), quick: true })).correct
-          : (await ask(generate(oc.topic, level(oc.topic)), { title, tag, seconds: timerSeconds(8), quick: true })).correct;
+        const long = isStepTopic(oc.topic) || isDragTopic(oc.topic);
+        const ok = (await askProblem(oc.topic, level(oc.topic), { title, tag, seconds: timerSeconds(long ? 14 : 8), quick: true })).correct;
         if (!ok) break;
         extraHits++;
       }
       if (extraHits > 0) this.refreshed.add(f.skill);
       pierce = extraHits >= 2;
       this.addLog(t('combat.combo', { n: def.effect.hits + extraHits }));
-    } else if (isLinalg(oc.topic)) {
-      const r = await askSteps(generateLA(oc.topic, level(oc.topic)), { title, tag });
+    } else if (isStepTopic(oc.topic) || isDragTopic(oc.topic)) {
+      const r = await askProblem(oc.topic, level(oc.topic), { title, tag, seconds: oc.timed ? timerSeconds(14) : 0 });
       if (r.correct) {
         mult = f.disrupted ? FOCUS_MULT.disrupted : FOCUS_MULT.perfect;
         pierce = true;
@@ -946,6 +945,12 @@ export class Combat {
         const rolls = Array.from({ length: atk.dice }, () => rand(1, 6));
         amount = rolls.reduce((a, b) => a + b, 0);
         this.float(u, rolls.join(' + '), '#f4f4f4', 6);
+      }
+      if (u.abilities.includes('tide')) {
+        // strength rides a sine wave over the rounds: high tide, mid, low tide, mid…
+        const tide = 1 + 0.5 * Math.round(Math.sin((this.round * Math.PI) / 2));
+        amount = Math.max(1, Math.round(amount * tide));
+        if (tide !== 1) this.float(u, t(tide > 1 ? 'combat.highTide' : 'combat.lowTide'), tide > 1 ? '#73a8ff' : '#94b0c2', 10);
       }
       if (u.abilities.includes('lucky') && rand(1, 6) === 6) {
         amount *= 2;
